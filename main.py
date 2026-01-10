@@ -23,7 +23,7 @@ import os  # Add this at the very top
 # ... inside your configuration section ...
 
 # Use environment variable if available, otherwise default to a placeholder
-CALLBACK_URL = os.environ.get('CALLBACK_URL', 'https://your-app.onrender.com/callback')
+CALLBACK_URL = os.environ.get('CALLBACK_URL', 'https://teamenvironmentkenya.onrender.com//callback')
 def get_access_token():
     """Generates an OAuth Access Token from Safaricom."""
     api_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
