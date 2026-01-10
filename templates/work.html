@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work With Us - TEAMEnvironment KENYA</title>
+    <meta name="description" content="Join our team and help us build a greener future. Volunteer, intern, or apply for a job.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. CSS VARIABLES --- */
+        :root {
+            --primary-green: #54B435;
+            --primary-dark: #0F172A;
+            --text-dark: #2F3B40;
+            --bg-light: #EDFBE2;
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --container-width: 1200px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); color: var(--text-dark); background: #f9f9f9; line-height: 1.6; }
+        
+        /* --- HEADER & NAV --- */
+        .top-bar { background: var(--bg-light); padding: 10px 0; border-bottom: 1px solid #ddd; font-size: 0.9rem; }
+        .top-bar .container { display: flex; justify-content: space-between; align-items: center; }
+        .social-icons a { margin-left: 15px; color: var(--primary-dark); }
+        
+        .main-header { padding: 15px 0; background: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        
+        .nav-menu { display: flex; gap: 20px; list-style: none; }
+        .nav-menu a { text-decoration: none; font-weight: 600; color: var(--primary-dark); transition: 0.3s; }
+        .nav-menu a:hover { color: var(--primary-green); }
+        .logo img { height: 60px; }
+        .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; }
+        
+        /* --- HERO SECTION --- */
+        .page-header {
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/highridge_seeds_of_a_greener_future_1_70.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+        .page-header h1 { font-size: 3rem; margin-bottom: 10px; font-family: var(--font-heading); }
+
+        /* --- CONTENT SECTIONS --- */
+        .intro-section { padding: 60px 0; text-align: center; max-width: 800px; margin: 0 auto; }
+        .intro-section h2 { color: var(--primary-green); margin-bottom: 20px; font-family: var(--font-heading); }
+        
+        .careers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .job-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .job-card:hover { border-color: var(--primary-green); box-shadow: 0 5px 15px rgba(0,0,0,0.05); transform: translateY(-5px); }
+        .job-card h3 { margin-bottom: 10px; color: var(--primary-dark); font-family: var(--font-heading); }
+        .job-meta { font-size: 0.9rem; color: #777; margin-bottom: 15px; display: block; font-weight: 600; }
+        .job-card p { flex-grow: 1; margin-bottom: 20px; }
+        
+        .volunteer-form {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            max-width: 700px;
+            margin: 60px auto;
+            border-top: 5px solid var(--primary-green);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark); }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; font-size: 1rem;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none; border-color: var(--primary-green);
+        }
+        .submit-btn {
+            background: var(--primary-green); color: white; padding: 15px 30px; border: none; 
+            border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .submit-btn:hover { background: var(--primary-dark); }
+
+        .apply-btn {
+            display: inline-block; padding: 10px 20px; background-color: var(--primary-dark); color: white; 
+            text-decoration: none; border-radius: 4px; font-weight: 600; text-align: center;
+        }
+        .apply-btn:hover { background-color: var(--primary-green); }
+
+        /* --- FOOTER --- */
+        footer { background: var(--primary-dark); color: white; padding: 60px 0; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .nav-menu { display: none; } /* Simplified for example */
+            .page-header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <span>Make a call: +254 725 660204</span>
+             <div class="social-icons">
+                <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </div>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="/"><img src="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" alt="TEK Logo"></a>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/services.html">Services</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                    <li><a href="/work.html" style="color: var(--primary-green);">Work With Us</a></li>
+                    <li><a href="/contact-us">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Work With Us</h1>
+            <p>Be part of the change. Volunteer, intern, or build a career with us.</p>
+        </div>
+    </section>
+
+    <section class="intro-section">
+        <div class="container">
+            <h2>Join Our Green Army</h2>
+            <p>At TEAMEnvironment KENYA, we believe in the power of collective action. Whether you are a student, a professional, or a community member, there is a place for you to make a difference in conserving our environment.</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <h2 style="text-align: center; margin-bottom: 30px; font-family: 'Montserrat', sans-serif;">Current Opportunities</h2>
+        <div class="careers-grid">
+            <div class="job-card">
+                <h3>Tree Nursery Attendant</h3>
+                <span class="job-meta"><i class="fas fa-map-marker-alt"></i> Kabarak University | Full-Time</span>
+                <p>We are looking for dedicated individuals to manage our 10-million tree nursery. Experience in agriculture preferred.</p>
+                <a href="#volunteer" class="apply-btn">Apply Now</a>
+            </div>
+            <div class="job-card">
+                <h3>Community Volunteer</h3>
+                <span class="job-meta"><i class="fas fa-map-marker-alt"></i> Nationwide | Part-Time</span>
+                <p>Join our tree planting drives in your local county. Help mobilize youth and women groups for climate action.</p>
+                <a href="#volunteer" class="apply-btn">Register</a>
+            </div>
+            <div class="job-card">
+                <h3>Social Media Intern</h3>
+                <span class="job-meta"><i class="fas fa-laptop"></i> Remote/Nairobi | Internship</span>
+                <p>Help us spread the word! Create engaging content about climate change and our projects to drive awareness.</p>
+                <a href="#volunteer" class="apply-btn">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="volunteer" class="container">
+        <div class="volunteer-form">
+            <h2 style="text-align: center; margin-bottom: 10px; font-family: 'Montserrat', sans-serif;">Application Form</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">Fill in your details below and we will get back to you.</p>
+            
+            <form action="#" method="POST"> <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" placeholder="07XXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>Position of Interest</label>
+                    <select name="position">
+                        <option value="Volunteer">General Volunteer</option>
+                        <option value="Nursery Attendant">Tree Nursery Attendant</option>
+                        <option value="Intern">Social Media Intern</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Why do you want to join us?</label>
+                    <textarea name="message" rows="5" placeholder="Tell us a bit about yourself and your passion for the environment..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Copyright © 2025 TEAMEnvironment KENYA. Powered by DELSTARFORD WORKS.CO.KE</p>
+        </div>
+    </footer>
+
+</body>
+</html>

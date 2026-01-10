@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team - TEAMEnvironment KENYA</title>
+    <meta name="description" content="Meet the dedicated team behind TEAMEnvironment KENYA driving climate action and sustainability.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. CSS VARIABLES & RESET --- */
+        :root {
+            --primary-green: #54B435;
+            --primary-dark: #0F172A;
+            --text-dark: #2F3B40;
+            --text-light: #ffffff;
+            --bg-light: #EDFBE2;
+            --gray-border: #e5e7eb;
+            --card-gradient: linear-gradient(135deg, #eefcf0 0%, #ffffff 100%);
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --container-width: 1200px;
+            --mpesa-green: #4CAF50;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: var(--font-heading); font-weight: 700; color: var(--primary-dark); }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; display: block; }
+
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: var(--primary-green);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            border: 2px solid var(--primary-green);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn:hover { background-color: white; color: var(--primary-green); }
+
+        /* --- 2. HEADER --- */
+        .top-bar {
+            background-color: var(--bg-light);
+            padding: 10px 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #ddd;
+        }
+        .top-bar .container { display: flex; justify-content: space-between; align-items: center; }
+        .social-icons a { margin-left: 15px; color: var(--primary-dark); }
+        .social-icons a:hover { color: var(--primary-green); }
+
+        .main-header {
+            padding: 15px 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo img { height: 60px; }
+        .nav-menu { display: flex; gap: 30px; align-items: center; }
+        .nav-menu a { font-weight: 600; font-size: 15px; color: var(--primary-dark); }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary-green); }
+        .donate-btn { background-color: var(--primary-dark); color: white; padding: 10px 25px; border-radius: 0; }
+        .donate-btn:hover { background-color: var(--primary-green); color: white; border-color: var(--primary-green); }
+        .mobile-toggle { display: none; font-size: 24px; cursor: pointer; }
+
+        /* --- 3. PAGE HEADER --- */
+        .page-header {
+            background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+        .page-header h1 { font-size: 3rem; margin-bottom: 10px; color: white; }
+        .breadcrumb { font-size: 0.9rem; opacity: 0.8; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* --- 4. TEAM SECTION --- */
+        .team-page-section { padding: 80px 0; }
+        .section-intro { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+        .section-intro h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .section-intro p { color: #666; font-size: 1.1rem; }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            text-align: center;
+            border: 1px solid var(--gray-border);
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: var(--primary-green);
+        }
+
+        .member-img-wrapper {
+            background: var(--card-gradient);
+            height: 320px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+            padding-top: 20px;
+        }
+
+        .member-img-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover .member-img-wrapper img { transform: scale(1.05); }
+
+        .member-info { padding: 25px; }
+        .member-name { font-size: 1.4rem; margin-bottom: 5px; color: var(--primary-dark); }
+        .member-role { font-size: 0.9rem; color: var(--primary-green); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; display: block; }
+        .member-bio { font-size: 0.9rem; color: #666; line-height: 1.5; }
+
+        /* --- 5. FOOTER --- */
+        footer { background-color: var(--primary-dark); color: white; padding-top: 60px; }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer-col h5 { color: white; margin-bottom: 20px; font-size: 1.2rem; }
+        .footer-col p { color: #ccc; font-size: 0.95rem; }
+        .footer-bottom {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* --- 6. M-PESA MODAL STYLES --- */
+        .floating-donate-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--mpesa-green);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s ease;
+            border: 2px solid white;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+        }
+        .floating-donate-btn:hover { transform: scale(1.05); background-color: #388E3C; }
+        .floating-donate-btn img { height: 24px; width: auto; }
+
+        .mpesa-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .mpesa-modal-overlay.active { display: flex; }
+
+        .mpesa-modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; color: #888; cursor: pointer; }
+        .modal-header img { height: 50px; margin-bottom: 10px; }
+        .modal-body input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; }
+        .modal-body label { display: block; text-align: left; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        
+        #donateBtn { width: 100%; padding: 14px; background: var(--mpesa-green); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        #donateBtn:hover { background: #388E3C; }
+        #donateBtn:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .status-success { color: green; font-weight: 600; display: block; margin-top: 10px; }
+        .status-error { color: red; display: block; margin-top: 10px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 920px) {
+            .mobile-toggle { display: block; }
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { display: flex; }
+            .top-bar .container { flex-direction: column; gap: 10px; text-align: center; }
+            .team-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <span></span>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/TeamEnvironmentKenya/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/tek_kenya" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/tek_kenya/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="http://wa.me/+254718052745" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="/">
+                    <img src="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" alt="TEAMEnvironment Kenya">
+                </a>
+            </div>
+            
+            <i class="fas fa-bars mobile-toggle" onclick="toggleMenu()"></i>
+
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about.html">About</a></li>
+                    <li><a href="/our-team.html" class="active">Our Team</a></li>
+                    <li><a href="/services.html">Services</a></li>
+                    <li><a href="/events.html">Events</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="/contact.html">Contact Us</a></li>
+                    <li><a href="#" class="btn donate-btn" onclick="openMpesaModal()">DONATE</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Team</h1>
+            <div class="breadcrumb">
+                <a href="/">Home</a> / <span>Our Team</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-page-section">
+        <div class="container">
+            <div class="section-intro">
+                <h2>Meet the Experts</h2>
+                <p>We have a dedicated team of professionals committed to environmental sustainability and climate action.</p>
+            </div>
+
+            <div class="team-grid">
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/PHOTO_PASSPORT.-removebg-preview.png" alt="Ochanda Mathew">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Ochanda Mathew</h3>
+                        <span class="member-role">Executive Director</span>
+                        <p class="member-bio">Climate Change Expert and Environmental Consultant.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Mr._Joseph_Kithyaka_-_-removebg-preview.png" alt="Mr. Joseph Kithyaka">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Mr. Joseph Kithyaka</h3>
+                        <span class="member-role">National Chairman (Patron)</span>
+                        <p class="member-bio">Plant Your Age Initiative & Executive Director Green Thinking Action Party (G-Tap).</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Ms._Janet_Ruto.1jpeg-removebg-preview.png" alt="Ms. Janet Ruto">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Ms. Janet Ruto</h3>
+                        <span class="member-role">Corporate Communications</span>
+                        <p class="member-bio">CEO - Jani Mpya Solutions.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/MR._SAMORA_SALIM.-removebg-preview.png" alt="Mr. Samora Salim">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Mr. Samora Salim</h3>
+                        <span class="member-role">Forester & Conservation Expert</span>
+                        <p class="member-bio">CEO - Myexperthub Agroconsultancy Ltd.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/WhatsApp_Image_2025-03-25_at_06.50.42_947191d1-removebg-preview.png" alt="Daniel Lovi">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Daniel Lovi</h3>
+                        <span class="member-role">Project Manager</span>
+                        <p class="member-bio">Media and Communications, Me-Forest.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/RoxVenter_IMGL5464-removebg-preview.png" alt="Roxventer Ongugo">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Roxventer Ongugo</h3>
+                        <span class="member-role">Senior Research Scientist</span>
+                        <p class="member-bio">Liason And Corporate Affair Expert.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Prof._Mathiu_Mbaabu.-removebg-preview.png" alt="Prof. Mathiu Mbaabu">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Prof. Mathiu Mbaabu</h3>
+                        <span class="member-role">Environmental Stewardship</span>
+                        <p class="member-bio">CEO - Center for Environmental Stewardship.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Dr.-Kalua-Green.1png.png" alt="Dr. Kalua">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Dr. Kalua</h3>
+                        <span class="member-role">Director & Mentor</span>
+                        <p class="member-bio">Green Group of Companies.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Executive_Director-removebg-preview.png" alt="Sachin Shaha">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Sachin Shaha</h3>
+                        <span class="member-role">Council Member</span>
+                        <p class="member-bio">Lukenya University.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Benedict_Oduor_-_Advocate__Legal_Officer-removebg-preview.png" alt="Benedict Oduor">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Benedict Oduor</h3>
+                        <span class="member-role">Lead Legal Officer</span>
+                        <p class="member-bio">Advocate of the High Court.</p>
+                    </div>
+                </div>
+
+                 <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/omanyala-e1671076763930-removebg-preview.png" alt="Ferdinand Omanyala">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Ferdinand Omanyala</h3>
+                        <span class="member-role">Ambassador</span>
+                        <p class="member-bio">Championing Environmental Conservation.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h5>TEAMEnvironment KENYA</h5>
+                    <p>Our philosophy is to, “Build a Heritage for Future Generations of a Cleaner, Greener (Food & Water) Secure and a Peaceful Environment.”</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Office</h5>
+                    <p>Norwich Union House<br>2nd Floor, Norwich Union House. Nairobi.</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Our Location</h5>
+                    <p>Nairobi, Kenya</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Socials</h5>
+<div class="social-icons" style="margin-left: -15px;">
+    <a href="https://www.facebook.com/TeamEnvironmentKenya/" target="_blank" style="color:white">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+    
+    <a href="https://twitter.com/tek_kenya" target="_blank" style="color:white">
+        <i class="fab fa-twitter"></i>
+    </a>
+    
+    <a href="https://www.instagram.com/tek_kenya/" target="_blank" style="color:white">
+        <i class="fab fa-instagram"></i>
+    </a>
+
+    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright © 2025 TEAMEnvironment KENYA.</p>
+                <p>Powered by DELSTARFORD WORKS.CO.KE</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-donate-btn" onclick="openMpesaModal()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa Logo">
+        <span>Donate</span>
+    </div>
+
+    <div class="mpesa-modal-overlay" id="mpesaModal">
+        <div class="mpesa-modal-box">
+            <span class="close-modal" onclick="closeMpesaModal()">&times;</span>
+            <div class="modal-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa">
+                <h3>Support Our Cause</h3>
+                <p>Enter your details to receive an M-Pesa PIN prompt.</p>
+            </div>
+            <div class="modal-body">
+                <label>Phone Number</label>
+                <input type="text" id="donorPhone" placeholder="07XXXXXXXX">
+                <label>Amount (KES)</label>
+                <input type="number" id="donorAmount" placeholder="e.g. 500">
+                <button id="donateBtn" onclick="processDonation()">Donate Now</button>
+                <div id="donationStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu Toggle
+        function toggleMenu() {
+            var nav = document.getElementById("navMenu");
+            nav.classList.toggle("active");
+        }
+
+        // M-Pesa Modal Logic
+        const mpesaModal = document.getElementById('mpesaModal');
+
+        function openMpesaModal() {
+            mpesaModal.classList.add('active');
+        }
+
+        function closeMpesaModal() {
+            mpesaModal.classList.remove('active');
+            document.getElementById('donationStatus').innerHTML = ''; 
+        }
+
+        window.onclick = function(event) {
+            if (event.target == mpesaModal) {
+                closeMpesaModal();
+            }
+        }
+
+        // M-Pesa Payment Logic
+        async function processDonation() {
+            const phone = document.getElementById('donorPhone').value;
+            const amount = document.getElementById('donorAmount').value;
+            const btn = document.getElementById('donateBtn');
+            const status = document.getElementById('donationStatus');
+
+            if (!phone || !amount) {
+                status.innerHTML = '<span class="status-error">Please fill in all fields.</span>';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+            status.innerHTML = '';
+
+            try {
+                // IMPORTANT: Use /pay as defined in your Python backend
+                const response = await fetch('/pay', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: phone, amount: amount })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    status.innerHTML = '<span class="status-success">✔ Success! Check your phone to enter PIN.</span>';
+                    setTimeout(() => {
+                        btn.innerText = "Donate Again";
+                    }, 3000);
+                } else {
+                    status.innerHTML = `<span class="status-error">❌ Error: ${result.error}</span>`;
+                    btn.innerText = "Try Again";
+                }
+            } catch (error) {
+                status.innerHTML = '<span class="status-error">Connection failed. Check internet.</span>';
+                btn.innerText = "Try Again";
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
