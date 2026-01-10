@@ -1,3 +1,4 @@
+import os
 import requests
 import base64
 from flask import Flask, request, jsonify, render_template
@@ -9,12 +10,11 @@ app = Flask(__name__)
 #  1. CONFIGURATION (M-PESA CREDENTIALS)
 # ==========================================
 # Note: These are Sandbox keys. For production, never expose these in code.
-CONSUMER_KEY = 'mjpi9dRnBx6ZgredXiDbOK8U1gSnCds5TdJr7A3VrAdEg5a0'
-CONSUMER_SECRET = 'CPiCSfv7qWx5faY0tfHElspd1OMA9IBIlJo86snqBMtGhtglvBKPwzP2mG3d33hD'
-PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
-BUSINESS_SHORT_CODE = '174379'  # Safaricom Sandbox Paybill
-CALLBACK_URL = 'https://your-ngrok-url.ngrok-free.app/callback' # <--- UPDATE THIS WITH YOUR NGROK URL
-
+# In main.py
+CONSUMER_KEY = os.environ.get('CONSUMER_KEY')
+CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET')
+PASSKEY = os.environ.get('PASSKEY')
+BUSINESS_SHORT_CODE = '174379'
 # ==========================================
 #  2. HELPER FUNCTIONS
 # ==========================================
