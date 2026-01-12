@@ -119,7 +119,7 @@ def send_job_email(name, applicant_email, phone, position, msg_content):
     SMTP_PORT = int(os.environ.get('MAIL_PORT', 587)) 
     SENDER_EMAIL = os.environ.get('MAIL_USERNAME')
     SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    RECIPIENT_EMAIL = 'info@teamenvironment.org'
+    RECIPIENT_EMAIL = 'teamenvironment.ke@gmail.com'
 
     if not SENDER_EMAIL or not SENDER_PASSWORD:
         print("❌ Email credentials missing. Check your .env file.")
@@ -153,7 +153,7 @@ def send_job_email(name, applicant_email, phone, position, msg_content):
     # 3. Send the Email using TLS (Fixes WinError 10060)
     try:
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT) # Connect
-        server.set_debuglevel(1) # Show communication in terminal for debugging
+        #server.set_debuglevel(1) # Show communication in terminal for debugging
         server.starttls()        # Secure the connection
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
         server.send_message(msg)
