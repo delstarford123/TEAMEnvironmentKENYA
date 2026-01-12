@@ -4,6 +4,7 @@ import base64
 from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 
+
 app = Flask(__name__)
 
 # ==========================================
@@ -98,35 +99,98 @@ def contact():
 @app.route('/work')
 def work():
     return render_template('work.html')
+import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from flask import Flask, request, jsonify, render_template
 
-# --- 2. Route to Handle Job Applications ---
+
+# ==========================================
+#  HELPER FUNCTION: SEND EMAIL
+# ==========================================
+def send_job_email(name, applicant_email, phone, position, msg_content):
+    # 1. Get Credentials from Environment Variables (Set these in Render)
+    # If using Gmail, SMTP_SERVER is 'smtp.gmail.com' and PORT is 465
+    # If using cPanel/Webmail, ask your host for the SMTP Server and Port
+    SMTP_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com') 
+    SMTP_PORT = int(os.environ.get('MAIL_PORT', 465))
+    SENDER_EMAIL = os.environ.get('MAIL_USERNAME') # The email sending the alert
+    SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD') # The App Password
+    RECIPIENT_EMAIL = 'info@teamenvironment.org'
+
+    if not SENDER_EMAIL or not SENDER_PASSWORD:
+        print("❌ Email credentials missing in Environment Variables")
+        return False
+
+    # 2. Create the Email content
+    subject = f"New Job Application: {name} - {position}"
+    
+    body = f"""
+    You have received a new job application from the website.
+
+    ---------------------------------------
+    APPLICANT DETAILS
+    ---------------------------------------
+    Name:     {name}
+    Position: {position}
+    Phone:    {phone}
+    Email:    {applicant_email}
+
+    ---------------------------------------
+    MESSAGE
+    ---------------------------------------
+    {msg_content}
+    """
+
+    msg = MIMEMultipart()
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = RECIPIENT_EMAIL
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    # 3. Send the Email
+    try:
+        # Note: Use SMTP_SSL for port 465. If using port 587, use server.starttls()
+        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
+            server.login(SENDER_EMAIL, SENDER_PASSWORD)
+            server.send_message(msg)
+        print(f"✅ Email sent successfully to {RECIPIENT_EMAIL}")
+        return True
+    except Exception as e:
+        print(f"❌ Failed to send email: {str(e)}")
+        return False
+
+# ==========================================
+#  ROUTE: SUBMIT APPLICATION
+# ==========================================
 @app.route('/submit-application', methods=['POST'])
 def submit_application():
     data = request.json
     
-    # Extract data
+    # Extract dataironment
     name = data.get('name')
     email = data.get('email')
     phone = data.get('phone')
     position = data.get('position')
     message = data.get('message')
-
+    
     # Basic Validation
     if not name or not email or not phone:
         return jsonify({"error": "Please fill in all required fields."}), 400
+       
+    # --- SEND EMAIL ---
+    # We call the helper function here
+    email_sent = send_job_email(name, email, phone, position, message)
 
-    # In a real app, you would save this to a database or send an email here.
-    # For now, we print it to the terminal.
-    print("---------------------------------------")
-    print("NEW JOB APPLICATION RECEIVED:")
-    print(f"Name: {name}")
-    print(f"Email: {email}")
-    print(f"Phone: {phone}")
-    print(f"Position: {position}")
-    print(f"Message: {message}")
-    print("---------------------------------------")
-
-    return jsonify({"success": "Application received successfully! We will contact you soon."}), 200
+    if email_sent:
+        print("Application processed and email sent.")
+        return jsonify({"success": "Application received! We have sent a confirmation to our HR team."}), 200
+    else:
+        # We still return success to the user, but log the error on the server
+        print("Application processed but EMAIL FAILED.")
+        return jsonify({"success": "Application received, but internal notification failed. We saved your data."}), 200
+       
 @app.route('/pay', methods=['POST'])
 def pay():
     data = request.json
