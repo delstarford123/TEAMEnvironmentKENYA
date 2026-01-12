@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work With Us - TEAMEnvironment KENYA</title>
-    <meta name="description" content="Join our team and help us build a greener future. Volunteer, intern, or apply for a job.">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +21,7 @@
             --font-heading: 'Montserrat', sans-serif;
             --font-body: 'Open Sans', sans-serif;
             --container-width: 1200px;
+            --mpesa-green: #4CAF50;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,10 +35,15 @@
         .main-header { padding: 15px 0; background: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .main-header .container { display: flex; justify-content: space-between; align-items: center; }
         
+        .logo img { height: 60px; }
         .nav-menu { display: flex; gap: 20px; list-style: none; }
         .nav-menu a { text-decoration: none; font-weight: 600; color: var(--primary-dark); transition: 0.3s; }
-        .nav-menu a:hover { color: var(--primary-green); }
-        .logo img { height: 60px; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary-green); }
+        
+        .donate-btn { background-color: var(--primary-dark); color: white; padding: 10px 25px; border-radius: 0; }
+        .donate-btn:hover { background-color: var(--primary-green); color: white; border-color: var(--primary-green); }
+        .mobile-toggle { display: none; font-size: 24px; cursor: pointer; }
+
         .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; }
         
         /* --- HERO SECTION --- */
@@ -100,19 +105,40 @@
             transition: 0.3s;
         }
         .submit-btn:hover { background: var(--primary-dark); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         .apply-btn {
             display: inline-block; padding: 10px 20px; background-color: var(--primary-dark); color: white; 
-            text-decoration: none; border-radius: 4px; font-weight: 600; text-align: center;
+            text-decoration: none; border-radius: 4px; font-weight: 600; text-align: center; cursor: pointer;
         }
         .apply-btn:hover { background-color: var(--primary-green); }
 
         /* --- FOOTER --- */
         footer { background: var(--primary-dark); color: white; padding: 60px 0; text-align: center; }
         
+        /* --- M-PESA MODAL STYLES --- */
+        .mpesa-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .mpesa-modal-overlay.active { display: flex; }
+        .mpesa-modal-box { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.2); transform: translateY(20px); transition: transform 0.3s ease; }
+        .mpesa-modal-overlay.active .mpesa-modal-box { transform: translateY(0); }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 28px; color: #888; cursor: pointer; }
+        .modal-header img { height: 50px; margin-bottom: 10px; }
+        .modal-body label { display: block; text-align: left; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        .modal-body input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; outline: none; }
+        .modal-body input:focus { border-color: var(--mpesa-green); }
+        #modalDonateBtn { width: 100%; padding: 14px; background: var(--mpesa-green); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        #modalDonateBtn:hover { background: #388E3C; }
+        #modalDonateBtn:disabled { background: #ccc; cursor: not-allowed; }
+        #donationStatus { margin-top: 15px; font-size: 0.9rem; }
+        .status-success { color: green; font-weight: 600; }
+        .status-error { color: red; }
+
         @media (max-width: 768px) {
-            .nav-menu { display: none; } /* Simplified for example */
+            .nav-menu { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+            .nav-menu.active { display: flex; }
+            .mobile-toggle { display: block; }
             .page-header h1 { font-size: 2rem; }
+            .top-bar .container { flex-direction: column; gap: 10px; text-align: center; }
         }
     </style>
 </head>
@@ -132,15 +158,20 @@
             <div class="logo">
                 <a href="/"><img src="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" alt="TEK Logo"></a>
             </div>
+            
+            <i class="fas fa-bars mobile-toggle" onclick="toggleMenu()"></i>
+
             <nav>
-                <ul class="nav-menu">
+                <ul class="nav-menu" id="navMenu">
                     <li><a href="/">Home</a></li>
                     <li><a href="/about.html">About</a></li>
+                    <li><a href="/our-team.html">Our Team</a></li>
                     <li><a href="/services.html">Services</a></li>
                     <li><a href="/events.html">Events</a></li>
-                    <li><a href="/work.html" style="color: var(--primary-green);">Work With Us</a></li>
-                    <li><a href="/contact-us">Contact</a></li>
-                    <li><a href="/register.html" class="nav-link">Events Support</a></li>
+                    <li><a href="/blog.html">Blog</a></li>
+                    <li><a href="/work.html" class="active">Work With Us</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                    <li><a href="#" class="btn donate-btn" onclick="openMpesaModal()">DONATE</a></li>
                 </ul>
             </nav>
         </div>
@@ -189,21 +220,22 @@
             <h2 style="text-align: center; margin-bottom: 10px; font-family: 'Montserrat', sans-serif;">Application Form</h2>
             <p style="text-align: center; margin-bottom: 30px; color: #666;">Fill in your details below and we will get back to you.</p>
             
-            <form action="#" method="POST"> <div class="form-group">
+            <form id="applicationForm" onsubmit="handleApplication(event)">
+                <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="text" id="appName" name="name" placeholder="Your Name" required>
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" name="email" placeholder="Your Email" required>
+                    <input type="email" id="appEmail" name="email" placeholder="Your Email" required>
                 </div>
                 <div class="form-group">
                     <label>Phone Number</label>
-                    <input type="text" name="phone" placeholder="07XXXXXXXX" required>
+                    <input type="text" id="appPhone" name="phone" placeholder="07XXXXXXXX" required>
                 </div>
                 <div class="form-group">
                     <label>Position of Interest</label>
-                    <select name="position">
+                    <select id="appPosition" name="position">
                         <option value="Volunteer">General Volunteer</option>
                         <option value="Nursery Attendant">Tree Nursery Attendant</option>
                         <option value="Intern">Social Media Intern</option>
@@ -212,18 +244,147 @@
                 </div>
                 <div class="form-group">
                     <label>Why do you want to join us?</label>
-                    <textarea name="message" rows="5" placeholder="Tell us a bit about yourself and your passion for the environment..."></textarea>
+                    <textarea id="appMessage" name="message" rows="5" placeholder="Tell us a bit about yourself and your passion for the environment..."></textarea>
                 </div>
-                <button type="submit" class="submit-btn">Submit Application</button>
+                <button type="submit" id="submitAppBtn" class="submit-btn">Submit Application</button>
+                <div id="appStatus" style="margin-top: 15px; text-align: center;"></div>
             </form>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>Copyright © 2025 TEAMEnvironment KENYA. Powered by DELSTARFORD WORKS.CO.KE</p>
+            <p>Copyright © 2025 TEAMEnvironment KENYA. Powered by Pesatally.co.ke</p>
         </div>
     </footer>
+
+    <div class="mpesa-modal-overlay" id="mpesaModal">
+        <div class="mpesa-modal-box">
+            <span class="close-modal" onclick="closeMpesaModal()">&times;</span>
+            <div class="modal-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa">
+                <h3>Support Our Cause</h3>
+                <p>Enter your details to receive an M-Pesa PIN prompt.</p>
+            </div>
+            <div class="modal-body">
+                <label>Phone Number</label>
+                <input type="text" id="donorPhone" placeholder="07XXXXXXXX">
+                <label>Amount (KES)</label>
+                <input type="number" id="donorAmount" placeholder="e.g. 500">
+                <button id="modalDonateBtn" onclick="processDonation()">Donate Now</button>
+                <div id="donationStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Menu Toggle ---
+        function toggleMenu() {
+            var nav = document.getElementById("navMenu");
+            nav.classList.toggle("active");
+        }
+
+        // --- 2. Application Form Logic ---
+        async function handleApplication(event) {
+            event.preventDefault(); // Prevents the 405 Method Not Allowed error
+            
+            const btn = document.getElementById('submitAppBtn');
+            const status = document.getElementById('appStatus');
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('appName').value,
+                email: document.getElementById('appEmail').value,
+                phone: document.getElementById('appPhone').value,
+                position: document.getElementById('appPosition').value,
+                message: document.getElementById('appMessage').value
+            };
+
+            btn.disabled = true;
+            btn.innerText = "Submitting...";
+            status.innerHTML = '';
+
+            try {
+                // Send to Python Backend
+                const response = await fetch('/submit-application', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    status.innerHTML = `<span class="status-success" style="color: green;">✔ ${result.success}</span>`;
+                    document.getElementById('applicationForm').reset();
+                } else {
+                    status.innerHTML = `<span class="status-error" style="color: red;">❌ ${result.error}</span>`;
+                }
+            } catch (error) {
+                status.innerHTML = '<span class="status-error" style="color: red;">Connection error. Try again later.</span>';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Submit Application";
+            }
+        }
+
+        // --- 3. M-Pesa Logic ---
+        const mpesaModal = document.getElementById('mpesaModal');
+
+        function openMpesaModal() {
+            mpesaModal.classList.add('active');
+        }
+
+        function closeMpesaModal() {
+            mpesaModal.classList.remove('active');
+            document.getElementById('donationStatus').innerHTML = ''; 
+        }
+
+        window.onclick = function(event) {
+            if (event.target == mpesaModal) {
+                closeMpesaModal();
+            }
+        }
+
+        async function processDonation() {
+            const phone = document.getElementById('donorPhone').value;
+            const amount = document.getElementById('donorAmount').value;
+            const btn = document.getElementById('modalDonateBtn');
+            const status = document.getElementById('donationStatus');
+
+            if (!phone || !amount) {
+                status.innerHTML = '<span class="status-error">Please fill in all fields.</span>';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Processing...";
+            status.innerHTML = '';
+
+            try {
+                const response = await fetch('/pay', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: phone, amount: amount })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    status.innerHTML = '<span class="status-success">✔ Success! Check your phone to enter PIN.</span>';
+                    setTimeout(() => { btn.innerText = "Donate Again"; }, 3000);
+                } else {
+                    status.innerHTML = `<span class="status-error">❌ Error: ${result.error}</span>`;
+                    btn.innerText = "Try Again";
+                }
+            } catch (error) {
+                status.innerHTML = '<span class="status-error">Connection failed. Check internet.</span>';
+                btn.innerText = "Try Again";
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
 
 </body>
 </html>

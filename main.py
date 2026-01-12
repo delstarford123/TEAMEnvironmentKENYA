@@ -109,7 +109,61 @@ from flask import Flask, request, jsonify, render_template
 # ==========================================
 #  HELPER FUNCTION: SEND EMAIL
 # ==========================================
+# ==========================================
+#  HELPER FUNCTION: SEND EMAIL (Updated for TLS)
+# ==========================================
 def send_job_email(name, applicant_email, phone, position, msg_content):
+    # 1. Get Credentials
+    # Default to Port 587 if not set
+    SMTP_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com') 
+    SMTP_PORT = int(os.environ.get('MAIL_PORT', 587)) 
+    SENDER_EMAIL = os.environ.get('MAIL_USERNAME')
+    SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    RECIPIENT_EMAIL = 'info@teamenvironment.org'
+
+    if not SENDER_EMAIL or not SENDER_PASSWORD:
+        print("❌ Email credentials missing. Check your .env file.")
+        return False
+
+    # 2. Create Email
+    subject = f"New Job Application: {name} - {position}"
+    body = f"""
+    You have received a new job application from the website.
+
+    ---------------------------------------
+    APPLICANT DETAILS
+    ---------------------------------------
+    Name:     {name}
+    Position: {position}
+    Phone:    {phone}
+    Email:    {applicant_email}
+
+    ---------------------------------------
+    MESSAGE
+    ---------------------------------------
+    {msg_content}
+    """
+
+    msg = MIMEMultipart()
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = RECIPIENT_EMAIL
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    # 3. Send the Email using TLS (Fixes WinError 10060)
+    try:
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT) # Connect
+        server.set_debuglevel(1) # Show communication in terminal for debugging
+        server.starttls()        # Secure the connection
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        print(f"✅ Email sent successfully to {RECIPIENT_EMAIL}")
+        return True
+    except Exception as e:
+        print(f"❌ Failed to send email: {str(e)}")
+        return False
+def sendd_jobb_emaill(name, applicant_email, phone, position, msg_content):
     # 1. Get Credentials from Environment Variables (Set these in Render)
     # If using Gmail, SMTP_SERVER is 'smtp.gmail.com' and PORT is 465
     # If using cPanel/Webmail, ask your host for the SMTP Server and Port
@@ -117,7 +171,7 @@ def send_job_email(name, applicant_email, phone, position, msg_content):
     SMTP_PORT = int(os.environ.get('MAIL_PORT', 465))
     SENDER_EMAIL = os.environ.get('MAIL_USERNAME') # The email sending the alert
     SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD') # The App Password
-    RECIPIENT_EMAIL = 'info@teamenvironment.org'
+    RECIPIENT_EMAIL = 'teamenvironment.ke@gmail.com'
 
     if not SENDER_EMAIL or not SENDER_PASSWORD:
         print("❌ Email credentials missing in Environment Variables")
