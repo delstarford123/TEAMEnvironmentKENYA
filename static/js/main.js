@@ -1,11 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- 1. MOBILE MENU TOGGLE ---
+    // --- 1. HEADER SCROLL EFFECT ---
+    const header = document.querySelector('.main-header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // --- 2. MOBILE MENU TOGGLE ---
     const mobileToggle = document.querySelector('.mobile-toggle');
     const mainNav = document.querySelector('.main-nav');
+    const body = document.body;
 
     if (mobileToggle && mainNav) {
         mobileToggle.addEventListener('click', function() {
             mainNav.classList.toggle('active');
+            const isOpen = mainNav.classList.contains('active');
+            
+            // Toggle icon
+            const icon = mobileToggle.querySelector('i');
+            if (isOpen) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+                body.style.overflow = 'hidden'; // Lock scroll
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                body.style.overflow = ''; // Unlock scroll
+            }
+        });
+
+        // Close menu when clicking on a link
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('active');
+                mobileToggle.querySelector('i').classList.replace('fa-times', 'fa-bars');
+                body.style.overflow = '';
+            });
         });
     }
 

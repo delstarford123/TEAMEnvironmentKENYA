@@ -127,8 +127,16 @@ section {
     position: sticky;
     top: 0;
     z-index: 1000;
-    padding: 10px 0;
+    padding: 15px 0;
     width: 100%;
+    transition: var(--transition);
+}
+
+.main-header.scrolled {
+    padding: 8px 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .header-container {
@@ -138,10 +146,15 @@ section {
 }
 
 .logo img {
-    height: 55px;
+    height: 60px;
     width: auto;
     transition: transform 0.3s ease;
 }
+
+.main-header.scrolled .logo img {
+    height: 50px;
+}
+
 .logo img:hover { transform: scale(1.05); }
 
 .main-nav {
@@ -151,7 +164,7 @@ section {
 
 .nav-menu {
     display: flex;
-    gap: 25px;
+    gap: 30px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -159,50 +172,59 @@ section {
 }
 
 .nav-link {
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: var(--primary-dark);
     text-transform: uppercase;
     position: relative;
-    padding: 5px 0;
-    transition: color 0.3s;
+    padding: 8px 0;
+    transition: var(--transition);
+    letter-spacing: 0.5px;
+    text-decoration: none;
 }
 
 .nav-link::after {
     content: '';
     position: absolute;
     width: 0;
-    height: 2px;
-    bottom: 0;
+    height: 3px;
+    bottom: -2px;
     left: 0;
     background-color: var(--primary-green);
-    transition: width 0.3s;
+    transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 10px;
 }
 
 .nav-link:hover { color: var(--primary-green); }
-.nav-link:hover::after { width: 100%; }
+.nav-link:hover::after,
+.nav-link.active::after { width: 100%; }
+.nav-link.active { color: var(--primary-green); }
 
 .donate-btn {
     background-color: var(--primary-green);
     color: white !important;
-    padding: 10px 25px;
+    padding: 12px 28px;
     border-radius: 50px;
-    font-weight: 700;
-    box-shadow: 0 4px 10px rgba(84, 180, 53, 0.3);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: none;
+    font-weight: 800;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 15px rgba(84, 180, 53, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid var(--primary-green);
     display: flex;
     align-items: center;
     gap: 8px;
+    text-decoration: none;
 }
 
 .donate-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(84, 180, 53, 0.4);
-    background-color: #388E3C;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(84, 180, 53, 0.4);
+    background-color: #fff;
+    color: var(--primary-green) !important;
 }
 
-.mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--primary-dark); }
+.mobile-toggle { display: none; font-size: 1.6rem; cursor: pointer; color: var(--primary-dark); transition: var(--transition); }
+.mobile-toggle:hover { color: var(--primary-green); transform: scale(1.1); }
 
 /* --- 4. FLOATING DONATE BUTTON --- */
 .floating-donate-btn {

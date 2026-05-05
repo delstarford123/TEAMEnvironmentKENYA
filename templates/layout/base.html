@@ -86,13 +86,13 @@
 
             <nav class="main-nav">
                 <ul class="nav-menu">
-                    <li><a href="/" class="nav-link">Home</a></li>
-                    <li><a href="/about" class="nav-link">About Us</a></li>
-                    <li><a href="/activities" class="nav-link">Activities</a></li>
-                    <li><a href="/impact" class="nav-link">Impact</a></li>
-                    <li><a href="/events" class="nav-link">Events</a></li>
-                    <li><a href="/resources" class="nav-link">Resources</a></li>
-                    <li><a href="/contact" class="nav-link">Contact</a></li>
+                    <li><a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">About Us</a></li>
+                    <li><a href="{{ url_for('activities') }}" class="nav-link {% if request.endpoint == 'activities' %}active{% endif %}">Activities</a></li>
+                    <li><a href="{{ url_for('impact') }}" class="nav-link {% if request.endpoint == 'impact' %}active{% endif %}">Impact</a></li>
+                    <li><a href="{{ url_for('events') }}" class="nav-link {% if request.endpoint == 'events' %}active{% endif %}">Events</a></li>
+                    <li><a href="{{ url_for('resources') }}" class="nav-link {% if request.endpoint == 'resources' %}active{% endif %}">Resources</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}">Contact</a></li>
                     <li class="cta-item">
                         <a href="#" class="donate-btn" onclick="openModal()">
                             <i class="fas fa-heart"></i> DONATE
@@ -118,20 +118,20 @@
                 <div class="footer-col">
                     <h5>Quick Links</h5>
                     <ul class="footer-links">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/services">Our Services</a></li>
-                        <li><a href="/team">Our Team</a></li>
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('about') }}">About Us</a></li>
+                        <li><a href="{{ url_for('services') }}">Our Services</a></li>
+                        <li><a href="{{ url_for('team') }}">Our Team</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-col">
                     <h5>Support</h5>
                     <ul class="footer-links">
-                        <li><a href="/faq">FAQ</a></li>
-                        <li><a href="/resources">Resources</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+                        <li><a href="{{ url_for('resources') }}">Resources</a></li>
+                        <li><a href="{{ url_for('privacy') }}">Privacy Policy</a></li>
+                        <li><a href="{{ url_for('terms') }}">Terms of Service</a></li>
                     </ul>
                 </div>
                 
