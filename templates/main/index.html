@@ -43,6 +43,74 @@
     .mission-text h2 { color: white; font-size: 2.2rem; margin-bottom: 20px; }
     .mission-text p { color: #cbd5e1; }
 
+    /* --- SDG SECTION --- */
+    .sdg-section { padding: 100px 0; background-color: #fff; }
+    .sdg-header { text-align: center; margin-bottom: 60px; max-width: 800px; margin-left: auto; margin-right: auto; }
+    .sdg-header h4 { color: var(--primary-green); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; font-weight: 700; }
+    .sdg-header h2 { font-size: 2.8rem; color: var(--primary-dark); margin-bottom: 20px; }
+    
+    .sdg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+    .sdg-card { 
+        background: #fff; 
+        padding: 45px 35px; 
+        border-radius: 15px; 
+        text-align: center; 
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        position: relative;
+        overflow: hidden;
+    }
+    .sdg-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--primary-green);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+        transform-origin: left;
+    }
+    .sdg-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        border-color: rgba(76, 175, 80, 0.2);
+    }
+    .sdg-card:hover::before {
+        transform: scaleX(1);
+    }
+    .sdg-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--bg-light);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        font-size: 2rem;
+        color: var(--primary-green);
+        transition: all 0.4s ease;
+    }
+    .sdg-card:hover .sdg-icon {
+        background: var(--primary-green);
+        color: #fff;
+        transform: rotateY(360deg);
+    }
+    .sdg-number {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: #999;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .sdg-card h3 { font-size: 1.4rem; color: var(--primary-dark); margin-bottom: 15px; }
+    .sdg-card p { font-size: 0.95rem; color: #666; line-height: 1.7; }
+
     /* --- TEAM SECTION --- */
     .team-section { padding: 80px 0; }
     .team-header { text-align: center; margin-bottom: 50px; }
@@ -53,10 +121,20 @@
     .team-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
     .team-info h3 { color: white; margin-bottom: 5px; }
     .team-info p { color: var(--primary-green); font-weight: 600; }
+
+    @media (max-width: 768px) {
+        .hero h1 { font-size: 2.5rem; }
+        .stats-grid { grid-template-columns: 1fr; }
+        .mission-section { grid-template-columns: 1fr; }
+        .mission-image { height: 300px; }
+        .mission-text { padding: 40px; }
+        .sdg-header h2 { font-size: 2.2rem; }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <h3>Let Us Go Green, with You.</h3>
@@ -69,6 +147,7 @@
         </div>
     </section>
 
+    <!-- Stats Section -->
     <section class="stats-section">
         <div class="container">
             <div class="stats-grid">
@@ -89,6 +168,7 @@
         </div>
     </section>
 
+    <!-- Values Bar -->
     <section class="values-section">
         <div class="container">
             <div class="values-grid">
@@ -100,6 +180,7 @@
         </div>
     </section>
 
+    <!-- Mission Section -->
     <section class="mission-section">
         <div class="mission-image"></div>
         <div class="mission-text">
@@ -111,6 +192,60 @@
         </div>
     </section>
 
+    <!-- SDG Section (New) -->
+    <section class="sdg-section">
+        <div class="container">
+            <div class="sdg-header">
+                <h4>Global Impact</h4>
+                <h2>Our Commitment to the SDGs</h2>
+                <p>We align our local conservation efforts with the United Nations Sustainable Development Goals to ensure a lasting impact on our planet and its people.</p>
+            </div>
+            
+            <div class="sdg-grid">
+                <!-- SDG 13 -->
+                <div class="sdg-card">
+                    <span class="sdg-number">Goal 13</span>
+                    <div class="sdg-icon">
+                        <i class="fas fa-globe-africa"></i>
+                    </div>
+                    <h3>Climate Action</h3>
+                    <p>We implement reforestation and greening projects to combat global warming and build community resilience against climate-related disasters.</p>
+                </div>
+
+                <!-- SDG 15 -->
+                <div class="sdg-card">
+                    <span class="sdg-number">Goal 15</span>
+                    <div class="sdg-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3>Life on Land</h3>
+                    <p>Our commitment involves restoring degraded forests, protecting biodiversity, and promoting the sustainable management of Kenya's terrestrial ecosystems.</p>
+                </div>
+
+                <!-- SDG 6 -->
+                <div class="sdg-card">
+                    <span class="sdg-number">Goal 6</span>
+                    <div class="sdg-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h3>Clean Water & Sanitation</h3>
+                    <p>By conserving watersheds and promoting sustainable land-use practices, we ensure the protection and restoration of vital water-related ecosystems.</p>
+                </div>
+
+                <!-- SDG 11 -->
+                <div class="sdg-card">
+                    <span class="sdg-number">Goal 11</span>
+                    <div class="sdg-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <h3>Sustainable Cities</h3>
+                    <p>We advocate for green urban spaces and community-led environmental initiatives to make human settlements inclusive, safe, and resilient.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
     <section class="team-section">
         <div class="container">
             <div class="team-header">
