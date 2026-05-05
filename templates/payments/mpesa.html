@@ -1,0 +1,18 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Donate - TEAMEnvironment KENYA{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 100px 20px; text-align: center;">
+    <div style="max-width: 600px; margin: 0 auto; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+        <h1 style="color: var(--primary-green); margin-bottom: 20px;">Donate to Our Cause</h1>
+        <p style="margin-bottom: 30px; font-size: 1.1rem; color: #555;">
+            Your contribution helps us plant more trees, support farmers, and fight climate change in Kenya.
+        </p>
+
+        <button onclick="openModal()" class="pay-btn" style="max-width: 300px; margin: 0 auto;">
+            Donate via M-Pesa
+        </button>
+    </div>
+</div>
+{% endblock %}

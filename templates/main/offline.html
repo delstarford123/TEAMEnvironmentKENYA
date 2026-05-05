@@ -1,0 +1,35 @@
+{% extends "layout/base.html" %}
+
+{% block title %}You're Offline | TEAMEnvironment KENYA{% endblock %}
+
+{% block content %}
+<section style="padding: 120px 0; text-align: center; min-height: 70vh; display: flex; align-items: center;">
+    <div class="container">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <i class="fas fa-cloud-sun" style="font-size: 5rem; color: var(--primary-green); margin-bottom: 30px;"></i>
+            <h1 style="margin-bottom: 20px;">You're Offline</h1>
+            <p style="font-size: 1.2rem; color: #64748b; margin-bottom: 40px;">The climate fight continues even when you're disconnected. Reconnect to see our latest activities and join our mission for a greener Kenya.</p>
+            
+            <div style="background: var(--bg-light); padding: 30px; border-radius: 12px; margin-bottom: 40px;">
+                <h3 style="margin-bottom: 10px;">While you wait:</h3>
+                <ul style="text-align: left; display: inline-block; list-style: disc;">
+                    <li>Check your Wi-Fi or data connection.</li>
+                    <li>Wait for your signal to return.</li>
+                    <li>Read our mission statement on this page.</li>
+                </ul>
+            </div>
+
+            <button onclick="window.location.reload()" class="btn">
+                <i class="fas fa-sync-alt"></i> Try Again
+            </button>
+        </div>
+    </div>
+</section>
+
+<section style="background: var(--primary-dark); color: white; padding: 60px 0;">
+    <div class="container">
+        <h2 style="color: white; margin-bottom: 20px;">Our Mission</h2>
+        <p style="color: #cbd5e1; font-size: 1.1rem;">To build a heritage for future generations of a cleaner, greener (food & water) secure and a peaceful environment through strategic restoration and community engagement.</p>
+    </div>
+</section>
+{% endblock %}

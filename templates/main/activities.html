@@ -1,0 +1,192 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Our Activities - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(rgba(84, 180, 53, 0.8), rgba(15, 23, 42, 0.8)), url('https://teamenvironment.org/wp-content/uploads/2025/03/highridge_seeds_of_a_greener_future_1_70.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { font-size: 3rem; color: white; margin-bottom: 15px; }
+    .page-header p { font-size: 1.1rem; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+
+    .activities-section { padding: 80px 0; background: #f4f7f6; }
+    
+    .activities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+    }
+
+    .activity-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+    .activity-card:hover { 
+        transform: translateY(-10px); 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
+    }
+
+    .activity-media-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 66.67%; /* 3:2 Aspect Ratio */
+        overflow: hidden;
+        background: #000;
+    }
+
+    .activity-media {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .activity-card:hover .activity-media {
+        transform: scale(1.08);
+    }
+
+    video.activity-media {
+        background: #000;
+    }
+
+    .activity-content {
+        padding: 30px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .activity-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .activity-date {
+        font-size: 0.8rem;
+        color: var(--primary-green);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: rgba(84, 180, 53, 0.1);
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    .activity-content h3 { 
+        margin-bottom: 15px; 
+        color: var(--primary-dark); 
+        font-size: 1.4rem; 
+        line-height: 1.3;
+    }
+
+    .activity-content p { 
+        color: #64748b; 
+        font-size: 0.95rem; 
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+    }
+
+    .activity-footer {
+        margin-top: auto;
+        padding-top: 20px;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .read-more {
+        color: var(--primary-green);
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: gap 0.3s;
+    }
+
+    .activity-card:hover .read-more {
+        gap: 10px;
+    }
+
+    .no-activities { 
+        text-align: center; 
+        padding: 100px 20px; 
+        grid-column: 1 / -1; 
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 768px) {
+        .page-header h1 { font-size: 2.2rem; }
+        .activities-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="container">
+            <h1>Climate Action Hub</h1>
+            <p>Documenting our journey towards a greener, more resilient Kenya through grassroots initiatives and strategic partnerships.</p>
+        </div>
+    </section>
+
+    <section class="activities-section">
+        <div class="container">
+            <div class="activities-grid">
+                {% if activities %}
+                    {% for activity in activities %}
+                        <div class="activity-card">
+                            <div class="activity-media-wrapper">
+                                {% if activity.media_type == 'video' %}
+                                    <video class="activity-media" controls poster="{{ activity.thumbnail_url or '' }}">
+                                        <source src="{{ activity.media_url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% else %}
+                                    <img src="{{ activity.media_url }}" alt="{{ activity.title }}" class="activity-media" loading="lazy">
+                                {% endif %}
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-meta">
+                                    <span class="activity-date"><i class="far fa-calendar-alt"></i> {{ activity.created_at[:10] }}</span>
+                                </div>
+                                <h3>{{ activity.title }}</h3>
+                                <p>{{ activity.description }}</p>
+                                <div class="activity-footer">
+                                    <span class="read-more">View Details <i class="fas fa-arrow-right"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-activities">
+                        <i class="fas fa-seedling" style="font-size: 4rem; color: var(--primary-green); margin-bottom: 25px; display: block; opacity: 0.5;"></i>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 10px;">No activities posted yet.</h3>
+                        <p style="color: #64748b;">We're busy working on the ground! Stay tuned for updates on our latest projects and impact stories.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

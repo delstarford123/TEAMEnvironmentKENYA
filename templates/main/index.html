@@ -1,0 +1,142 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Home - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- HERO SECTION --- */
+    .hero {
+        background-image: linear-gradient(90deg, rgba(12, 20, 6, 0.7) 0%, rgba(255, 255, 255, 0.1) 100%), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 85vh;
+        display: flex;
+        align-items: center;
+        color: white;
+    }
+
+    .hero h3 { color: var(--primary-green); font-weight: 400; margin-bottom: 10px; font-size: 1.5rem; }
+    .hero h1 { font-size: 3.5rem; line-height: 1.2; color: white; margin-bottom: 20px; }
+    .hero p { max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
+    .hero-btns { display: flex; gap: 20px; }
+
+    /* --- STATS SECTION --- */
+    .stats-section { padding: 80px 0; background: #fff; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+    .stats-content h2 { font-size: 2.5rem; margin-bottom: 20px; }
+    .stats-numbers { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+    .stat-box { padding: 30px; border-right: 1px solid #eee; border-bottom: 1px solid #eee; text-align: left; }
+    .stat-box h2 { color: var(--primary-green); font-size: 3rem; margin-bottom: 5px; }
+    .stat-box p { font-size: 0.9rem; font-weight: 600; }
+
+    /* --- VALUES SECTION --- */
+    .values-section { padding: 60px 0; background-color: var(--bg-light); }
+    .values-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .value-item { font-weight: 700; font-size: 1.2rem; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+    .value-item i { color: var(--primary-green); }
+
+    /* --- MISSION SECTION --- */
+    .mission-section { display: grid; grid-template-columns: 1fr 1fr; min-height: 500px; }
+    .mission-image { background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2021/11/mission-vission-min.jpg'); background-size: cover; background-position: center; }
+    .mission-text { padding: 80px; background-color: var(--primary-dark); color: white; }
+    .mission-text h4 { color: var(--primary-green); margin-bottom: 10px; }
+    .mission-text h2 { color: white; font-size: 2.2rem; margin-bottom: 20px; }
+    .mission-text p { color: #cbd5e1; }
+
+    /* --- TEAM SECTION --- */
+    .team-section { padding: 80px 0; }
+    .team-header { text-align: center; margin-bottom: 50px; }
+    .team-header h4 { color: var(--primary-green); margin-bottom: 10px; }
+    .team-header h2 { font-size: 2.5rem; }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    .team-card { height: 400px; background-size: cover; background-position: center; position: relative; border-radius: 8px; overflow: hidden; }
+    .team-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
+    .team-info h3 { color: white; margin-bottom: 5px; }
+    .team-info p { color: var(--primary-green); font-weight: 600; }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <div class="container">
+            <h3>Let Us Go Green, with You.</h3>
+            <h1>TEAMEnvironment KENYA</h1>
+            <p>A Socio-economic, Environmental and Humanitarian Membership Association focused on Greening and Environmental Conservation.</p>
+            <div class="hero-btns">
+                <a href="/services" class="btn">Our Services</a>
+                <a href="/contact" class="btn btn-outline">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stats-content">
+                    <h4>Let's Go Green, with You.</h4>
+                    <h2>7 Years Of Undefeated Success</h2>
+                    <p>Colleagues and Partners in Climate Action: 1,520+ People<br>TEK Bonafied Registered Members: 121+ People</p>
+                    <br>
+                    <a href="/work" class="btn" style="background: var(--primary-dark);">Work With Us</a>
+                </div>
+                <div class="stats-numbers">
+                    <div class="stat-box"><h2>32+</h2><p>Projects Finished</p></div>
+                    <div class="stat-box"><h2>7</h2><p>Years Experience</p></div>
+                    <div class="stat-box"><h2>120+</h2><p>Investments</p></div>
+                    <div class="stat-box"><h2>1.5k</h2><p>Colleagues</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="values-section">
+        <div class="container">
+            <div class="values-grid">
+                <div class="value-item"><i class="fas fa-people-arrows"></i> Socially</div>
+                <div class="value-item"><i class="fas fa-money-bill-wave"></i> Economically</div>
+                <div class="value-item"><i class="fas fa-leaf"></i> Environmentally</div>
+                <div class="value-item"><i class="fas fa-check"></i> Humanitarian</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-section">
+        <div class="mission-image"></div>
+        <div class="mission-text">
+            <h4>Mission</h4>
+            <h2>Transform Communities Across the Globe</h2>
+            <p>To foster climate change adaptation and mitigation by catalyzing community-level interventions that enhances well-being, livelihood security, environmental conservation and sustainable asset-based community development.</p>
+            <br>
+            <a href="/contact" class="btn btn-outline">Get In Touch</a>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container">
+            <div class="team-header">
+                <h4>Our Team</h4>
+                <h2>Meet our team</h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card" style="background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Mr._Joseph_Kithyaka_-_-removebg-preview.png');">
+                    <div class="team-info">
+                        <h3>Mr. Joseph Kithyaka</h3>
+                        <p>National Chairman & Patron</p>
+                    </div>
+                </div>
+                <div class="team-card" style="background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/PHOTO_PASSPORT.-removebg-preview.png');">
+                    <div class="team-info">
+                        <h3>Ochanda Mathew</h3>
+                        <p>Executive Director</p>
+                    </div>
+                </div>
+                <div class="team-card" style="background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Ms._Janet_Ruto.1jpeg-removebg-preview.png');">
+                    <div class="team-info">
+                        <h3>Ms. Janet Ruto</h3>
+                        <p>CEO - Jani Mpya Solutions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

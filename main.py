@@ -1,30 +1,81 @@
 import os
 import requests
 import base64
-from flask import Flask, request, jsonify, render_template
-from datetime import datetime
+import smtplib
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session, flash
 
+# ==========================================
+#  0. SENTRY INITIALIZATION
+# ==========================================
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN"),
+    integrations=[FlaskIntegration()],
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile every transaction.
+    profiles_sample_rate=1.0,
+)
+from datetime import datetime
+from functools import wraps
+from werkzeug.utils import secure_filename
+from firebase_config import initialize_firebase, db
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
 
 # ==========================================
-#  1. CONFIGURATION (M-PESA CREDENTIALS)
+#  1. FIREBASE INITIALIZATION
 # ==========================================
-# Note: These are Sandbox keys. For production, never expose these in code.
-# In main.py
+bucket = initialize_firebase()
+
+# ==========================================
+#  2. CONFIGURATION (M-PESA & ADMIN)
+# ==========================================
 CONSUMER_KEY = os.environ.get('CONSUMER_KEY')
 CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET')
 PASSKEY = os.environ.get('PASSKEY')
 BUSINESS_SHORT_CODE = '174379'
-# ==========================================
-#  2. HELPER FUNCTIONS
-# ==========================================
-import os  # Add this at the very top
+CALLBACK_URL = os.environ.get('CALLBACK_URL', 'https://teamenvironmentkenya.onrender.com/callback')
 
-# ... inside your configuration section ...
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
 
-# Use environment variable if available, otherwise default to a placeholder
-CALLBACK_URL = os.environ.get('CALLBACK_URL', 'https://teamenvironmentkenya.onrender.com//callback')
+# ==========================================
+#  3. HELPER FUNCTIONS & DECORATORS
+# ==========================================
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def upload_to_firebase(file, folder="uploads"):
+    """Uploads a file to Firebase Storage and returns the public URL."""
+    if not file:
+        return None
+    
+    filename = secure_filename(file.filename)
+    # Add timestamp to filename to prevent collisions
+    filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{filename}"
+    blob = bucket.blob(f"{folder}/{filename}")
+    
+    # Set content type (optional but recommended)
+    blob.upload_from_file(file, content_type=file.content_type)
+    blob.make_public()
+    return blob.public_url
+
 def get_access_token():
     """Generates an OAuth Access Token from Safaricom."""
     api_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
@@ -41,234 +92,353 @@ def generate_password(timestamp):
     data_to_encode = BUSINESS_SHORT_CODE + PASSKEY + timestamp
     return base64.b64encode(data_to_encode.encode()).decode('utf-8')
 
+def send_email(subject, recipient, body, attachment_path=None):
+    from email.mime.application import MIMEApplication
+    SMTP_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com') 
+    SMTP_PORT = int(os.environ.get('MAIL_PORT', 587)) 
+    SENDER_EMAIL = os.environ.get('MAIL_USERNAME')
+    SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
+    if not SENDER_EMAIL or not SENDER_PASSWORD:
+        print("❌ Email credentials missing.")
+        return False
+
+    msg = MIMEMultipart()
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = recipient
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Optional Attachment
+    if attachment_path and os.path.exists(attachment_path):
+        with open(attachment_path, "rb") as f:
+            attach = MIMEApplication(f.read(), _subtype="pdf")
+            attach.add_header('Content-Disposition', 'attachment', filename=os.path.basename(attachment_path))
+            msg.attach(attach)
+
+    try:
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"❌ Failed to send email: {str(e)}")
+        return False
+
 # ==========================================
-#  3. WEBSITE ROUTES (Navigation)
+#  4. WEBSITE ROUTES (Navigation)
 # ==========================================
 
 @app.route('/')
 @app.route('/index.html')
 def home():
-    return render_template('index.html')
+    return render_template('main/index.html')
 
-@app.route('/about.html')
 @app.route('/about')
+@app.route('/about.html')
 def about():
-    return render_template('about.html')
+    return render_template('main/about.html')
 
-@app.route('/services.html')
 @app.route('/services')
+@app.route('/services.html')
 def services():
-    return render_template('services.html')
+    return render_template('main/services.html')
 
-@app.route('/events.html')
 @app.route('/events')
+@app.route('/events.html')
 def events():
-    return render_template('events.html')
+    # Fetch events from Firebase
+    events_ref = db.reference('events')
+    events_data = events_ref.get()
+    
+    upcoming_events = []
+    past_events = []
+    
+    if events_data:
+        for event_id, event in events_data.items():
+            event['id'] = event_id
+            if event.get('status') == 'upcoming':
+                upcoming_events.append(event)
+            else:
+                past_events.append(event)
+    
+    return render_template('events/events.html', upcoming_events=upcoming_events, past_events=past_events)
+
+@app.route('/activities')
+@app.route('/activities.html')
+def activities():
+    # Fetch activities from Firebase
+    activities_ref = db.reference('activities')
+    activities_data = activities_ref.get()
+    
+    activities_list = []
+    if activities_data:
+        for act_id, act in activities_data.items():
+            act['id'] = act_id
+            activities_list.append(act)
+    
+    # Sort by date (newest first)
+    activities_list.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    
+    return render_template('main/activities.html', activities=activities_list)
 
 
-@app.route('/register.html')
+
 @app.route('/register')
+@app.route('/register.html')
 def register():
-    return render_template('register.html')
-   
-@app.route('/base.html')
-@app.route('/base')
-def base():
-    return render_template('base.html')
+    return render_template('auth/register.html')
 
-@app.route('/blog.html')
 @app.route('/blog')
+@app.route('/blog.html')
 def blog():
-    return render_template('blog.html')
-@app.route('/our-team.html')
+    # Example of passing dynamic SEO variables for a page
+    return render_template(
+        'blog/blog.html',
+        page_title='Our Impact Stories',
+        page_description='Read the latest updates and success stories from TEAMEnvironment KENYA\'s conservation efforts.',
+        feature_image_url=url_for('static', filename='images/Climate resilience.jpeg', _external=True)
+    )
+
 @app.route('/our-team')
+@app.route('/our-team.html')
 def team():
-    # Make sure your file is named 'team.html' inside the templates folder
-    return render_template('team.html')
+    return render_template('main/team.html')
+
 @app.route('/contact')
 @app.route('/contact.html')
 def contact():
-    return render_template('contact.html')
+    return render_template('main/contact.html')
 
-# ==========================================
-#  4. PAYMENT ROUTES (M-PESA)
-# ==========================================
-# ... (Keep your imports and configuration at the top)
-# --- 1. Route to Render the Work Page ---
-@app.route('/work.html')
 @app.route('/work')
+@app.route('/work.html')
 def work():
-    return render_template('work.html')
-import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from flask import Flask, request, jsonify, render_template
+    return render_template('main/work.html')
 
+@app.route('/privacy')
+@app.route('/privacy-policy')
+def privacy():
+    return render_template('main/privacy.html')
+
+@app.route('/terms')
+@app.route('/terms-of-service')
+def terms():
+    return render_template('main/terms.html')
+
+@app.route('/impact')
+def impact():
+    # In a real scenario, you would fetch these numbers from Firebase
+    stats = {
+        "trees_planted": "150,000+",
+        "volunteers": "5,000+",
+        "communities": "120+",
+        "acres_restored": "2,500+"
+    }
+    return render_template('main/impact.html', stats=stats)
+
+@app.route('/resources')
+def resources():
+    # You could fetch documents from Firebase Storage or a list in DB
+    documents = [
+        {"title": "TEK & KFS MOU", "filename": "TEK & KFS MOU for Ngong Hills Adoption for Rehabilitation and Restoration...pdf"},
+        {"title": "Sustainable Restoration Cost", "filename": "KFS - Team Environment Kenya... Ngong Hills Ecosystem... SUSTAINABLE RESTORATION COST...pdf"},
+        {"title": "Tree Forest Cover Commitment", "filename": "TEK'S COMMITMENT TOWARDS THE ATTAINMENT OF 30% (TREE) FOREST COVER BY 2032.pdf"}
+    ]
+    return render_template('main/resources.html', documents=documents)
+
+@app.route('/faq')
+def faq():
+    return render_template('main/faq.html')
+
+@app.route('/offline')
+def offline():
+    return render_template('main/offline.html')
 
 # ==========================================
-#  HELPER FUNCTION: SEND EMAIL
+#  5. ADMIN ROUTES
 # ==========================================
-# ==========================================
-#  HELPER FUNCTION: SEND EMAIL (Updated for TLS)
-# ==========================================
-def send_job_email(name, applicant_email, phone, position, msg_content):
-    # 1. Get Credentials
-    # Default to Port 587 if not set
-    SMTP_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com') 
-    SMTP_PORT = int(os.environ.get('MAIL_PORT', 587)) 
-    SENDER_EMAIL = os.environ.get('MAIL_USERNAME')
-    SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    RECIPIENT_EMAIL = 'teamenvironment.ke@gmail.com'
 
-    if not SENDER_EMAIL or not SENDER_PASSWORD:
-        print("❌ Email credentials missing. Check your .env file.")
-        return False
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['logged_in'] = True
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Invalid credentials!', 'danger')
+            
+    return render_template('admin/login.html')
 
-    # 2. Create Email
-    subject = f"New Job Application: {name} - {position}"
-    body = f"""
-    You have received a new job application from the website.
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('home'))
 
-    ---------------------------------------
-    APPLICANT DETAILS
-    ---------------------------------------
-    Name:     {name}
-    Position: {position}
-    Phone:    {phone}
-    Email:    {applicant_email}
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    events_ref = db.reference('events')
+    events = events_ref.get()
+    bookings_ref = db.reference('bookings')
+    bookings = bookings_ref.get()
+    activities_ref = db.reference('activities')
+    activities = activities_ref.get()
+    return render_template('admin/admin.html', events=events, bookings=bookings, activities=activities)
 
-    ---------------------------------------
-    MESSAGE
-    ---------------------------------------
-    {msg_content}
-    """
+@app.route('/admin/add-event', methods=['POST'])
+@login_required
+def add_event():
+    # Handle image upload
+    image_file = request.files.get('image')
+    image_url = upload_to_firebase(image_file, "events") if image_file else request.form.get('image_url')
 
-    msg = MIMEMultipart()
-    msg['From'] = SENDER_EMAIL
-    msg['To'] = RECIPIENT_EMAIL
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    event_data = {
+        'title': request.form.get('title'),
+        'date': request.form.get('date'),
+        'location': request.form.get('location'),
+        'description': request.form.get('description'),
+        'image_url': image_url,
+        'status': request.form.get('status', 'upcoming'),
+        'created_at': datetime.now().isoformat()
+    }
+    db.reference('events').push(event_data)
+    flash('Event added successfully!', 'success')
+    return redirect(url_for('admin_dashboard'))
 
-    # 3. Send the Email using TLS (Fixes WinError 10060)
-    try:
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT) # Connect
-        #server.set_debuglevel(1) # Show communication in terminal for debugging
-        server.starttls()        # Secure the connection
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        server.send_message(msg)
-        server.quit()
-        print(f"✅ Email sent successfully to {RECIPIENT_EMAIL}")
-        return True
-    except Exception as e:
-        print(f"❌ Failed to send email: {str(e)}")
-        return False
-def sendd_jobb_emaill(name, applicant_email, phone, position, msg_content):
-    # 1. Get Credentials from Environment Variables (Set these in Render)
-    # If using Gmail, SMTP_SERVER is 'smtp.gmail.com' and PORT is 465
-    # If using cPanel/Webmail, ask your host for the SMTP Server and Port
-    SMTP_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com') 
-    SMTP_PORT = int(os.environ.get('MAIL_PORT', 465))
-    SENDER_EMAIL = os.environ.get('MAIL_USERNAME') # The email sending the alert
-    SENDER_PASSWORD = os.environ.get('MAIL_PASSWORD') # The App Password
-    RECIPIENT_EMAIL = 'teamenvironment.ke@gmail.com'
+@app.route('/admin/delete-event/<event_id>')
+@login_required
+def delete_event(event_id):
+    db.reference(f'events/{event_id}').delete()
+    flash('Event deleted successfully!', 'success')
+    return redirect(url_for('admin_dashboard'))
 
-    if not SENDER_EMAIL or not SENDER_PASSWORD:
-        print("❌ Email credentials missing in Environment Variables")
-        return False
-
-    # 2. Create the Email content
-    subject = f"New Job Application: {name} - {position}"
+@app.route('/admin/add-activity', methods=['POST'])
+@login_required
+def add_activity():
+    title = request.form.get('title')
+    description = request.form.get('description')
+    media_file = request.files.get('media')
     
-    body = f"""
-    You have received a new job application from the website.
+    if not title or not media_file:
+        flash('Title and Media are required!', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    
+    # Determine if it's a video or image based on content type
+    media_type = 'video' if media_file.content_type.startswith('video') else 'image'
+    media_url = upload_to_firebase(media_file, "activities")
+    
+    activity_data = {
+        'title': title,
+        'description': description,
+        'media_url': media_url,
+        'media_type': media_type,
+        'created_at': datetime.now().isoformat()
+    }
+    
+    db.reference('activities').push(activity_data)
+    flash('Activity posted successfully!', 'success')
+    return redirect(url_for('admin_dashboard'))
 
-    ---------------------------------------
-    APPLICANT DETAILS
-    ---------------------------------------
-    Name:     {name}
-    Position: {position}
-    Phone:    {phone}
-    Email:    {applicant_email}
+@app.route('/admin/delete-activity/<activity_id>')
+@login_required
+def delete_activity(activity_id):
+    db.reference(f'activities/{activity_id}').delete()
+    flash('Activity deleted successfully!', 'success')
+    return redirect(url_for('admin_dashboard'))
 
-    ---------------------------------------
-    MESSAGE
-    ---------------------------------------
-    {msg_content}
+# ==========================================
+#  6. BOOKING & APPLICATIONS
+# ==========================================
+
+@app.route('/book-event', methods=['POST'])
+def book_event():
+    data = request.json
+    event_id = data.get('event_id')
+    event_title = data.get('event_title')
+    name = data.get('name')
+    email = data.get('email')
+    phone = data.get('phone')
+    
+    booking_data = {
+        'event_id': event_id,
+        'event_title': event_title,
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'booked_at': datetime.now().isoformat()
+    }
+    
+    # Save to Firebase
+    db.reference('bookings').push(booking_data)
+    
+    # Send Email to Admin
+    admin_body = f"""
+    New Event Booking Received:
+    Event: {event_title}
+    Name: {name}
+    Email: {email}
+    Phone: {phone}
     """
+    send_email(f"New Booking: {event_title}", 'teamenvironment.ke@gmail.com', admin_body)
+    
+    # Send Confirmation to User
+    user_body = f"""
+    Hi {name},
+    
+    Thank you for booking for the event: {event_title}.
+    We have received your application and will contact you soon with more details.
+    
+    Best regards,
+    TEAMEnvironment KENYA
+    """
+    send_email(f"Booking Confirmation: {event_title}", email, user_body)
+    
+    return jsonify({"success": "Booking successful! Check your email for confirmation."}), 200
 
-    msg = MIMEMultipart()
-    msg['From'] = SENDER_EMAIL
-    msg['To'] = RECIPIENT_EMAIL
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
-
-    # 3. Send the Email
-    try:
-        # Note: Use SMTP_SSL for port 465. If using port 587, use server.starttls()
-        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
-            server.login(SENDER_EMAIL, SENDER_PASSWORD)
-            server.send_message(msg)
-        print(f"✅ Email sent successfully to {RECIPIENT_EMAIL}")
-        return True
-    except Exception as e:
-        print(f"❌ Failed to send email: {str(e)}")
-        return False
-
-# ==========================================
-#  ROUTE: SUBMIT APPLICATION
-# ==========================================
 @app.route('/submit-application', methods=['POST'])
 def submit_application():
     data = request.json
-    
-    # Extract dataironment
     name = data.get('name')
     email = data.get('email')
     phone = data.get('phone')
     position = data.get('position')
     message = data.get('message')
     
-    # Basic Validation
     if not name or not email or not phone:
         return jsonify({"error": "Please fill in all required fields."}), 400
        
-    # --- SEND EMAIL ---
-    # We call the helper function here
-    email_sent = send_job_email(name, email, phone, position, message)
+    body = f"New Job Application from {name}\nPosition: {position}\nPhone: {phone}\nEmail: {email}\nMessage: {message}"
+    email_sent = send_email(f"Job Application: {name}", 'teamenvironment.ke@gmail.com', body)
 
-    if email_sent:
-        print("Application processed and email sent.")
-        return jsonify({"success": "Application received! We have sent a confirmation to our HR team."}), 200
-    else:
-        # We still return success to the user, but log the error on the server
-        print("Application processed but EMAIL FAILED.")
-        return jsonify({"success": "Application received, but internal notification failed. We saved your data."}), 200
-       
+    return jsonify({"success": "Application received!"}), 200
+
+# ==========================================
+#  7. PAYMENT ROUTES (M-PESA)
+# ==========================================
+
 @app.route('/pay', methods=['POST'])
 def pay():
     data = request.json
     phone = data.get('phone')
     amount = data.get('amount')
 
-    # 1. VALIDATION
     if not phone or not amount:
         return jsonify({"error": "Phone and Amount are required"}), 400
 
-    # 2. FORMAT PHONE NUMBER (Crucial for M-Pesa)
-    # This converts 0722000000 or +254722000000 to 254722000000
     if phone.startswith('0'):
         phone = '254' + phone[1:]
     elif phone.startswith('+254'):
         phone = phone[1:]
     
-    # 3. GET TOKEN
     access_token = get_access_token()
     if not access_token:
-        print("❌ Error: Could not generate Access Token")
         return jsonify({"error": "Failed to generate M-Pesa Token"}), 500
 
-    # 4. PREPARE PAYLOAD
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     password = generate_password(timestamp)
 
@@ -277,11 +447,11 @@ def pay():
         "Password": password,
         "Timestamp": timestamp,
         "TransactionType": "CustomerPayBillOnline",
-        "Amount": int(amount), # Ensure amount is an integer
+        "Amount": int(amount),
         "PartyA": phone,
         "PartyB": BUSINESS_SHORT_CODE,
         "PhoneNumber": phone,
-        "CallBackURL": CALLBACK_URL, # Ensure this is your active Ngrok URL
+        "CallBackURL": CALLBACK_URL,
         "AccountReference": "TEAMEnvironment KENYA",
         "TransactionDesc": "Donation"
     }
@@ -291,52 +461,29 @@ def pay():
         'Content-Type': 'application/json'
     }
 
-    # 5. SEND TO SAFARICOM
     try:
-        print(f"📡 Sending STK Push to: {phone} for Amount: {amount}")
         response = requests.post(
             "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
             json=payload,
             headers=headers
         )
-        
-        response_data = response.json()
-        
-        # 6. PRINT THE EXACT RESPONSE FROM SAFARICOM (Check your terminal for this!)
-        print("------------------------------------------------")
-        print("SAFARICOM RESPONSE:", response_data)
-        print("------------------------------------------------")
-
-        # 7. CHECK FOR SUCCESS (ResponseCode '0' means success)
-        if response_data.get('ResponseCode') == '0':
-            return jsonify(response_data)
-        else:
-            # If Safaricom refused, send the error back to the frontend
-            error_message = response_data.get('errorMessage', 'Unknown Error')
-            return jsonify({"error": error_message}), 400
-
+        return jsonify(response.json())
     except Exception as e:
-        print(f"❌ Exception: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
 @app.route('/callback', methods=['POST'])
 def callback():
-    """
-    Receives the payment result from Safaricom.
-    This route will only work if your laptop is exposed via Ngrok.
-    """
     data = request.json
-    print("---------------------------------------")
-    print("M-PESA CALLBACK RECEIVED:")
-    print(data)
-    print("---------------------------------------")
-    
-    # In a real app, you would save this data to a database here.
+    db.reference('payments').push(data)
     return "OK"
 
-# ==========================================
-#  5. RUN SERVER
-# ==========================================
+@app.route('/sw.js')
+def serve_sw():
+    return app.send_static_file('sw.js')
+
+@app.route('/manifest.json')
+def serve_manifest():
+    return app.send_static_file('manifest.json')
 
 if __name__ == '__main__':
-    # host='0.0.0.0' allows access from other devices on the same Wi-Fi (e.g., your phone)
     app.run(host='0.0.0.0', port=5000, debug=True)

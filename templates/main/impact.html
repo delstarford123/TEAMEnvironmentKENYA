@@ -1,0 +1,55 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Our Impact | TEAMEnvironment KENYA{% endblock %}
+
+{% block content %}
+<section class="page-header" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/Climate resilience.jpeg'); background-size: cover; background-position: center; padding: 100px 0; color: white; text-align: center;">
+    <div class="container">
+        <h1 style="font-size: 3rem; margin-bottom: 20px;">Our Impact</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Transparent results of our commitment to a greener, cleaner, and more sustainable Kenya.</p>
+    </div>
+</section>
+
+<section class="impact-stats" style="padding: 80px 0; background-color: var(--bg-light);">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center;">
+            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <i class="fas fa-tree" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
+                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.trees_planted }}</h2>
+                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Trees Planted</p>
+            </div>
+            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <i class="fas fa-users" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
+                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.volunteers }}</h2>
+                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Active Volunteers</p>
+            </div>
+            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <i class="fas fa-handshake" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
+                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.communities }}</h2>
+                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Communities Reached</p>
+            </div>
+            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
+                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.acres_restored }}</h2>
+                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Acres Restored</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="impact-details" style="padding: 80px 0;">
+    <div class="container">
+        <div style="display: flex; flex-wrap: wrap; gap: 50px; align-items: center;">
+            <div style="flex: 1; min-width: 300px;">
+                <h2 style="margin-bottom: 25px;">Driving Real Change Through Local Action</h2>
+                <p style="margin-bottom: 20px;">At TEAMEnvironment KENYA, we believe that environmental conservation is not just about planting trees, but about restoring ecosystems and empowering communities.</p>
+                <p style="margin-bottom: 20px;">Our data-driven approach ensures that every shilling donated and every hour volunteered translates into measurable environmental impact. From the Ngong Hills restoration to community agroforestry projects, we are building a legacy of sustainability.</p>
+                <a href="/activities" class="btn">View Our Activities</a>
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+                <img src="/static/images/People collborating.jpeg" alt="Impact" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

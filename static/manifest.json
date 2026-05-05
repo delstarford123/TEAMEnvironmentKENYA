@@ -1,0 +1,21 @@
+{
+  "name": "TEAMEnvironment KENYA",
+  "short_name": "TEK",
+  "description": "Building a Heritage for Future Generations of a Cleaner, Greener Secure and a Peaceful Environment.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#54B435",
+  "icons": [
+    {
+      "src": "/static/images/TEK.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/static/images/TEK.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

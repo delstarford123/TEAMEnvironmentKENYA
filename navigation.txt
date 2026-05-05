@@ -1,0 +1,69 @@
+================================================================================
+TEAMEnvironment KENYA - SYSTEM NAVIGATION & ARCHITECTURE
+================================================================================
+
+1. OVERVIEW
+-----------
+The TEAMEnvironment KENYA web application is a professional socio-economic and 
+environmental platform built using the Flask (Python) framework. It integrates 
+real-time data management via Firebase, automated financial transactions through 
+Safaricom's M-Pesa API, and automated communication via SMTP.
+
+2. CORE TECH STACK
+------------------
+- Backend: Flask (Python)
+- Database: Firebase Realtime Database (Dynamic storage for events, posts, bookings)
+- Storage: Firebase Storage (Hosting for high-quality images and videos)
+- Payments: M-Pesa Daraja API (STK Push for donations/support)
+- Email: SMTP (Automated booking confirmations and admin alerts)
+- Frontend: HTML5, CSS3 (Modern/Responsive), JavaScript (ES6+)
+- PWA: Service Worker (sw.js) & Web Manifest (manifest.json) for mobile installation.
+
+3. USER NAVIGATION FLOW (PUBLIC)
+--------------------------------
+/ (Home)           : Hero highlights, key statistics, mission, and team introduction.
+/about             : Detailed history, philosophy, and environmental goals.
+/services          : Overview of reforestation, advocacy, and community programs.
+/activities        : Dynamic hub for climate actions. Supports images & videos.
+/events            : List of Upcoming Initiatives and Past Impact Highlights.
+/blog              : Professional articles and impact stories from the field.
+/our-team          : Profiles of the leadership and executive board.
+/contact           : Direct communication channel with the organization.
+/register          : Portal for new members to join the movement.
+/work              : Career opportunities and strategic partnership applications.
+
+4. SPECIAL SYSTEM FEATURES
+--------------------------
+A. M-Pesa STK Push Integration:
+   - Users can trigger a secure donation prompt directly to their phone.
+   - Accessible via the "Donate" floating button or "Support" links.
+   - Handles automated callbacks to track successful transactions in Firebase.
+
+B. Dynamic Event Management:
+   - "Apply / Book Ticket" feature captures user data in Firebase.
+   - Triggers two-way email notifications (Confirmation to User, Alert to Admin).
+
+C. Professional Post Sizing (Activities & Blog):
+   - Automated 3:2 aspect ratio for all media (images/videos).
+   - Responsive grid layout for seamless viewing on mobile and desktop.
+
+5. ADMIN SYSTEM (SECURE)
+------------------------
+Location: /login -> /admin
+- Secure authentication for authorized personnel.
+- Content Management Dashboard:
+  * Events: Add (title, date, location, image) or Delete events.
+  * Activities: Post new updates with media (Image/Video) directly to Firebase.
+  * Bookings: View all user applications and event attendance in real-time.
+
+6. PROJECT STRUCTURE REFERENCE
+------------------------------
+- main.py           : The "Brain" - Routing, M-Pesa logic, Firebase integration.
+- firebase_config.py: Handles connection to Google Firebase services.
+- mpesa.py          : Specialized logic for Daraja API communication.
+- templates/        : HTML structure (Base layouts, Auth, Blog, Events, Admin).
+- static/           : CSS styling, JS behavior, and persistent media assets.
+
+================================================================================
+Document generated for TEK Engineering Reference
+================================================================================

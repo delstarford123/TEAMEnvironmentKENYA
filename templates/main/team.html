@@ -1,0 +1,221 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Our Team - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- PAGE HEADER --- */
+    .page-header {
+        background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { font-size: 3rem; margin-bottom: 10px; color: white; }
+    .breadcrumb { font-size: 0.9rem; opacity: 0.8; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* --- TEAM SECTION --- */
+    .team-page-section { padding: 80px 0; }
+    .section-intro { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    .section-intro h2 { font-size: 2.5rem; margin-bottom: 15px; }
+    .section-intro p { color: #666; font-size: 1.1rem; }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 40px;
+    }
+
+    .team-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+        text-align: center;
+        border: 1px solid var(--gray-border);
+    }
+
+    .team-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        border-color: var(--primary-green);
+    }
+
+    .member-img-wrapper {
+        background: linear-gradient(135deg, #eefcf0 0%, #ffffff 100%);
+        height: 320px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        overflow: hidden;
+        padding-top: 20px;
+    }
+
+    .member-img-wrapper img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .team-card:hover .member-img-wrapper img { transform: scale(1.05); }
+
+    .member-info { padding: 25px; }
+    .member-name { font-size: 1.4rem; margin-bottom: 5px; color: var(--primary-dark); }
+    .member-role { font-size: 0.9rem; color: var(--primary-green); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; display: block; }
+    .member-bio { font-size: 0.9rem; color: #666; line-height: 1.5; }
+
+    @media (max-width: 768px) {
+        .team-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Team</h1>
+            <div class="breadcrumb">
+                <a href="/">Home</a> / <span>Our Team</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="team-page-section">
+        <div class="container">
+            <div class="section-intro">
+                <h2>Meet the Experts</h2>
+                <p>We have a dedicated team of professionals committed to environmental sustainability and climate action.</p>
+            </div>
+
+            <div class="team-grid">
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/PHOTO_PASSPORT.-removebg-preview.png" alt="Ochanda Mathew">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Ochanda Mathew</h3>
+                        <span class="member-role">Executive Director</span>
+                        <p class="member-bio">Climate Change Expert and Environmental Consultant.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Mr._Joseph_Kithyaka_-_-removebg-preview.png" alt="Mr. Joseph Kithyaka">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Mr. Joseph Kithyaka</h3>
+                        <span class="member-role">National Chairman (Patron)</span>
+                        <p class="member-bio">Plant Your Age Initiative & Executive Director Green Thinking Action Party (G-Tap).</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Ms._Janet_Ruto.1jpeg-removebg-preview.png" alt="Ms. Janet Ruto">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Ms. Janet Ruto</h3>
+                        <span class="member-role">Corporate Communications</span>
+                        <p class="member-bio">CEO - Jani Mpya Solutions.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/MR._SAMORA_SALIM.-removebg-preview.png" alt="Mr. Samora Salim">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Mr. Samora Salim</h3>
+                        <span class="member-role">Forester & Conservation Expert</span>
+                        <p class="member-bio">CEO - Myexperthub Agroconsultancy Ltd.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/WhatsApp_Image_2025-03-25_at_06.50.42_947191d1-removebg-preview.png" alt="Daniel Lovi">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Daniel Lovi</h3>
+                        <span class="member-role">Project Manager</span>
+                        <p class="member-bio">Media and Communications, Me-Forest.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/RoxVenter_IMGL5464-removebg-preview.png" alt="Roxventer Ongugo">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Roxventer Ongugo</h3>
+                        <span class="member-role">Senior Research Scientist</span>
+                        <p class="member-bio">Liason And Corporate Affair Expert.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Prof._Mathiu_Mbaabu.-removebg-preview.png" alt="Prof. Mathiu Mbaabu">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Prof. Mathiu Mbaabu</h3>
+                        <span class="member-role">Environmental Stewardship</span>
+                        <p class="member-bio">CEO - Center for Environmental Stewardship.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Dr.-Kalua-Green.1png.png" alt="Dr. Kalua">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Dr. Kalua</h3>
+                        <span class="member-role">Director & Mentor</span>
+                        <p class="member-bio">Green Group of Companies.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Executive_Director-removebg-preview.png" alt="Sachin Shaha">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Sachin Shaha</h3>
+                        <span class="member-role">Council Member</span>
+                        <p class="member-bio">Lukenya University.</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Benedict_Oduor_-_Advocate__Legal_Officer-removebg-preview.png" alt="Benedict Oduor">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Benedict Oduor</h3>
+                        <span class="member-role">Lead Legal Officer</span>
+                        <p class="member-bio">Advocate of the High Court.</p>
+                    </div>
+                </div>
+
+                 <div class="team-card">
+                    <div class="member-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/omanyala-e1671076763930-removebg-preview.png" alt="Ferdinand Omanyala">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Ferdinand Omanyala</h3>
+                        <span class="member-role">Ambassador</span>
+                        <p class="member-bio">Championing Environmental Conservation.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

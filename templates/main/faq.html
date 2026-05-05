@@ -1,0 +1,41 @@
+{% extends "layout/base.html" %}
+
+{% block title %}FAQ | TEAMEnvironment KENYA{% endblock %}
+
+{% block content %}
+<section class="page-header" style="background: var(--bg-light); padding: 80px 0; text-align: center;">
+    <div class="container">
+        <h1 style="font-size: 3rem; margin-bottom: 15px;">Frequently Asked Questions</h1>
+        <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">Everything you need to know about TEAMEnvironment KENYA and how you can get involved.</p>
+    </div>
+</section>
+
+<section class="faq-content" style="padding: 80px 0;">
+    <div class="container" style="max-width: 800px;">
+        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary-green);">How can I donate to TEK?</h3>
+            <p>You can donate easily via M-Pesa using our floating "Donate" button or the link in the footer. Simply enter your phone number and the amount you wish to contribute, and you'll receive a prompt on your phone.</p>
+        </div>
+        
+        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary-green);">Is my donation tax-deductible?</h3>
+            <p>TEAMEnvironment KENYA is a registered NGO in Kenya. We provide receipts for all donations which can be used for tax purposes in accordance with Kenyan law.</p>
+        </div>
+
+        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary-green);">How do I become a volunteer?</h3>
+            <p>We're always looking for passionate individuals to join our cause. You can register via our <a href="/register" style="color: var(--primary-green); font-weight: 600;">Join Us</a> page, and a member of our team will reach out to you with upcoming opportunities.</p>
+        </div>
+
+        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary-green);">Where does my money go?</h3>
+            <p>Transparency is key to our operations. Donations go directly towards our tree planting initiatives, community education programs, and the maintenance of restored sites. You can see our real-time impact on the <a href="/impact" style="color: var(--primary-green); font-weight: 600;">Impact</a> page.</p>
+        </div>
+
+        <div class="faq-item" style="margin-bottom: 30px;">
+            <h3 style="margin-bottom: 15px; color: var(--primary-green);">Can organizations partner with TEK?</h3>
+            <p>Yes, we welcome corporate partnerships and collaborations with other NGOs. Please contact us through our <a href="/contact" style="color: var(--primary-green); font-weight: 600;">Contact Us</a> page for partnership inquiries.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

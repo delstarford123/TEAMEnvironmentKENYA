@@ -1,0 +1,155 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Services - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- PAGE HEADER --- */
+    .page-header {
+        background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/g8bb840eaaacab8de022be0c2faabf9f02bf2dc0326587732cdf6fb8e2bc832954479c202bfa82c0bb62f6afda35623200a221542ee4442f3fec59b8c6b39e28b_1280-1950402.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { font-size: 3rem; margin-bottom: 10px; color: white; }
+    .breadcrumb { font-size: 0.9rem; opacity: 0.8; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* --- SERVICES GRID --- */
+    .services-section { padding: 80px 0; }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-header h4 { color: var(--primary-green); text-transform: uppercase; font-size: 1rem; margin-bottom: 10px; }
+    .section-header h2 { font-size: 2.5rem; }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+    }
+
+    .service-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+        border: 1px solid var(--gray-border);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        border-color: var(--primary-green);
+    }
+
+    .service-img {
+        height: 250px;
+        overflow: hidden;
+    }
+
+    .service-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .service-card:hover .service-img img { transform: scale(1.05); }
+
+    .service-content { padding: 30px; flex-grow: 1; }
+    .service-content h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--primary-dark); }
+    .service-content p { color: #666; font-size: 0.95rem; line-height: 1.7; }
+
+    @media (max-width: 768px) {
+        .services-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="container">
+            <h1>Our Services</h1>
+            <div class="breadcrumb">
+                <a href="/">Home</a> / <span>Services</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <div class="container">
+            <div class="section-header">
+                <h4>Our Services</h4>
+                <h2>Quality Environmental Solutions</h2>
+            </div>
+            
+            <div class="services-grid">
+
+                <article class="service-card">
+                    <div class="service-img">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/tree-planting-session-at-a-past-event.jpg" alt="Tree Planting">
+                    </div>
+                    <div class="service-content">
+                        <h3>Tree Planting (Growing)</h3>
+                        <p>We offer comprehensive tree growing services including Site and Species matching, ground preparation, and ongoing support to ensure the health and growth of your trees.</p>
+                    </div>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-img">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/adverse-effects-of-climate-change.jpg" alt="Climate Consultancy">
+                    </div>
+                    <div class="service-content">
+                        <h3>Climate Change Consultancy</h3>
+                        <p>Expert consultancy on climate change adaptation and mitigation. We help organizations understand environmental degradation and take action to protect our planet.</p>
+                    </div>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-img">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/10-million-Tree-Seedlings-Propagation-Centre-600x450-1.jpg" alt="Seedlings Supply">
+                    </div>
+                    <div class="service-content">
+                        <h3>Supply of Quality Seedlings</h3>
+                        <p>We provide high-quality diverse tree seedlings sourced from KEFRI. Our 10-Million Tree Seedlings Propagation Center supports farmers and landowners.</p>
+                    </div>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-img">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/pexels-kashif-shah-14489171-1.jpg" alt="Landscaping">
+                    </div>
+                    <div class="service-content">
+                        <h3>Landscaping Services</h3>
+                        <p>Professional garden design and installation, lawn care, tree and shrub planting, hardscaping, irrigation system installation, and seasonal cleanup.</p>
+                    </div>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-img">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/pexels-photo-2533743-2533743-scaled.jpg" alt="EIA Services">
+                    </div>
+                    <div class="service-content">
+                        <h3>Environmental Impact Assessment</h3>
+                        <p>We assess potential environmental effects of proposed developments, ensuring projects comply with regulations and adhere to responsible sustainable practices.</p>
+                    </div>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-img">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/pexels-photo-2480807-2480807-scaled.jpg" alt="Green Facility">
+                    </div>
+                    <div class="service-content">
+                        <h3>Green Facility Initiative</h3>
+                        <p>Mobilizing the Green Facility initiative by partnering on PPP frameworks to enhance sustainable utility management of physical infrastructure and water catchments.</p>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

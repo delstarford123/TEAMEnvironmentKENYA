@@ -1,0 +1,79 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}M-Pesa Payment - TEAMEnvironment KENYA{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 100px 20px; text-align: center;">
+    <div style="max-width: 500px; margin: 0 auto; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--gray-border);">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa" style="height: 60px; margin-bottom: 20px;">
+        <h2 style="margin-bottom: 30px;">Direct Payment</h2>
+        
+        <div class="input-group" style="text-align: left; margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 8px;">Phone Number</label>
+            <input type="text" id="payPhone" placeholder="2547XXXXXXXX" value="2547" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        
+        <div class="input-group" style="text-align: left; margin-bottom: 30px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 8px;">Amount (KES)</label>
+            <input type="number" id="payAmount" placeholder="Amount" value="100" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+
+        <button onclick="payNow()" id="paySubmitBtn" class="btn" style="width: 100%;">Pay Now</button>
+        
+        <div id="payStatus" style="margin-top: 20px;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    async function payNow() {
+        const phone = document.getElementById('payPhone').value;
+        const amount = document.getElementById('payAmount').value;
+        const status = document.getElementById('payStatus');
+        const btn = document.getElementById('paySubmitBtn');
+        
+        if(!phone || !amount) {
+            status.innerHTML = '<span class="status-error">Please fill in all fields.</span>';
+            return;
+        }
+
+        const originalBtnText = btn.innerText;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        status.innerHTML = '<div style="margin-top: 15px; color: #666;"><div class="spinner" style="width: 25px; height: 25px; border-width: 3px;"></div> Waiting for STK Push... Check your phone.</div>';
+
+        try {
+            const response = await fetch('/pay', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone: phone, amount: amount })
+            });
+            
+            const data = await response.json();
+            
+            if(data.ResponseCode === "0") {
+                status.innerHTML = '<span class="status-success">✔ Check your phone for the PIN prompt!</span>';
+            } else {
+                status.innerHTML = `<span class="status-error">❌ Error: ${data.errorMessage || data.error}</span>`;
+                btn.disabled = false;
+                btn.innerText = originalBtnText;
+            }
+        } catch (error) {
+            status.innerHTML = '<span class="status-error">❌ Connection failed.</span>';
+            btn.disabled = false;
+            btn.innerText = originalBtnText;
+        }
+    }
+
+    // Add inline validation to the phone field here as well
+    document.getElementById('payPhone').addEventListener('input', function() {
+        const regex = /^(254|0)(7|1)\d{8}$/;
+        if (regex.test(this.value)) {
+            this.style.borderColor = 'var(--primary-green)';
+        } else {
+            this.style.borderColor = '#e11d48';
+        }
+    });
+</script>
+{% endblock %}

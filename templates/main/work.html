@@ -1,0 +1,200 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Work With Us - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- HERO SECTION --- */
+    .page-header {
+        background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/highridge_seeds_of_a_greener_future_1_70.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { font-size: 3rem; margin-bottom: 10px; font-family: var(--font-heading); color: white; }
+
+    /* --- CONTENT SECTIONS --- */
+    .intro-section { padding: 60px 0; text-align: center; max-width: 800px; margin: 0 auto; }
+    .intro-section h2 { color: var(--primary-green); margin-bottom: 20px; font-family: var(--font-heading); }
+    
+    .careers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        padding: 40px 0;
+    }
+
+    .job-card {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+    .job-card:hover { border-color: var(--primary-green); box-shadow: 0 5px 15px rgba(0,0,0,0.05); transform: translateY(-5px); }
+    .job-card h3 { margin-bottom: 10px; color: var(--primary-dark); font-family: var(--font-heading); }
+    .job-meta { font-size: 0.9rem; color: #777; margin-bottom: 15px; display: block; font-weight: 600; }
+    .job-card p { flex-grow: 1; margin-bottom: 20px; }
+    
+    .volunteer-form {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        max-width: 700px;
+        margin: 60px auto;
+        border-top: 5px solid var(--primary-green);
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark); }
+    .form-group input, .form-group textarea, .form-group select {
+        width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; font-size: 1rem;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+        outline: none; border-color: var(--primary-green);
+    }
+    .submit-btn {
+        background: var(--primary-green); color: white; padding: 15px 30px; border: none; 
+        border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; text-transform: uppercase;
+        transition: 0.3s;
+    }
+    .submit-btn:hover { background: var(--primary-dark); }
+    .submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    .apply-btn {
+        display: inline-block; padding: 10px 20px; background-color: var(--primary-dark); color: white; 
+        text-decoration: none; border-radius: 4px; font-weight: 600; text-align: center; cursor: pointer;
+    }
+    .apply-btn:hover { background-color: var(--primary-green); }
+
+    @media (max-width: 768px) {
+        .page-header h1 { font-size: 2rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="container">
+            <h1>Work With Us</h1>
+            <p>Be part of the change. Volunteer, intern, or build a career with us.</p>
+        </div>
+    </section>
+
+    <section class="intro-section">
+        <div class="container">
+            <h2>Join Our Green Army</h2>
+            <p>At TEAMEnvironment KENYA, we believe in the power of collective action. Whether you are a student, a professional, or a community member, there is a place for you to make a difference in conserving our environment.</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <h2 style="text-align: center; margin-bottom: 30px; font-family: 'Montserrat', sans-serif;">Current Opportunities</h2>
+        <div class="careers-grid">
+            <div class="job-card">
+                <h3>Tree Nursery Attendant</h3>
+                <span class="job-meta"><i class="fas fa-map-marker-alt"></i> Kabarak University | Full-Time</span>
+                <p>We are looking for dedicated individuals to manage our 10-million tree nursery. Experience in agriculture preferred.</p>
+                <a href="#volunteer" class="apply-btn">Apply Now</a>
+            </div>
+            <div class="job-card">
+                <h3>Community Volunteer</h3>
+                <span class="job-meta"><i class="fas fa-map-marker-alt"></i> Nationwide | Part-Time</span>
+                <p>Join our tree planting drives in your local county. Help mobilize youth and women groups for climate action.</p>
+                <a href="#volunteer" class="apply-btn">Register</a>
+            </div>
+            <div class="job-card">
+                <h3>Social Media Intern</h3>
+                <span class="job-meta"><i class="fas fa-laptop"></i> Remote/Nairobi | Internship</span>
+                <p>Help us spread the word! Create engaging content about climate change and our projects to drive awareness.</p>
+                <a href="#volunteer" class="apply-btn">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="volunteer" class="container">
+        <div class="volunteer-form">
+            <h2 style="text-align: center; margin-bottom: 10px; font-family: 'Montserrat', sans-serif;">Application Form</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">Fill in your details below and we will get back to you.</p>
+            
+            <form id="applicationForm" onsubmit="handleApplication(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="appName" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="appEmail" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="appPhone" name="phone" placeholder="07XXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>Position of Interest</label>
+                    <select id="appPosition" name="position">
+                        <option value="Volunteer">General Volunteer</option>
+                        <option value="Nursery Attendant">Tree Nursery Attendant</option>
+                        <option value="Intern">Social Media Intern</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Why do you want to join us?</label>
+                    <textarea id="appMessage" name="message" rows="5" placeholder="Tell us a bit about yourself and your passion for the environment..."></textarea>
+                </div>
+                <button type="submit" id="submitAppBtn" class="submit-btn">Submit Application</button>
+                <div id="appStatus" style="margin-top: 15px; text-align: center;"></div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    async function handleApplication(event) {
+        event.preventDefault();
+        
+        const btn = document.getElementById('submitAppBtn');
+        const status = document.getElementById('appStatus');
+        
+        const formData = {
+            name: document.getElementById('appName').value,
+            email: document.getElementById('appEmail').value,
+            phone: document.getElementById('appPhone').value,
+            position: document.getElementById('appPosition').value,
+            message: document.getElementById('appMessage').value
+        };
+
+        btn.disabled = true;
+        btn.innerText = "Submitting...";
+        status.innerHTML = '';
+
+        try {
+            const response = await fetch('/submit-application', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                status.innerHTML = `<span style="color: green; font-weight: bold;">✔ ${result.success}</span>`;
+                document.getElementById('applicationForm').reset();
+            } else {
+                status.innerHTML = `<span style="color: red; font-weight: bold;">❌ ${result.error}</span>`;
+            }
+        } catch (error) {
+            status.innerHTML = '<span style="color: red; font-weight: bold;">Connection error. Try again later.</span>';
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Submit Application";
+        }
+    }
+</script>
+{% endblock %}

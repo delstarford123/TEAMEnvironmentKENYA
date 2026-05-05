@@ -1,0 +1,249 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Blog - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- PAGE HEADER --- */
+    .page-header {
+        background-image: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/trees-planting-session-one.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { font-size: 3.5rem; margin-bottom: 15px; color: white; letter-spacing: -1px; }
+    .breadcrumb { font-size: 1rem; color: rgba(255,255,255,0.7); font-weight: 500; }
+    .breadcrumb a { color: var(--primary-green); font-weight: 600; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* --- BLOG GRID --- */
+    .blog-section { padding: 100px 0; background: #f8fafc; }
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 40px;
+    }
+
+    .blog-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(0,0,0,0.02);
+    }
+
+    .blog-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+    }
+
+    .blog-img-wrapper {
+        position: relative;
+        padding-top: 66.67%; /* 3:2 Aspect Ratio */
+        overflow: hidden;
+        background-color: #f1f5f9;
+    }
+
+    .blog-img-wrapper img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .blog-card:hover .blog-img-wrapper img { transform: scale(1.1); }
+
+    .blog-content { padding: 35px; flex-grow: 1; display: flex; flex-direction: column; }
+    
+    .blog-meta {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+    }
+    
+    .blog-meta .category { 
+        color: var(--primary-green); 
+        text-transform: uppercase; 
+        letter-spacing: 1px;
+        background: rgba(84, 180, 53, 0.1);
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    .blog-title {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        line-height: 1.3;
+        color: var(--primary-dark);
+        font-weight: 700;
+    }
+
+    .blog-title a:hover { color: var(--primary-green); }
+
+    .blog-excerpt {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 30px;
+        flex-grow: 1;
+        line-height: 1.6;
+    }
+
+    .blog-footer {
+        margin-top: auto;
+        padding-top: 25px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .read-more-link {
+        color: var(--primary-green);
+        font-weight: 700;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: gap 0.3s;
+    }
+
+    .blog-card:hover .read-more-link {
+        gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .blog-grid { grid-template-columns: 1fr; }
+        .page-header h1 { font-size: 2.8rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="container">
+            <h1>Impact Stories</h1>
+            <div class="breadcrumb">
+                <a href="/">Home</a> / <span>Our Blog</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog-section">
+        <div class="container">
+            <div class="blog-grid">
+
+                <article class="blog-card">
+                    <div class="blog-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/nyeri-tree-conservation-1.jpg" alt="Restoring Hope">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="category">TEK Updates</span>
+                            <span><i class="far fa-user"></i> By Yassin Ali</span>
+                        </div>
+                        <h3 class="blog-title"><a href="#">Restoring Hope, Plant Your Age – One Tree at a Time</a></h3>
+                        <p class="blog-excerpt">Youth for Climate Action; Ngong Restoration Project. In the shadow of the majestic Ngong Hills, a generation of environmental champions is rising.</p>
+                        <div class="blog-footer">
+                            <a href="#" class="read-more-link">Read Full Story <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-img-wrapper">
+                         <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/adverse-effects-of-climate-change.jpg" alt="Youth Front Runners">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="category">TEK Updates</span>
+                            <span><i class="far fa-user"></i> By Yassin Ali</span>
+                        </div>
+                        <h3 class="blog-title"><a href="#">Youth the Front Runners</a></h3>
+                        <p class="blog-excerpt">TEAMEnvironment KENYA Championing Local Climate Action for Global Impact. As the celebrations kicked off in Kilifi County earlier this week.</p>
+                        <div class="blog-footer">
+                            <a href="#" class="read-more-link">Read Full Story <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/07/1Five-Hundred-500-TREES-Planted-to-Crown-the-Climate-Action-Conference-at-the-Kabarak-University-July-9th-to-12th-2025-%E2%80%93-Kabarak-University-Nakuru-County.jpg?fit=1024%2C576&ssl=1" alt="Kabarak Tree Planting">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="category">TEK Updates</span>
+                            <span><i class="far fa-user"></i> By Yassin Ali</span>
+                        </div>
+                        <h3 class="blog-title"><a href="#">500 Trees Planted to Crown the Climate Action Conference</a></h3>
+                        <p class="blog-excerpt">The Inaugural Climate Action, Agro-ecology, Energy and Paper Presentation Conference Event held at the Kabarak University in July.</p>
+                        <div class="blog-footer">
+                            <a href="#" class="read-more-link">Read Full Story <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/07/Ochanda-Mathew-fated-for-his-remarkable-performance-and-admirable-leadership-in-advocating-for-Climate-Action-and-Environmental-Sustainability-at-the-Inaugural-Climate-Action-Conference.jpg?fit=1024%2C774&ssl=1" alt="Ochanda Mathew Award">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="category">TEK Updates</span>
+                            <span><i class="far fa-user"></i> By Yassin Ali</span>
+                        </div>
+                        <h3 class="blog-title"><a href="#">Ochanda Mathew Fated for Remarkable Performance in Climate Action</a></h3>
+                        <p class="blog-excerpt">The Executive Director TEAMEnvironment KENYA, Mr. Mathew Ochanda, was recognized and appreciated with a prestigious award.</p>
+                        <div class="blog-footer">
+                            <a href="#" class="read-more-link">Read Full Story <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/07/CLIMATE-ACTION-MEETS-MENSTRUAL-DIGNITY-IMG-20250722-WA0008.jpg?fit=1024%2C576&ssl=1" alt="Menstrual Dignity">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="category">TEK Updates</span>
+                            <span><i class="far fa-user"></i> By Yassin Ali</span>
+                        </div>
+                        <h3 class="blog-title"><a href="#">Climate Action Meets Menstrual Dignity</a></h3>
+                        <p class="blog-excerpt">Did you know that menstrual hygiene is not just a health issue—but a climate and environmental justice issue too?</p>
+                        <div class="blog-footer">
+                            <a href="#" class="read-more-link">Read Full Story <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-img-wrapper">
+                        <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/05/Inaugural-International-Climate-Action-Agroecology-Waste-Management-and-Energy-Conference-and-Bamboo-Expo.jpg?fit=1024%2C1024&ssl=1" alt="Conference Poster">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span class="category">Events</span>
+                            <span><i class="far fa-user"></i> By TeamTEK</span>
+                        </div>
+                        <h3 class="blog-title"><a href="#">Inaugural International Climate Action Conference</a></h3>
+                        <p class="blog-excerpt">Team Environment Kenya, Kabarak University, and KEFRI are launching Kenya's most ambitious environmental initiative.</p>
+                        <div class="blog-footer">
+                            <a href="#" class="read-more-link">Read Full Story <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

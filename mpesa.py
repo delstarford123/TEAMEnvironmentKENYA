@@ -1,18 +1,22 @@
+import os
 import requests
 from flask import Flask, request, jsonify, render_template
 from datetime import datetime
 import base64
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 
 # --- CONFIGURATION ---
-# Note: It is generally safer not to post these keys publicly, 
-# but since this is a Sandbox/Test environment, it is okay for now.
-CONSUMER_KEY = 'mjpi9dRnBx6ZgredXiDbOK8U1gSnCds5TdJr7A3VrAdEg5a0'
-CONSUMER_SECRET = 'CPiCSfv7qWx5faY0tfHElspd1OMA9IBIlJo86snqBMtGhtglvBKPwzP2mG3d33hD'
-PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
+# Credentials are now loaded from environment variables for security.
+CONSUMER_KEY = os.environ.get('CONSUMER_KEY')
+CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET')
+PASSKEY = os.environ.get('PASSKEY')
 BUSINESS_SHORT_CODE = '174379'  # Sandbox Paybill
-CALLBACK_URL = 'https://your-ngrok-url.ngrok-free.app/callback' # You will need Ngrok for this later
+CALLBACK_URL = os.environ.get('CALLBACK_URL', 'https://your-ngrok-url.ngrok-free.app/callback')
 
 # --- HELPER: GET ACCESS TOKEN ---
 
@@ -31,13 +35,40 @@ def generate_password(timestamp):
     data_to_encode = BUSINESS_SHORT_CODE + PASSKEY + timestamp
     return base64.b64encode(data_to_encode.encode()).decode('utf-8')
 
-# --- ROUTE 1: HOME PAGE (Fixes 404 Error) ---
-@app.route('/')
-def home():
-    # This looks for index.html in the 'templates' folder
-    return render_template('index.html')
+# --- ROUTES ---
 
-# --- ROUTE 2: INITIATE PAYMENT ---
+@app.route('/')
+@app.route('/index.html')
+def home():
+    return render_template('main/index.html')
+
+@app.route('/about.html')
+@app.route('/about')
+def about():
+    return render_template('main/about.html')
+
+@app.route('/services.html')
+@app.route('/services')
+def services():
+    return render_template('main/services.html')
+
+@app.route('/events.html')
+@app.route('/events')
+def events():
+    return render_template('events/events.html')
+
+@app.route('/blog.html')
+@app.route('/blog')
+def blog():
+    return render_template('blog/blog.html')
+
+@app.route('/contact-us')
+@app.route('/contact.html')
+def contact():
+    return render_template('main/contact.html')
+
+# --- PAYMENT ROUTES ---
+
 @app.route('/pay', methods=['POST'])
 def pay():
     data = request.json
@@ -66,66 +97,23 @@ def pay():
         "PartyB": BUSINESS_SHORT_CODE,
         "PhoneNumber": phone_number,
         "CallBackURL": CALLBACK_URL,
-        "AccountReference": "IIG SMART FARMER",
+        "AccountReference": "TEK",
         "TransactionDesc": "Payment for Goods"
     }
 
     stk_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-    response = requests.post(stk_url, json=payload, headers=headers)
-    
-    return response.json()
+    try:
+        response = requests.post(stk_url, json=payload, headers=headers)
+        return response.json()
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# --- ROUTE 3: CALLBACK (Where M-Pesa sends the result) ---
 @app.route('/callback', methods=['POST'])
 def callback():
     data = request.json
     print("CALLBACK DATA:", data)
     return "OK"
-from flask import Flask, render_template
 
-app = Flask(__name__)
-
-# 1. Route for the Homepage
-@app.route('/')
-@app.route('/index.html')
-def home():
-    return render_template('index.html')
-
-# 2. Route for About Page
-@app.route('/about.html')
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-# 3. Route for Services Page
-@app.route('/services.html')
-@app.route('/services')
-def services():
-    return render_template('services.html')
-
-# 4. Route for Events Page
-@app.route('/events.html')
-@app.route('/events')
-def events():
-    return render_template('events.html')
-
-# 5. Route for Blog Page
-@app.route('/blog.html')
-@app.route('/blog')
-def blog():
-    return render_template('blog.html')
-
-# 6. Route for Contact Page
-# Note: Matches both /contact-us (used in nav) and /contact.html
-@app.route('/contact-us')
-@app.route('/contact.html')
-def contact():
-    return render_template('contact.html')
-
-if __name__ == '__main__':
-    # Debug mode allows you to see changes without restarting the server
-    app.run(debug=True, port=5000)
-# --- RUN SERVER (Fixes 'Real Phone' connection) ---
 if __name__ == '__main__':
     # host='0.0.0.0' allows your phone to connect to your laptop
     app.run(host='0.0.0.0', port=5000, debug=True)

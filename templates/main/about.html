@@ -1,0 +1,147 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}About Us - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- PAGE HEADER --- */
+    .page-header {
+        background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { color: white; font-size: 3rem; margin-bottom: 10px; }
+
+    /* --- ABOUT CONTENT --- */
+    .about-intro { padding: 80px 0; }
+    .intro-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+    }
+    .intro-text h3 { color: var(--primary-green); font-weight: 600; font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase; }
+    .intro-text h2 { font-size: 2.2rem; margin-bottom: 20px; line-height: 1.3; }
+    .intro-text p { margin-bottom: 20px; color: #555; font-size: 1.05rem; }
+
+    /* --- PHILOSOPHY / MISSION / VISION --- */
+    .pmv-section { padding: 0 0 80px 0; }
+    .pmv-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+    .pmv-card {
+        background: #fff;
+        padding: 40px 30px;
+        border: 1px solid var(--gray-border);
+        text-align: left;
+        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .pmv-card:hover { transform: translateY(-5px); border-color: var(--primary-green); }
+    .pmv-icon {
+        font-size: 40px;
+        color: var(--primary-green);
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+    .pmv-card h3 { margin-bottom: 15px; font-size: 1.4rem; }
+    .pmv-card p { font-size: 0.95rem; color: #666; }
+
+    /* --- STATS COUNTER --- */
+    .stats-counter {
+        background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2021/11/about-us-2-min.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        padding: 80px 0;
+        color: white;
+    }
+    .counter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        text-align: center;
+    }
+    .counter-item h2 { color: var(--primary-green); font-size: 3rem; margin-bottom: 10px; }
+    .counter-item p { font-weight: 600; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+
+    @media (max-width: 768px) {
+        .intro-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="container">
+            <h1>About Us</h1>
+            <p>Our Journey, Our Purpose, Our Impact</p>
+        </div>
+    </section>
+
+    <section class="about-intro">
+        <div class="container">
+            <div class="intro-grid">
+                <div class="intro-image">
+                    <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2021/11/about-us-1-min.jpg" alt="About TEK" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                </div>
+                <div class="intro-text">
+                    <h3>Who We Are</h3>
+                    <h2>Socio-economic, Environmental & Humanitarian Membership Association</h2>
+                    <p>TEAMEnvironment KENYA is a Socio-economic, Environmental and Humanitarian Membership Association focused on Greening and Environmental Conservation.</p>
+                    <p>Our Association is committed to addressing the sustainable development goals (SDGs) and protecting Kenya's landscapes from the impacts of climate change through community-based initiatives.</p>
+                    <a href="/register" class="btn">Become a Member</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pmv-section">
+        <div class="container">
+            <div class="pmv-grid">
+                <div class="pmv-card">
+                    <div class="pmv-icon"><i class="fas fa-eye"></i></div>
+                    <h3>Vision</h3>
+                    <p>To be the leading champion in environmental conservation and humanitarian services, creating a greener and more sustainable future for all Kenyans.</p>
+                </div>
+                <div class="pmv-card">
+                    <div class="pmv-icon"><i class="fas fa-bullseye"></i></div>
+                    <h3>Mission</h3>
+                    <p>To foster climate change adaptation and mitigation by catalyzing community-level interventions that enhance well-being, livelihood security, and environmental conservation.</p>
+                </div>
+                <div class="pmv-card">
+                    <div class="pmv-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Philosophy</h3>
+                    <p>“Build a Heritage for Future Generations of a Cleaner, Greener (Food & Water) Secure and a Peaceful Environment.”</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-counter">
+        <div class="container">
+            <div class="counter-grid">
+                <div class="counter-item">
+                    <h2>32+</h2>
+                    <p>Completed Projects</p>
+                </div>
+                <div class="counter-item">
+                    <h2>1,520+</h2>
+                    <p>Partners & Colleagues</p>
+                </div>
+                <div class="counter-item">
+                    <h2>121+</h2>
+                    <p>Registered Members</p>
+                </div>
+                <div class="counter-item">
+                    <h2>47</h2>
+                    <p>Counties Reached</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

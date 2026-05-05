@@ -1,0 +1,35 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Admin Login - TEAMEnvironment KENYA{% endblock %}
+
+{% block content %}
+<section style="padding: 100px 0; background: #f4f7f6;">
+    <div class="container" style="max-width: 400px;">
+        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-green);">Admin Login</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="padding: 10px; margin-bottom: 20px; border-radius: 5px; background: {% if category == 'danger' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if category == 'danger' %}#721c24{% else %}#155724{% endif %};">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <form action="/login" method="POST">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username</label>
+                    <input type="text" name="username" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 30px;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password</label>
+                    <input type="password" name="password" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; padding: 14px; background: var(--primary-green); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">Login</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

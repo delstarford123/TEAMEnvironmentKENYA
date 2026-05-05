@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Dynamic SEO Meta Tags -->
+    <title>{% if page_title %}{{ page_title }} | TEAMEnvironment KENYA{% else %}{% block title %}TEAMEnvironment KENYA{% endblock %}{% endif %}</title>
+    <meta name="description" content="{{ page_description or 'A Socio-economic, Environmental and Humanitarian Membership Association focused on Greening and Environmental Conservation in Kenya.' }}">
+    <meta name="author" content="TEAMEnvironment KENYA">
+    <link rel="canonical" href="{{ request.url }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{{ og_type or 'website' }}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:title" content="{{ page_title or 'TEAMEnvironment KENYA' }}">
+    <meta property="og:description" content="{{ page_description or 'Leading the way in climate action and environmental restoration across Africa.' }}">
+    <meta property="og:image" content="{{ feature_image_url or url_for('static', filename='images/TEK.jpeg', _external=True) }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.url }}">
+    <meta property="twitter:title" content="{{ page_title or 'TEAMEnvironment KENYA' }}">
+    <meta property="twitter:description" content="{{ page_description or 'Leading the way in climate action and environmental restoration across Africa.' }}">
+    <meta property="twitter:image" content="{{ feature_image_url or url_for('static', filename='images/TEK.jpeg', _external=True) }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- PWA Setup -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#54B435">
+    <link rel="apple-touch-icon" href="/static/images/TEK.jpeg">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- PWA Install Banner -->
+    <div id="pwa-banner" class="pwa-install-banner">
+        <div class="pwa-content">
+            <img src="/static/images/TEK.jpeg" alt="TEK Icon" class="pwa-icon">
+            <div class="pwa-text">
+                <h4>Install TEK App</h4>
+                <p>Install our app for a better experience and quick access.</p>
+            </div>
+        </div>
+        <div class="pwa-actions">
+            <button id="install-pwa-btn" class="install-btn-small">Install</button>
+            <button id="close-pwa-banner" class="close-pwa"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="contact-links">
+                <span><i class="fas fa-envelope"></i> teamenvironment.ke@gmail.com</span>
+                <span style="margin-left: 20px;"><i class="fas fa-phone"></i> +254 712 345 678</span>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="/">
+                    <img src="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" alt="TEK Logo">
+                </a>
+            </div>
+            
+            <div class="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li><a href="/" class="nav-link">Home</a></li>
+                    <li><a href="/about" class="nav-link">About Us</a></li>
+                    <li><a href="/activities" class="nav-link">Activities</a></li>
+                    <li><a href="/impact" class="nav-link">Impact</a></li>
+                    <li><a href="/events" class="nav-link">Events</a></li>
+                    <li><a href="/resources" class="nav-link">Resources</a></li>
+                    <li><a href="/contact" class="nav-link">Contact</a></li>
+                    <li class="cta-item">
+                        <a href="#" class="donate-btn" onclick="openModal()">
+                            <i class="fas fa-heart"></i> DONATE
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h5>TEAMEnvironment KENYA</h5>
+                    <p>Our philosophy is to, “Build a Heritage for Future Generations of a Cleaner, Greener (Food & Water) Secure and a Peaceful Environment.”</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/services">Our Services</a></li>
+                        <li><a href="/team">Our Team</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h5>Support</h5>
+                    <ul class="footer-links">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/resources">Resources</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h5>Contact Us</h5>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+                        <li><i class="fas fa-phone"></i> +254 712 345 678</li>
+                        <li><i class="fas fa-envelope"></i> teamenvironment.ke@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year"></span> TEAMEnvironment KENYA. All rights reserved. Powered by <a href="https://www.delstarfordworks.co.ke" target="_blank" class="powered-by-link">DELSTARFORD WORKS</a>. | <a href="/login" style="color: #888; text-decoration: none;">Admin</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Button -->
+    <div class="floating-donate-btn" onclick="openModal()">
+        <i class="fas fa-hand-holding-heart"></i> M-Pesa
+    </div>
+
+    <!-- M-Pesa Modal -->
+    <div class="modal-overlay" id="mpesaModal">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="modal-form-container" class="modal-content-form">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa" class="mpesa-logo">
+                <h3>Support Our Mission</h3>
+                <p style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">Enter your details to receive an M-Pesa prompt on your phone.</p>
+
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="phone" placeholder="2547XXXXXXXX" required>
+                    <div class="validation-message" id="phone-validation"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Amount (KES)</label>
+                    <input type="number" id="amount" placeholder="e.g. 500" required>
+                    <div class="validation-message" id="amount-validation"></div>
+                </div>
+
+                <button class="pay-btn btn" onclick="initiatePayment()" id="payBtn" style="width: 100%;">Donate Now</button>
+            </div>
+
+            <div id="modal-processing-container" class="processing-state">
+                <div class="spinner"></div>
+                <h4>Waiting for M-Pesa...</h4>
+                <p>Please check your phone for the <strong>SIM Toolkit (STK) Push</strong> and enter your M-Pesa PIN to complete the transaction.</p>
+                <div id="processing-status-message"></div>
+                <button class="btn btn-outline" onclick="resetModal()" style="margin-top: 20px; font-size: 0.8rem; padding: 8px 15px;">Cancel / Back</button>
+            </div>
+            
+            <div id="status-message"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Set current year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.log('Service Worker registration failed', err));
+            });
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

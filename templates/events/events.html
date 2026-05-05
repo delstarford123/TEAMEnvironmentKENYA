@@ -1,0 +1,314 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Events - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- PAGE HEADER --- */
+    .page-header {
+        background-image: linear-gradient(rgba(1, 5, 15, 0.75), rgba(1, 5, 15, 0.75)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/04/JIM_0383.jpg');
+        background-size: cover;
+        background-position: center 60%;
+        padding: 140px 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { font-size: 3.5rem; margin-bottom: 15px; color: white; letter-spacing: -1px; }
+    .page-header p { font-size: 1.2rem; color: rgba(255,255,255,0.9); max-width: 650px; margin: 0 auto; line-height: 1.6; }
+
+    /* --- UPCOMING EVENTS --- */
+    .upcoming-section { padding: 100px 0; background: #fff; }
+    .section-title { text-align: center; margin-bottom: 70px; }
+    .section-title h2 { font-size: 2.8rem; margin-bottom: 20px; color: var(--primary-dark); }
+    .section-title p { color: #64748b; font-size: 1.1rem; }
+    .section-title .title-underline { width: 80px; height: 4px; background: var(--primary-green); margin: 0 auto; border-radius: 2px; }
+
+    .featured-event {
+        display: flex;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.07);
+        margin-bottom: 80px;
+        border: 1px solid rgba(0,0,0,0.02);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .featured-event:hover { transform: translateY(-8px); box-shadow: 0 25px 60px rgba(0,0,0,0.12); }
+    
+    .featured-event:nth-child(even) { flex-direction: row-reverse; }
+
+    .event-image-wrapper { flex: 1.2; position: relative; overflow: hidden; min-height: 450px; }
+    .event-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .featured-event:hover .event-image-wrapper img { transform: scale(1.05); }
+    
+    .event-badge { position: absolute; top: 30px; left: 30px; background: var(--primary-green); color: white; padding: 6px 18px; border-radius: 50px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+
+    .event-details { flex: 1; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+    .event-meta { display: flex; gap: 25px; margin-bottom: 25px; }
+    .event-meta span { color: #64748b; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .event-meta i { color: var(--primary-green); font-size: 1.1rem; }
+
+    .event-details h3 { font-size: 2.2rem; margin-bottom: 25px; color: var(--primary-dark); line-height: 1.2; }
+    .event-details p { margin-bottom: 35px; color: #555; line-height: 1.8; font-size: 1.05rem; }
+
+    .event-actions { display: flex; gap: 15px; flex-wrap: wrap; }
+
+    /* --- PAST EVENTS --- */
+    .past-events-section { padding: 100px 0; background-color: #f8fafc; }
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 40px;
+    }
+
+    .past-event-card {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+        border: 1px solid rgba(0,0,0,0.02);
+    }
+    .past-event-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    
+    .past-img-wrapper { position: relative; height: 260px; overflow: hidden; }
+    .past-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .past-event-card:hover .past-img-wrapper img { transform: scale(1.1); }
+    
+    .past-content { padding: 30px; }
+    .past-content .past-date { display: block; color: var(--primary-green); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; }
+    .past-content h4 { font-size: 1.4rem; margin-bottom: 12px; color: var(--primary-dark); line-height: 1.4; }
+    .past-location { font-size: 0.9rem; color: #64748b; display: flex; align-items: center; gap: 6px; }
+
+    @media (max-width: 1024px) {
+        .event-details { padding: 40px; }
+        .event-image-wrapper { min-height: 400px; }
+    }
+
+    @media (max-width: 920px) {
+        .featured-event, .featured-event:nth-child(even) { flex-direction: column; }
+        .event-image-wrapper { width: 100%; height: 350px; min-height: 350px; }
+        .event-details { padding: 40px 30px; }
+        .page-header h1 { font-size: 2.8rem; }
+    }
+
+    /* --- MODAL STYLES --- */
+    .booking-modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(15, 23, 42, 0.85);
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+    }
+    .booking-content {
+        background: white;
+        padding: 50px;
+        border-radius: 20px;
+        width: 95%;
+        max-width: 550px;
+        position: relative;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+    }
+    .close-booking { position: absolute; right: 25px; top: 20px; font-size: 32px; cursor: pointer; color: #94a3b8; transition: color 0.3s; }
+    .close-booking:hover { color: var(--primary-dark); }
+</style>
+{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="container">
+            <h1>Events & Summits</h1>
+            <p>Gathering changemakers, experts, and youth leaders to shape the future of environmental conservation in Africa.</p>
+        </div>
+    </section>
+
+    <section class="upcoming-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Upcoming Initiatives</h2>
+                <p>Register now to be part of these transformative events</p>
+                <div class="title-underline"></div>
+            </div>
+
+            {% if upcoming_events %}
+                {% for event in upcoming_events %}
+                <article class="featured-event">
+                    <div class="event-image-wrapper">
+                        <img src="{{ event.image_url or 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80' }}" alt="{{ event.title }}" loading="lazy">
+                        <span class="event-badge">Upcoming</span>
+                    </div>
+                    <div class="event-details">
+                        <div class="event-meta">
+                            <span><i class="far fa-calendar-alt"></i> {{ event.date }}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> {{ event.location }}</span>
+                        </div>
+                        <h3>{{ event.title }}</h3>
+                        <p>{{ event.description }}</p>
+                        <div class="event-actions">
+                            <button class="btn" onclick="openBooking('{{ event.id }}', '{{ event.title }}')">Apply / Book Ticket</button>
+                            <button class="btn btn-outline" style="border-color: var(--primary-green); color: var(--primary-green);" onclick="openModal()">Support Event</button>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <div style="text-align: center; padding: 60px; background: #f8fafc; border-radius: 20px; border: 2px dashed #cbd5e1;">
+                    <i class="far fa-calendar-times" style="font-size: 3.5rem; color: #94a3b8; margin-bottom: 20px; display: block;"></i>
+                    <h3 style="color: #64748b; margin-bottom: 10px;">No upcoming events at the moment.</h3>
+                    <p style="color: #94a3b8;">We're planning something big! Please check back soon.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="past-events-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Impact Highlights</h2>
+                <p>A look back at our journey of environmental restoration across Kenya</p>
+                <div class="title-underline"></div>
+            </div>
+            <div class="events-grid">
+                {% if past_events %}
+                    {% for event in past_events %}
+                    <div class="past-event-card">
+                        <div class="past-img-wrapper">
+                            <img src="{{ event.image_url or 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }}" alt="{{ event.title }}">
+                        </div>
+                        <div class="past-content">
+                            <span class="past-date">{{ event.date }}</span>
+                            <h4>{{ event.title }}</h4>
+                            <div class="past-location"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Static Past Events as Fallback -->
+                    <div class="past-event-card">
+                        <div class="past-img-wrapper"><img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/04/JIM_0353.jpg" alt="MoU" loading="lazy"></div>
+                        <div class="past-content">
+                            <span class="past-date">Dec 16, 2024</span>
+                            <h4>MoU Signing with Kabarak University</h4>
+                            <div class="past-location"><i class="fas fa-map-marker-alt"></i> Kabarak University, Nakuru</div>
+                        </div>
+                    </div>
+                    <div class="past-event-card">
+                        <div class="past-img-wrapper"><img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/nyeri-tree-conservation-1.jpg" alt="Nyeri"></div>
+                        <div class="past-content">
+                            <span class="past-date">April 1, 2023</span>
+                            <h4>10,000 Trees Conservation Drive</h4>
+                            <div class="past-location"><i class="fas fa-map-marker-alt"></i> Nyeri County</div>
+                        </div>
+                    </div>
+                    <div class="past-event-card">
+                        <div class="past-img-wrapper"><img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Youth Summit"></div>
+                        <div class="past-content">
+                            <span class="past-date">Aug 12, 2023</span>
+                            <h4>Africa Youth Climate Summit</h4>
+                            <div class="past-location"><i class="fas fa-map-marker-alt"></i> Nairobi, KICC</div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="booking-content">
+            <span class="close-booking" onclick="closeBooking()">&times;</span>
+            <h3 id="bookingEventTitle" style="margin-bottom: 15px; color: var(--primary-dark); font-size: 1.8rem;">Book Your Ticket</h3>
+            <p style="margin-bottom: 30px; font-size: 1rem; color: #64748b; line-height: 1.5;">Join us for this impactful event. Fill in your details and we'll send your official invitation to your email.</p>
+            
+            <form id="bookingForm">
+                <input type="hidden" id="bookingEventId">
+                <input type="hidden" id="bookingEventTitleInput">
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark);">Full Name</label>
+                    <input type="text" id="bookingName" required style="width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--primary-green)'" onblur="this.style.borderColor='#e2e8f0'">
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark);">Email Address</label>
+                    <input type="email" id="bookingEmail" required style="width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--primary-green)'" onblur="this.style.borderColor='#e2e8f0'">
+                </div>
+                <div class="form-group" style="margin-bottom: 30px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-dark);">Phone Number</label>
+                    <input type="text" id="bookingPhone" required style="width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; transition: border-color 0.3s;" placeholder="2547XXXXXXXX" onfocus="this.style.borderColor='var(--primary-green)'" onblur="this.style.borderColor='#e2e8f0'">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; padding: 16px; font-size: 1rem; border-radius: 10px;" id="bookingSubmitBtn">Submit Application</button>
+            </form>
+            <div id="bookingStatus" style="margin-top: 20px; text-align: center; font-weight: 600;"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openBooking(id, title) {
+        document.getElementById('bookingModal').style.display = 'flex';
+        document.getElementById('bookingEventTitle').innerText = 'Apply for: ' + title;
+        document.getElementById('bookingEventId').value = id;
+        document.getElementById('bookingEventTitleInput').value = title;
+    }
+
+    function closeBooking() {
+        document.getElementById('bookingModal').style.display = 'none';
+    }
+
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('bookingSubmitBtn');
+        const status = document.getElementById('bookingStatus');
+        
+        btn.disabled = true;
+        btn.innerText = 'Processing...';
+        
+        const data = {
+            event_id: document.getElementById('bookingEventId').value,
+            event_title: document.getElementById('bookingEventTitleInput').value,
+            name: document.getElementById('bookingName').value,
+            email: document.getElementById('bookingEmail').value,
+            phone: document.getElementById('bookingPhone').value
+        };
+
+        fetch('/book-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                status.innerHTML = '<p style="color: green;">' + data.success + '</p>';
+                setTimeout(() => {
+                    closeBooking();
+                    document.getElementById('bookingForm').reset();
+                    status.innerHTML = '';
+                    btn.disabled = false;
+                    btn.innerText = 'Submit Application';
+                }, 3000);
+            } else {
+                status.innerHTML = '<p style="color: red;">' + (data.error || 'Something went wrong') + '</p>';
+                btn.disabled = false;
+                btn.innerText = 'Submit Application';
+            }
+        })
+        .catch(err => {
+            status.innerHTML = '<p style="color: red;">Error connecting to server.</p>';
+            btn.disabled = false;
+            btn.innerText = 'Submit Application';
+        });
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('bookingModal')) {
+            closeBooking();
+        }
+    }
+</script>
+{% endblock %}
