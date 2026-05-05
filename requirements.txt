@@ -15,3 +15,5 @@ urllib3==2.6.3
 Werkzeug==3.1.5
 firebase-admin
 python-dotenv
+sentry-sdk[flask]
+weasyprint
