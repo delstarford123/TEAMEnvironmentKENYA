@@ -79,7 +79,9 @@
     <section class="page-header">
         <div class="container">
             <h1>About Us</h1>
-            <p>Our Journey, Our Purpose, Our Impact</p>
+            <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">
+                <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span style="color: var(--primary-green); font-weight: 600;">About Us</span>
+            </div>
         </div>
     </section>
 
@@ -94,7 +96,7 @@
                     <h2>Socio-economic, Environmental & Humanitarian Membership Association</h2>
                     <p>TEAMEnvironment KENYA is a Socio-economic, Environmental and Humanitarian Membership Association focused on Greening and Environmental Conservation.</p>
                     <p>Our Association is committed to addressing the sustainable development goals (SDGs) and protecting Kenya's landscapes from the impacts of climate change through community-based initiatives.</p>
-                    <a href="/register" class="btn">Become a Member</a>
+                    <a href="{{ url_for('register') }}" class="btn">Become a Member</a>
                 </div>
             </div>
         </div>

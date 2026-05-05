@@ -6,7 +6,9 @@
 <section class="page-header" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/Climate resilience.jpeg'); background-size: cover; background-position: center; padding: 100px 0; color: white; text-align: center;">
     <div class="container">
         <h1 style="font-size: 3rem; margin-bottom: 20px;">Our Impact</h1>
-        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Transparent results of our commitment to a greener, cleaner, and more sustainable Kenya.</p>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span style="color: var(--primary-green); font-weight: 600;">Impact</span>
+        </div>
     </div>
 </section>
 
@@ -44,7 +46,7 @@
                 <h2 style="margin-bottom: 25px;">Driving Real Change Through Local Action</h2>
                 <p style="margin-bottom: 20px;">At TEAMEnvironment KENYA, we believe that environmental conservation is not just about planting trees, but about restoring ecosystems and empowering communities.</p>
                 <p style="margin-bottom: 20px;">Our data-driven approach ensures that every shilling donated and every hour volunteered translates into measurable environmental impact. From the Ngong Hills restoration to community agroforestry projects, we are building a legacy of sustainability.</p>
-                <a href="/activities" class="btn">View Our Activities</a>
+                <a href="{{ url_for('activities') }}" class="btn">View Our Activities</a>
             </div>
             <div style="flex: 1; min-width: 300px;">
                 <img src="/static/images/People collborating.jpeg" alt="Impact" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">

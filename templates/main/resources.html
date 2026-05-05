@@ -6,7 +6,9 @@
 <section class="page-header" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/Trees for policy markers.jpeg'); background-size: cover; background-position: center; padding: 80px 0; color: white; text-align: center;">
     <div class="container">
         <h1 style="font-size: 3rem; margin-bottom: 15px;">Resource Center</h1>
-        <p style="font-size: 1.1rem; max-width: 700px; margin: 0 auto;">Access our official documents, research reports, and environmental guides.</p>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span style="color: var(--primary-green); font-weight: 600;">Resources</span>
+        </div>
     </div>
 </section>
 
@@ -33,7 +35,7 @@
     <div class="container">
         <h2>Need more information?</h2>
         <p style="margin-top: 15px; margin-bottom: 30px; color: #cbd5e1;">If you're looking for specific data or reports not listed here, please get in touch with our team.</p>
-        <a href="/contact" class="btn">Contact Us</a>
+        <a href="{{ url_for('contact') }}" class="btn">Contact Us</a>
     </div>
 </section>
 {% endblock %}
