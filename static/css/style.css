@@ -622,6 +622,8 @@ section {
     align-items: center;
     opacity: 0;
     transition: opacity 0.3s ease;
+    overflow-y: auto; /* Allow overlay to scroll if box is too big */
+    padding: 20px 0; /* Add safe margin at top and bottom */
 }
 .modal-overlay.active { display: flex; opacity: 1; }
 
@@ -636,6 +638,8 @@ section {
     transform: translateY(20px);
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-height: 90vh; /* Don't exceed screen height */
+    overflow-y: auto; /* Enable scroll inside if content is too long */
 }
 .modal-overlay.active .modal-box { transform: translateY(0); }
 
