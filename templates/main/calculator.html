@@ -1,0 +1,119 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Tree Impact Calculator - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .calc-card {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: clamp(30px, 5vw, 60px);
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        text-align: center;
+        border: 1px solid var(--gray-border);
+    }
+    
+    .calc-input-group { text-align: left; }
+    .calc-input-group label { display: block; font-weight: 700; margin-bottom: 10px; color: var(--primary-dark); font-size: 0.9rem; }
+    
+    input {
+        width: 100%;
+        padding: 15px 18px;
+        border: 2px solid var(--gray-border);
+        border-radius: 10px;
+        font-size: 1.1rem;
+        transition: var(--transition);
+        background-color: #f8fafc;
+    }
+    input:focus { outline: none; border-color: var(--primary-green); background-color: #fff; box-shadow: 0 0 0 4px rgba(84, 180, 53, 0.1); }
+
+    .result-box {
+        padding: 30px 20px;
+        background: var(--bg-light);
+        border-radius: 15px;
+        transition: var(--transition);
+        border: 1px solid transparent;
+        height: 100%;
+    }
+    .result-box:hover { border-color: var(--primary-green); transform: translateY(-5px); }
+    .result-box i { font-size: 2.2rem; color: var(--primary-green); margin-bottom: 15px; }
+    .result-box h4 { font-size: 1.8rem; margin: 5px 0; color: var(--primary-dark); }
+    .result-box p { font-size: 0.85rem; font-weight: 700; color: #888; text-transform: uppercase; margin: 0; letter-spacing: 0.5px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section style="background-color: var(--bg-light); padding: 80px 0;">
+    <div class="container">
+        <div class="calc-card">
+            <h4 class="text-green">Measure Your Change</h4>
+            <h2>Tree Impact Calculator</h2>
+            <p style="max-width: 600px; margin: 15px auto 40px; color: #666;">Estimate the positive environmental impact your donation can make over 20 years of tree growth.</p>
+            
+            <div class="grid grid-2" style="margin-bottom: 50px;">
+                <div class="calc-input-group">
+                    <label>Investment (KES)</label>
+                    <input type="number" id="calcAmount" value="1000" oninput="calculateImpact()">
+                </div>
+                <div class="calc-input-group">
+                    <label>Number of Trees</label>
+                    <input type="number" id="calcTrees" value="2" oninput="calculateFromTrees()">
+                </div>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="result-box">
+                    <i class="fas fa-cloud"></i>
+                    <h4 id="resCO2">440</h4>
+                    <p>kg CO2 Sequestered</p>
+                </div>
+                <div class="result-box">
+                    <i class="fas fa-tint"></i>
+                    <h4 id="resWater">5,000</h4>
+                    <p>Liters of Water Filtered</p>
+                </div>
+                <div class="result-box">
+                    <i class="fas fa-leaf"></i>
+                    <h4 id="resO2">240</h4>
+                    <p>Days of Oxygen Provided</p>
+                </div>
+            </div>
+            
+            <div class="mt-20">
+                <button class="btn" style="width: 100%; padding: 18px;" onclick="openModal()">Donate to Plant These Trees</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const COST_PER_TREE = 500; 
+    const CO2_PER_TREE = 220; 
+    const WATER_PER_TREE = 2500; 
+    const O2_PER_TREE = 120; 
+
+    function calculateImpact() {
+        const amount = document.getElementById('calcAmount').value;
+        const numTrees = Math.floor(amount / COST_PER_TREE);
+        document.getElementById('calcTrees').value = numTrees;
+        updateResults(numTrees);
+    }
+
+    function calculateFromTrees() {
+        const numTrees = document.getElementById('calcTrees').value;
+        document.getElementById('calcAmount').value = numTrees * COST_PER_TREE;
+        updateResults(numTrees);
+    }
+
+    function updateResults(num) {
+        document.getElementById('resCO2').innerText = (num * CO2_PER_TREE).toLocaleString();
+        document.getElementById('resWater').innerText = (num * WATER_PER_TREE).toLocaleString();
+        document.getElementById('resO2').innerText = (num * O2_PER_TREE).toLocaleString();
+    }
+    
+    // Initial calculation
+    calculateImpact();
+</script>
+{% endblock %}

@@ -3,40 +3,42 @@
 {% block title %}FAQ | TEAMEnvironment KENYA{% endblock %}
 
 {% block content %}
-<section class="page-header" style="background: var(--bg-light); padding: 80px 0; text-align: center;">
+<section class="page-header" style="background-color: var(--bg-light); padding: clamp(60px, 8vh, 100px) 0; text-align: center;">
     <div class="container">
-        <h1 style="font-size: 3rem; margin-bottom: 15px;">Frequently Asked Questions</h1>
-        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
-            <a href="{{ url_for('home') }}" style="color: var(--primary-dark); text-decoration: none;">Home</a> / <span style="color: var(--primary-green); font-weight: 600;">FAQ</span>
+        <h1>Frequently Asked Questions</h1>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">
+            <a href="{{ url_for('home') }}" style="color: var(--primary-dark); text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">FAQ</span>
         </div>
     </div>
 </section>
 
-<section class="faq-content" style="padding: 80px 0;">
-    <div class="container" style="max-width: 800px;">
-        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary-green);">How can I donate to TEK?</h3>
-            <p>You can donate easily via M-Pesa using our floating "Donate" button or the link in the footer. Simply enter your phone number and the amount you wish to contribute, and you'll receive a prompt on your phone.</p>
-        </div>
-        
-        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary-green);">Is my donation tax-deductible?</h3>
-            <p>TEAMEnvironment KENYA is a registered NGO in Kenya. We provide receipts for all donations which can be used for tax purposes in accordance with Kenyan law.</p>
-        </div>
+<section class="faq-content">
+    <div class="container" style="max-width: 900px;">
+        <div class="faq-list">
+            <div class="faq-item mb-20" style="background: white; padding: 30px; border-radius: 15px; border: 1px solid var(--gray-border); box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary-green); font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-question-circle mr-10"></i> How can I donate to TEK?</h3>
+                <p style="margin: 0; color: #555;">You can donate easily via M-Pesa using our floating "Donate" button or the link in the footer. Simply enter your phone number and the amount you wish to contribute, and you'll receive a prompt on your phone.</p>
+            </div>
+            
+            <div class="faq-item mb-20" style="background: white; padding: 30px; border-radius: 15px; border: 1px solid var(--gray-border); box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary-green); font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-question-circle mr-10"></i> Is my donation tax-deductible?</h3>
+                <p style="margin: 0; color: #555;">TEAMEnvironment KENYA is a registered NGO in Kenya. We provide official receipts for all donations which can be used for tax purposes in accordance with Kenyan law.</p>
+            </div>
 
-        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary-green);">How do I become a volunteer?</h3>
-            <p>We're always looking for passionate individuals to join our cause. You can register via our <a href="{{ url_for('register') }}" style="color: var(--primary-green); font-weight: 600;">Join Us</a> page, and a member of our team will reach out to you with upcoming opportunities.</p>
-        </div>
+            <div class="faq-item mb-20" style="background: white; padding: 30px; border-radius: 15px; border: 1px solid var(--gray-border); box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary-green); font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-question-circle mr-10"></i> How do I become a volunteer?</h3>
+                <p style="margin: 0; color: #555;">We're always looking for passionate individuals to join our cause. You can register via our <a href="{{ url_for('work') }}" class="text-green" style="font-weight: 700; text-decoration: none;">Join Our Army</a> page, and a member of our team will reach out to you.</p>
+            </div>
 
-        <div class="faq-item" style="margin-bottom: 30px; border-bottom: 1px solid var(--gray-border); padding-bottom: 20px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary-green);">Where does my money go?</h3>
-            <p>Transparency is key to our operations. Donations go directly towards our tree planting initiatives, community education programs, and the maintenance of restored sites. You can see our real-time impact on the <a href="{{ url_for('impact') }}" style="color: var(--primary-green); font-weight: 600;">Impact</a> page.</p>
-        </div>
+            <div class="faq-item mb-20" style="background: white; padding: 30px; border-radius: 15px; border: 1px solid var(--gray-border); box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary-green); font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-question-circle mr-10"></i> Where does my money go?</h3>
+                <p style="margin: 0; color: #555;">Transparency is our priority. Donations go directly towards reforestation, community education programs, and the maintenance of our propagation centers. Track our progress on the <a href="{{ url_for('transparency') }}" class="text-green" style="font-weight: 700; text-decoration: none;">Impact</a> page.</p>
+            </div>
 
-        <div class="faq-item" style="margin-bottom: 30px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary-green);">Can organizations partner with TEK?</h3>
-            <p>Yes, we welcome corporate partnerships and collaborations with other NGOs. Please contact us through our <a href="{{ url_for('contact') }}" style="color: var(--primary-green); font-weight: 600;">Contact Us</a> page for partnership inquiries.</p>
+            <div class="faq-item" style="background: white; padding: 30px; border-radius: 15px; border: 1px solid var(--gray-border); box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary-green); font-size: 1.2rem; margin-bottom: 15px;"><i class="fas fa-question-circle mr-10"></i> Can organizations partner with TEK?</h3>
+                <p style="margin: 0; color: #555;">Yes, we welcome corporate partnerships and collaborations. Please visit our <a href="{{ url_for('contact') }}" class="text-green" style="font-weight: 700; text-decoration: none;">Contact Us</a> page for partnership inquiries.</p>
+            </div>
         </div>
     </div>
 </section>

@@ -25,6 +25,7 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 from firebase_config import initialize_firebase, db
 from dotenv import load_dotenv
+from receipt_utils import generate_donation_receipt
 
 # Load environment variables
 load_dotenv()
@@ -475,7 +476,96 @@ def pay():
 def callback():
     data = request.json
     db.reference('payments').push(data)
+    
+    # Process successful payment
+    try:
+        if data and 'Body' in data and 'stkCallback' in data:
+            callback_data = data['Body']['stkCallback']
+            result_code = callback_data.get('ResultCode')
+            
+            if result_code == 0:
+                # Payment successful
+                metadata = callback_data.get('CallbackMetadata', {}).get('Item', [])
+                
+                payment_info = {}
+                for item in metadata:
+                    payment_info[item['Name']] = item.get('Value')
+                
+                amount = payment_info.get('Amount')
+                receipt_no = payment_info.get('MpesaReceiptNumber')
+                phone = payment_info.get('PhoneNumber')
+                
+                # In a real app, you'd look up the user by phone or session
+                # For now, we use a generic name or look up from a 'pending_donations' table
+                donor_name = "Valued Supporter"
+                
+                # Generate PDF Receipt
+                pdf_path = generate_donation_receipt(donor_name, amount, receipt_no)
+                print(f"✅ Receipt generated: {pdf_path}")
+                
+                # Optional: If you had the donor's email, you'd send it here
+                # send_email("Your Donation Receipt", donor_email, "Thank you...", pdf_path)
+                
+    except Exception as e:
+        print(f"❌ Error processing callback: {str(e)}")
+        
     return "OK"
+
+@app.route('/projects')
+@app.route('/projects.html')
+def projects():
+    # Fetch specific projects/sites from Firebase
+    projects_ref = db.reference('projects')
+    projects_data = projects_ref.get()
+    
+    projects_list = []
+    if projects_data:
+        for p_id, p in projects_data.items():
+            p['id'] = p_id
+            projects_list.append(p)
+    
+    return render_template('main/work.html', projects=projects_list) # Reusing work.html or creating projects.html
+
+@app.route('/gift-a-tree')
+def gift_a_tree():
+    return render_template('payments/pay.html', gift_mode=True)
+
+@app.route('/transparency')
+def transparency():
+    # In a real scenario, you would fetch these numbers from Firebase
+    stats = {
+        "trees_planted": "150,000+",
+        "volunteers": "5,000+",
+        "communities": "120+",
+        "acres_restored": "2,500+"
+    }
+    # Fetch impact reports
+    reports = [
+        {"title": "Annual Impact Report 2025", "url": "#"},
+        {"title": "Financial Transparency 2024", "url": "#"},
+        {"title": "Tree Survival Audit", "url": "#"}
+    ]
+    return render_template('main/impact.html', reports=reports, stats=stats)
+
+@app.route('/calculator')
+def calculator():
+    return render_template('main/calculator.html')
+
+@app.route('/corporate')
+def corporate():
+    return render_template('main/services.html', corporate_mode=True)
+
+@app.route('/ambassadors')
+def ambassadors():
+    return render_template('main/team.html', ambassadors_mode=True)
+
+@app.route('/newsletter-signup', methods=['POST'])
+def newsletter_signup():
+    email = request.form.get('email')
+    if email:
+        db.reference('newsletter_subs').push({'email': email, 'signed_up_at': datetime.now().isoformat()})
+        return jsonify({"success": "Thank you for joining our mission!"}), 200
+    return jsonify({"error": "Email is required"}), 400
 
 @app.route('/sw.js')
 def serve_sw():

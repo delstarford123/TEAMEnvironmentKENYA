@@ -2,27 +2,58 @@
 
 {% block title %}Resources | TEAMEnvironment KENYA{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* --- PAGE HEADER --- */
+    .page-header {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/Trees for policy markers.jpeg');
+        background-size: cover;
+        background-position: center;
+        padding: clamp(60px, 10vh, 120px) 0;
+        color: white;
+        text-align: center;
+    }
+    .page-header h1 { color: white; margin-bottom: 15px; }
+
+    /* --- RESOURCE CARDS --- */
+    .doc-card {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        border: 1px solid var(--gray-border);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .doc-card:hover { border-color: var(--primary-green); transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+    .doc-icon { font-size: 3rem; color: #e11d48; margin-bottom: 25px; }
+    .doc-card h3 { font-size: 1.3rem; margin-bottom: 15px; color: var(--primary-dark); }
+    .doc-card p { color: #666; font-size: 0.9rem; margin-bottom: 30px; flex-grow: 1; }
+</style>
+{% endblock %}
+
 {% block content %}
-<section class="page-header" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/Trees for policy markers.jpeg'); background-size: cover; background-position: center; padding: 80px 0; color: white; text-align: center;">
+<section class="page-header">
     <div class="container">
-        <h1 style="font-size: 3rem; margin-bottom: 15px;">Resource Center</h1>
-        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
-            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span style="color: var(--primary-green); font-weight: 600;">Resources</span>
+        <h1>Resource Center</h1>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Resources</span>
         </div>
     </div>
 </section>
 
-<section class="resources-list" style="padding: 80px 0;">
+<section class="resources-list" style="background-color: var(--bg-light);">
     <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <div class="grid grid-3">
             {% for doc in documents %}
-            <div class="resource-card" style="border: 1px solid var(--gray-border); padding: 30px; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s; background: #fff;">
+            <div class="doc-card">
                 <div>
-                    <i class="fas fa-file-pdf" style="font-size: 2.5rem; color: #e11d48; margin-bottom: 20px;"></i>
-                    <h3 style="margin-bottom: 15px;">{{ doc.title }}</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Official document outlining our initiatives and partnerships for environmental restoration.</p>
+                    <div class="doc-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>{{ doc.title }}</h3>
+                    <p>Official publication detailing our environmental strategies, restoration progress, and organizational commitments.</p>
                 </div>
-                <a href="/static/documents/{{ doc.filename }}" class="btn btn-outline" style="border-color: var(--primary-green); color: var(--primary-green); text-align: center;" target="_blank">
+                <a href="/static/documents/{{ doc.filename }}" class="btn btn-outline" style="width: 100%;" target="_blank">
                     <i class="fas fa-download"></i> Download PDF
                 </a>
             </div>
@@ -31,11 +62,11 @@
     </div>
 </section>
 
-<section class="resource-cta" style="padding: 60px 0; background-color: var(--primary-dark); color: white; text-align: center;">
+<section class="resource-cta py-80" style="background-color: var(--primary-dark); color: white; text-align: center;">
     <div class="container">
-        <h2>Need more information?</h2>
-        <p style="margin-top: 15px; margin-bottom: 30px; color: #cbd5e1;">If you're looking for specific data or reports not listed here, please get in touch with our team.</p>
-        <a href="{{ url_for('contact') }}" class="btn">Contact Us</a>
+        <h2 style="color: white;">Need More Information?</h2>
+        <p style="max-width: 700px; margin: 20px auto 40px; color: rgba(255,255,255,0.7);">If you are looking for specific environmental data, annual reports, or research papers not listed here, please reach out to our communications team.</p>
+        <a href="{{ url_for('contact') }}" class="btn">Contact Our Team</a>
     </div>
 </section>
 {% endblock %}

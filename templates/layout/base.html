@@ -60,7 +60,7 @@
         <div class="container">
             <div class="contact-links">
                 <span><i class="fas fa-envelope"></i> teamenvironment.ke@gmail.com</span>
-                <span style="margin-left: 20px;"><i class="fas fa-phone"></i> +254 712 345 678</span>
+                <span style="margin-left: 20px;"><i class="fas fa-phone"></i>+254 718 052745</span>
             </div>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -72,30 +72,65 @@
     </div>
 
     <!-- Header -->
-    <header class="main-header">
+    <header class="main-header" id="header">
+        <div class="nav-overlay" id="nav-overlay"></div>
         <div class="container header-container">
             <div class="logo">
-                <a href="/">
+                <a href="{{ url_for('home') }}" aria-label="TEAMEnvironment KENYA Home">
                     <img src="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" alt="TEK Logo">
                 </a>
             </div>
             
-            <div class="mobile-toggle">
+            <button class="mobile-toggle" aria-label="Toggle Navigation" aria-expanded="false" aria-controls="main-nav">
                 <i class="fas fa-bars"></i>
-            </div>
+            </button>
 
-            <nav class="main-nav">
+            <nav class="main-nav" id="main-nav">
                 <ul class="nav-menu">
-                    <li><a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">Home</a></li>
-                    <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">About Us</a></li>
-                    <li><a href="{{ url_for('activities') }}" class="nav-link {% if request.endpoint == 'activities' %}active{% endif %}">Activities</a></li>
-                    <li><a href="{{ url_for('impact') }}" class="nav-link {% if request.endpoint == 'impact' %}active{% endif %}">Impact</a></li>
-                    <li><a href="{{ url_for('events') }}" class="nav-link {% if request.endpoint == 'events' %}active{% endif %}">Events</a></li>
-                    <li><a href="{{ url_for('resources') }}" class="nav-link {% if request.endpoint == 'resources' %}active{% endif %}">Resources</a></li>
-                    <li><a href="{{ url_for('contact') }}" class="nav-link {% if request.endpoint == 'contact' %}active{% endif %}">Contact</a></li>
+                    <!-- Pillar 1: Get Informed -->
+                    <li class="has-dropdown">
+                        <a href="#" class="nav-link {% if request.endpoint in ['projects', 'blog', 'calculator', 'resources', 'faq'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                            Get Informed <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="{{ url_for('projects') }}" class="{% if request.endpoint == 'projects' %}active{% endif %}">Our Projects</a></li>
+                            <li><a href="{{ url_for('blog') }}" class="{% if request.endpoint == 'blog' %}active{% endif %}">Impact Stories</a></li>
+                            <li><a href="{{ url_for('calculator') }}" class="{% if request.endpoint == 'calculator' %}active{% endif %}">Impact Calculator</a></li>
+                            <li><a href="{{ url_for('resources') }}" class="{% if request.endpoint == 'resources' %}active{% endif %}">Resources</a></li>
+                            <li><a href="{{ url_for('faq') }}" class="{% if request.endpoint == 'faq' %}active{% endif %}">FAQ</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Pillar 2: Get Involved -->
+                    <li class="has-dropdown">
+                        <a href="#" class="nav-link {% if request.endpoint in ['gift_a_tree', 'corporate', 'ambassadors', 'activities'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                            Get Involved <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="#" onclick="openModal()">Donate Now</a></li>
+                            <li><a href="{{ url_for('gift_a_tree') }}" class="{% if request.endpoint == 'gift_a_tree' %}active{% endif %}">Gift a Tree</a></li>
+                            <li><a href="{{ url_for('corporate') }}" class="{% if request.endpoint == 'corporate' %}active{% endif %}">Corporate Partners</a></li>
+                            <li><a href="{{ url_for('ambassadors') }}" class="{% if request.endpoint == 'ambassadors' %}active{% endif %}">Ambassadors</a></li>
+                            <li><a href="{{ url_for('activities') }}" class="{% if request.endpoint == 'activities' %}active{% endif %}">Volunteer / Activities</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Pillar 3: Who We Are -->
+                    <li class="has-dropdown">
+                        <a href="#" class="nav-link {% if request.endpoint in ['about', 'team', 'transparency', 'contact'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                            Who We Are <i class="fas fa-chevron-down"></i>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">Our Mission</a></li>
+                            <li><a href="{{ url_for('team') }}" class="{% if request.endpoint == 'team' %}active{% endif %}">The Team</a></li>
+                            <li><a href="{{ url_for('transparency') }}" class="{% if request.endpoint == 'transparency' %}active{% endif %}">Transparency</a></li>
+                            <li><a href="{{ url_for('contact') }}" class="{% if request.endpoint == 'contact' %}active{% endif %}">Contact Us</a></li>
+                        </ul>
+                    </li>
+
                     <li class="cta-item">
-                        <a href="#" class="donate-btn" onclick="openModal()">
-                            <i class="fas fa-heart"></i> DONATE
+                        <a href="#" class="nav-cta-btn" onclick="openModal()">
+                            PROTECT FOREST NOW
                         </a>
                     </li>
                 </ul>
@@ -139,7 +174,7 @@
                     <h5>Contact Us</h5>
                     <ul class="contact-info">
                         <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
-                        <li><i class="fas fa-phone"></i> +254 712 345 678</li>
+                        <li><i class="fas fa-phone"></i>+254 718 052745</li>
                         <li><i class="fas fa-envelope"></i> teamenvironment.ke@gmail.com</li>
                     </ul>
                 </div>

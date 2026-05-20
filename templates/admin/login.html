@@ -3,15 +3,18 @@
 {% block title %}Admin Login - TEAMEnvironment KENYA{% endblock %}
 
 {% block content %}
-<section style="padding: 100px 0; background: #f4f7f6;">
-    <div class="container" style="max-width: 400px;">
-        <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-            <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary-green);">Admin Login</h2>
+<section style="padding: 100px 0; background-color: var(--bg-light); min-height: 80vh; display: flex; align-items: center;">
+    <div class="container" style="max-width: 450px;">
+        <div style="background: white; padding: clamp(30px, 5vw, 50px); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); border: 1px solid var(--gray-border);">
+            <div class="text-center mb-20">
+                <h4 class="text-green">Secure Access</h4>
+                <h2>Admin Login</h2>
+            </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
                 {% for category, message in messages %}
-                  <div style="padding: 10px; margin-bottom: 20px; border-radius: 5px; background: {% if category == 'danger' %}#f8d7da{% else %}#d4edda{% endif %}; color: {% if category == 'danger' %}#721c24{% else %}#155724{% endif %};">
+                  <div style="padding: 12px 15px; margin-bottom: 25px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; background: {% if category == 'danger' %}#fef2f2{% else %}#f0fdf4{% endif %}; color: {% if category == 'danger' %}#e11d48{% else %}var(--primary-green){% endif %}; border: 1px solid {% if category == 'danger' %}rgba(225, 29, 72, 0.1){% else %}rgba(84, 180, 53, 0.1){% endif %};">
                     {{ message }}
                   </div>
                 {% endfor %}
@@ -19,15 +22,15 @@
             {% endwith %}
 
             <form action="/login" method="POST">
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Username</label>
-                    <input type="text" name="username" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                <div class="mb-20">
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary-dark);">Username</label>
+                    <input type="text" name="username" required style="width: 100%; padding: 14px; border: 1px solid var(--gray-border); border-radius: 8px; background-color: #f8fafc; font-size: 1rem;">
                 </div>
-                <div style="margin-bottom: 30px;">
-                    <label style="display: block; margin-bottom: 5px; font-weight: 600;">Password</label>
-                    <input type="password" name="password" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                <div class="mb-20" style="margin-bottom: 30px;">
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary-dark);">Password</label>
+                    <input type="password" name="password" required style="width: 100%; padding: 14px; border: 1px solid var(--gray-border); border-radius: 8px; background-color: #f8fafc; font-size: 1rem;">
                 </div>
-                <button type="submit" class="btn" style="width: 100%; padding: 14px; background: var(--primary-green); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">Login</button>
+                <button type="submit" class="btn" style="width: 100%; padding: 16px; font-size: 1rem;">Authenticate</button>
             </form>
         </div>
     </div>

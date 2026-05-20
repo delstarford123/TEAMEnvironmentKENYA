@@ -9,45 +9,33 @@
         background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/g8bb840eaaacab8de022be0c2faabf9f02bf2dc0326587732cdf6fb8e2bc832954479c202bfa82c0bb62f6afda35623200a221542ee4442f3fec59b8c6b39e28b_1280-1950402.jpg');
         background-size: cover;
         background-position: center;
-        padding: 100px 0;
+        padding: clamp(60px, 10vh, 120px) 0;
         text-align: center;
         color: white;
     }
-    .page-header h1 { font-size: 3rem; margin-bottom: 10px; color: white; }
-    .breadcrumb { font-size: 0.9rem; opacity: 0.8; }
-    .breadcrumb a:hover { text-decoration: underline; }
+    .page-header h1 { color: white; margin-bottom: 10px; }
 
     /* --- SERVICES GRID --- */
-    .services-section { padding: 80px 0; }
-    .section-header { text-align: center; margin-bottom: 60px; }
-    .section-header h4 { color: var(--primary-green); text-transform: uppercase; font-size: 1rem; margin-bottom: 10px; }
-    .section-header h2 { font-size: 2.5rem; }
-
-    .services-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 40px;
-    }
-
     .service-card {
         background: white;
-        border-radius: 8px;
+        border-radius: 15px;
         overflow: hidden;
         box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        transition: transform 0.3s ease;
+        transition: var(--transition);
         border: 1px solid var(--gray-border);
         display: flex;
         flex-direction: column;
+        height: 100%;
     }
 
     .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         border-color: var(--primary-green);
     }
 
     .service-img {
-        height: 250px;
+        height: 240px;
         overflow: hidden;
     }
 
@@ -58,36 +46,33 @@
         transition: transform 0.5s ease;
     }
 
-    .service-card:hover .service-img img { transform: scale(1.05); }
+    .service-card:hover .service-img img { transform: scale(1.1); }
 
-    .service-content { padding: 30px; flex-grow: 1; }
-    .service-content h3 { font-size: 1.4rem; margin-bottom: 15px; color: var(--primary-dark); }
-    .service-content p { color: #666; font-size: 0.95rem; line-height: 1.7; }
-
-    @media (max-width: 768px) {
-        .services-grid { grid-template-columns: 1fr; }
-    }
+    .service-content { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
+    .service-content h3 { font-size: 1.3rem; margin-bottom: 15px; color: var(--primary-dark); }
+    .service-content p { color: #666; font-size: 0.9rem; line-height: 1.7; flex-grow: 1; }
 </style>
 {% endblock %}
 
 {% block content %}
     <section class="page-header">
         <div class="container">
-            <h1>Our Services</h1>
+            <h1>Our Expert Services</h1>
             <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">
-                <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span style="color: var(--primary-green); font-weight: 600;">Services</span>
+                <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Services</span>
             </div>
         </div>
     </section>
 
     <section class="services-section">
         <div class="container">
-            <div class="section-header">
-                <h4>Our Services</h4>
+            <div class="text-center mb-20">
+                <h4 class="text-green">What We Do</h4>
                 <h2>Quality Environmental Solutions</h2>
+                <p style="max-width: 800px; margin: 0 auto;">We provide a wide range of services designed to restore ecosystems and support sustainable development across Kenya.</p>
             </div>
             
-            <div class="services-grid">
+            <div class="grid grid-3 mt-20">
 
                 <article class="service-card">
                     <div class="service-img">
@@ -95,7 +80,7 @@
                     </div>
                     <div class="service-content">
                         <h3>Tree Planting (Growing)</h3>
-                        <p>We offer comprehensive tree growing services including Site and Species matching, ground preparation, and ongoing support to ensure the health and growth of your trees.</p>
+                        <p>Comprehensive tree growing services including site assessment, species matching, ground preparation, and ongoing monitoring to ensure high survival rates.</p>
                     </div>
                 </article>
 
@@ -105,7 +90,7 @@
                     </div>
                     <div class="service-content">
                         <h3>Climate Change Consultancy</h3>
-                        <p>Expert consultancy on climate change adaptation and mitigation. We help organizations understand environmental degradation and take action to protect our planet.</p>
+                        <p>Expert guidance on climate adaptation and mitigation. We help organizations and communities build resilience against environmental changes.</p>
                     </div>
                 </article>
 
@@ -114,8 +99,8 @@
                         <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/10-million-Tree-Seedlings-Propagation-Centre-600x450-1.jpg" alt="Seedlings Supply">
                     </div>
                     <div class="service-content">
-                        <h3>Supply of Quality Seedlings</h3>
-                        <p>We provide high-quality diverse tree seedlings sourced from KEFRI. Our 10-Million Tree Seedlings Propagation Center supports farmers and landowners.</p>
+                        <h3>Quality Seedlings Supply</h3>
+                        <p>Supplying high-quality diverse tree seedlings from our 10-Million Tree Seedlings Propagation Center, supporting large-scale reforestation efforts.</p>
                     </div>
                 </article>
 
@@ -124,8 +109,8 @@
                         <img src="https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/pexels-kashif-shah-14489171-1.jpg" alt="Landscaping">
                     </div>
                     <div class="service-content">
-                        <h3>Landscaping Services</h3>
-                        <p>Professional garden design and installation, lawn care, tree and shrub planting, hardscaping, irrigation system installation, and seasonal cleanup.</p>
+                        <h3>Professional Landscaping</h3>
+                        <p>Creative garden design, lawn care, and irrigation system installation that balances aesthetic beauty with environmental sustainability.</p>
                     </div>
                 </article>
 
@@ -135,7 +120,7 @@
                     </div>
                     <div class="service-content">
                         <h3>Environmental Impact Assessment</h3>
-                        <p>We assess potential environmental effects of proposed developments, ensuring projects comply with regulations and adhere to responsible sustainable practices.</p>
+                        <p>Thorough assessments of proposed developments to ensure compliance with environmental regulations and responsible project management.</p>
                     </div>
                 </article>
 
@@ -145,7 +130,7 @@
                     </div>
                     <div class="service-content">
                         <h3>Green Facility Initiative</h3>
-                        <p>Mobilizing the Green Facility initiative by partnering on PPP frameworks to enhance sustainable utility management of physical infrastructure and water catchments.</p>
+                        <p>Partnering on frameworks to enhance sustainable management of infrastructure, focusing on water catchments and resource efficiency.</p>
                     </div>
                 </article>
 

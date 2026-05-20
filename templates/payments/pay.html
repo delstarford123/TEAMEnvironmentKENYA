@@ -1,28 +1,118 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}M-Pesa Payment - TEAMEnvironment KENYA{% endblock %}
+{% block title %}Secure Payment - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- PAGE HEADER --- */
+    .page-header {
+        background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/highridge_seeds_of_a_greener_future_1_70.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: clamp(60px, 10vh, 100px) 0;
+        text-align: center;
+        color: white;
+    }
+    .page-header h1 { color: white; margin-bottom: 10px; }
+    
+    /* --- PAY CARD --- */
+    .pay-card {
+        max-width: 500px;
+        margin: 0 auto;
+        background: white;
+        padding: clamp(30px, 6vw, 60px);
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        border: 1px solid var(--gray-border);
+        text-align: center;
+    }
+
+    .mpesa-logo { height: 50px; margin-bottom: 30px; }
+
+    label { display: block; font-weight: 700; margin-bottom: 10px; text-align: left; font-size: 0.9rem; color: var(--primary-dark); }
+    
+    input { 
+        width: 100%; 
+        padding: 15px; 
+        border: 2px solid var(--gray-border); 
+        border-radius: 10px; 
+        font-size: 1.1rem;
+        transition: var(--transition);
+        background-color: #f8fafc;
+        margin-bottom: 25px;
+    }
+    input:focus {
+        border-color: var(--primary-green);
+        background-color: #fff;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(84, 180, 53, 0.1);
+    }
+
+    .status-msg {
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-top: 25px;
+        display: none;
+    }
+    .status-msg.active { display: block; }
+    .status-msg.success { background-color: #f0fdf4; color: var(--primary-green); border: 1px solid rgba(84, 180, 53, 0.2); }
+    .status-msg.error { background-color: #fef2f2; color: #e11d48; border: 1px solid rgba(225, 29, 72, 0.2); }
+    .status-msg.info { background-color: #eff6ff; color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.2); }
+
+    .secure-badge {
+        margin-top: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: #94a3b8;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container" style="padding: 100px 20px; text-align: center;">
-    <div style="max-width: 500px; margin: 0 auto; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--gray-border);">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa" style="height: 60px; margin-bottom: 20px;">
-        <h2 style="margin-bottom: 30px;">Direct Payment</h2>
-        
-        <div class="input-group" style="text-align: left; margin-bottom: 20px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 8px;">Phone Number</label>
-            <input type="text" id="payPhone" placeholder="2547XXXXXXXX" value="2547" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+<section class="page-header">
+    <div class="container">
+        <h1>Secure Payment</h1>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Payment</span>
         </div>
-        
-        <div class="input-group" style="text-align: left; margin-bottom: 30px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 8px;">Amount (KES)</label>
-            <input type="number" id="payAmount" placeholder="Amount" value="100" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
-        </div>
-
-        <button onclick="payNow()" id="paySubmitBtn" class="btn" style="width: 100%;">Pay Now</button>
-        
-        <div id="payStatus" style="margin-top: 20px;"></div>
     </div>
-</div>
+</section>
+
+<section class="pay-section" style="background-color: var(--bg-light); padding: 80px 0;">
+    <div class="container">
+        <div class="pay-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa" class="mpesa-logo">
+            <h2>Support Our Mission</h2>
+            <p style="color: #666; margin-bottom: 40px;">Your contribution directly funds reforestation and community sustainability projects across Kenya.</p>
+            
+            <div class="form-group">
+                <label for="payPhone">M-Pesa Phone Number</label>
+                <input type="text" id="payPhone" placeholder="07XXXXXXXX" value="07">
+            </div>
+            
+            <div class="form-group">
+                <label for="payAmount">Amount to Donate (KES)</label>
+                <input type="number" id="payAmount" placeholder="Enter amount" value="1000">
+            </div>
+
+            <button onclick="payNow()" id="paySubmitBtn" class="btn" style="width: 100%; padding: 18px;">Initiate STK Push</button>
+            
+            <div id="payStatus" class="status-msg"></div>
+
+            <div class="secure-badge">
+                <i class="fas fa-lock"></i> Secured by Safaricom Daraja
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
 
 {% block extra_js %}
@@ -33,15 +123,18 @@
         const status = document.getElementById('payStatus');
         const btn = document.getElementById('paySubmitBtn');
         
-        if(!phone || !amount) {
-            status.innerHTML = '<span class="status-error">Please fill in all fields.</span>';
+        if(!phone || !amount || amount <= 0) {
+            status.className = 'status-msg active error';
+            status.innerHTML = '❌ Please enter a valid phone and amount.';
             return;
         }
 
         const originalBtnText = btn.innerText;
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        status.innerHTML = '<div style="margin-top: 15px; color: #666;"><div class="spinner" style="width: 25px; height: 25px; border-width: 3px;"></div> Waiting for STK Push... Check your phone.</div>';
+        
+        status.className = 'status-msg active info';
+        status.innerHTML = '<i class="fas fa-mobile-alt"></i> Sending STK Push... Check your phone.';
 
         try {
             const response = await fetch('/pay', {
@@ -53,27 +146,21 @@
             const data = await response.json();
             
             if(data.ResponseCode === "0") {
-                status.innerHTML = '<span class="status-success">✔ Check your phone for the PIN prompt!</span>';
+                status.className = 'status-msg active success';
+                status.innerHTML = '✔ STK Push Sent! Enter your PIN on your phone to complete the payment.';
+                document.getElementById('payAmount').value = '';
             } else {
-                status.innerHTML = `<span class="status-error">❌ Error: ${data.errorMessage || data.error}</span>`;
+                status.className = 'status-msg active error';
+                status.innerHTML = `❌ Error: ${data.errorMessage || data.error || 'Initiation failed'}`;
                 btn.disabled = false;
                 btn.innerText = originalBtnText;
             }
         } catch (error) {
-            status.innerHTML = '<span class="status-error">❌ Connection failed.</span>';
+            status.className = 'status-msg active error';
+            status.innerHTML = '❌ Connection failed. Please check your internet.';
             btn.disabled = false;
             btn.innerText = originalBtnText;
         }
     }
-
-    // Add inline validation to the phone field here as well
-    document.getElementById('payPhone').addEventListener('input', function() {
-        const regex = /^(254|0)(7|1)\d{8}$/;
-        if (regex.test(this.value)) {
-            this.style.borderColor = 'var(--primary-green)';
-        } else {
-            this.style.borderColor = '#e11d48';
-        }
-    });
 </script>
 {% endblock %}

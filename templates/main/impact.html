@@ -3,55 +3,81 @@
 {% block title %}Our Impact | TEAMEnvironment KENYA{% endblock %}
 
 {% block content %}
-<section class="page-header" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/Climate resilience.jpeg'); background-size: cover; background-position: center; padding: 100px 0; color: white; text-align: center;">
+<section class="page-header" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/static/images/Climate resilience.jpeg'); background-size: cover; background-position: center; padding: clamp(60px, 10vh, 120px) 0; color: white; text-align: center;">
     <div class="container">
-        <h1 style="font-size: 3rem; margin-bottom: 20px;">Our Impact</h1>
+        <h1>Our Environmental Impact</h1>
         <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
-            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span style="color: var(--primary-green); font-weight: 600;">Impact</span>
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Impact</span>
         </div>
     </div>
 </section>
 
-<section class="impact-stats" style="padding: 80px 0; background-color: var(--bg-light);">
+<section class="impact-stats" style="background-color: var(--bg-light);">
     <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; text-align: center;">
-            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                <i class="fas fa-tree" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
-                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.trees_planted }}</h2>
-                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Trees Planted</p>
+        <div class="grid grid-4 text-center">
+            <div class="card">
+                <i class="fas fa-tree text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 10px;">{{ stats.trees_planted }}</h2>
+                <p style="font-weight: 700; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Trees Planted</p>
             </div>
-            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                <i class="fas fa-users" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
-                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.volunteers }}</h2>
-                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Active Volunteers</p>
+            <div class="card">
+                <i class="fas fa-users text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 10px;">{{ stats.volunteers }}</h2>
+                <p style="font-weight: 700; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Active Volunteers</p>
             </div>
-            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                <i class="fas fa-handshake" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
-                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.communities }}</h2>
-                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Communities Reached</p>
+            <div class="card">
+                <i class="fas fa-handshake text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 10px;">{{ stats.communities }}</h2>
+                <p style="font-weight: 700; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Communities Reached</p>
             </div>
-            <div class="stat-card" style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
-                <h2 style="font-size: 2.5rem; margin-bottom: 10px;">{{ stats.acres_restored }}</h2>
-                <p style="font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px;">Acres Restored</p>
+            <div class="card">
+                <i class="fas fa-map-marked-alt text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 10px;">{{ stats.acres_restored }}</h2>
+                <p style="font-weight: 700; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Acres Restored</p>
             </div>
         </div>
     </div>
 </section>
 
-<section class="impact-details" style="padding: 80px 0;">
+<section class="impact-details">
     <div class="container">
-        <div style="display: flex; flex-wrap: wrap; gap: 50px; align-items: center;">
-            <div style="flex: 1; min-width: 300px;">
-                <h2 style="margin-bottom: 25px;">Driving Real Change Through Local Action</h2>
-                <p style="margin-bottom: 20px;">At TEAMEnvironment KENYA, we believe that environmental conservation is not just about planting trees, but about restoring ecosystems and empowering communities.</p>
-                <p style="margin-bottom: 20px;">Our data-driven approach ensures that every shilling donated and every hour volunteered translates into measurable environmental impact. From the Ngong Hills restoration to community agroforestry projects, we are building a legacy of sustainability.</p>
-                <a href="{{ url_for('activities') }}" class="btn">View Our Activities</a>
+        <div class="grid grid-2" style="align-items: center;">
+            <div>
+                <h4 class="text-green">Our Approach</h4>
+                <h2>Driving Real Change Through Local Action</h2>
+                <p>At TEAMEnvironment KENYA, we believe that environmental conservation is not just about planting trees, but about restoring ecosystems and empowering communities.</p>
+                <p>Our data-driven approach ensures that every shilling donated and every hour volunteered translates into measurable environmental impact. From the Ngong Hills restoration to community agroforestry projects, we are building a legacy of sustainability.</p>
+                <div class="mt-20">
+                    <a href="{{ url_for('activities') }}" class="btn">View Our Activities</a>
+                </div>
             </div>
-            <div style="flex: 1; min-width: 300px;">
-                <img src="/static/images/People collborating.jpeg" alt="Impact" style="border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+            <div>
+                <img src="/static/images/People collborating.jpeg" alt="Impact" style="border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);">
             </div>
         </div>
     </div>
 </section>
+
+{% if reports %}
+<section class="transparency py-80" style="background-color: var(--primary-dark); color: white;">
+    <div class="container">
+        <div class="text-center mb-20">
+            <h4 class="text-green">Trust & Accountability</h4>
+            <h2 style="color: white;">Transparency Reports</h2>
+            <p style="opacity: 0.8; max-width: 700px; margin: 0 auto;">We are committed to full transparency. View our latest impact and financial reports below.</p>
+        </div>
+        <div class="grid grid-3 mt-20">
+            {% for report in reports %}
+            <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; border-left: 4px solid var(--primary-green); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <div>
+                    <h4 style="margin-bottom: 5px; color: white;">{{ report.title }}</h4>
+                    <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">PDF Download</p>
+                </div>
+                <a href="{{ report.url }}" class="btn" style="padding: 10px 18px; font-size: 0.8rem; border-radius: 8px;"><i class="fas fa-download"></i></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
