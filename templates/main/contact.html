@@ -115,18 +115,26 @@
                     <h2>How Can We Help?</h2>
                     <p>Have questions about our environmental projects or want to partner with us? We're here to listen and collaborate.</p>
                     
-                    <form action="#" method="POST" class="mt-20">
+                    <form id="contactForm" class="mt-20">
                         <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
-                            <input type="text" name="name" placeholder="Your Name" required>
-                            <input type="email" name="email" placeholder="Your Email" required>
+                            <div>
+                                <input type="text" id="contactName" placeholder="Your Name" required>
+                                <div class="validation-message" id="contactName-validation"></div>
+                            </div>
+                            <div>
+                                <input type="email" id="contactEmail" placeholder="Your Email" required>
+                                <div class="validation-message" id="contactEmail-validation"></div>
+                            </div>
                         </div>
                         <div class="mb-20">
-                            <input type="text" name="subject" placeholder="Subject">
+                            <input type="text" id="contactSubject" placeholder="Subject">
                         </div>
                         <div class="mb-20">
-                            <textarea name="message" placeholder="Write your message here..." required></textarea>
+                            <textarea id="contactMessage" placeholder="Write your message here..." required></textarea>
+                            <div class="validation-message" id="contactMessage-validation"></div>
                         </div>
-                        <button type="submit" class="btn">Send Message</button>
+                        <div id="contactStatus" class="mb-20"></div>
+                        <button type="submit" class="btn" id="contactBtn">Send Message</button>
                     </form>
                 </div>
 

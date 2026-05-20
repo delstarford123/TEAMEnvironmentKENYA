@@ -63,8 +63,47 @@
     <div class="container">
         <div class="text-center mb-20">
             <h4 class="text-green">Trust & Accountability</h4>
-            <h2 style="color: white;">Transparency Reports</h2>
-            <p style="opacity: 0.8; max-width: 700px; margin: 0 auto;">We are committed to full transparency. View our latest impact and financial reports below.</p>
+            <h2 style="color: white;">Financial Transparency</h2>
+            <p style="opacity: 0.8; max-width: 700px; margin: 0 auto;">We believe in absolute transparency. Here is exactly how we allocate every shilling donated to our mission.</p>
+        </div>
+
+        <div class="grid grid-2" style="align-items: center; margin-bottom: 50px;">
+            <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                <canvas id="financialChart"></canvas>
+            </div>
+            <div style="padding: clamp(20px, 5vw, 60px);">
+                <h3 style="color: white; margin-bottom: 25px;">How Your Donation Is Used</h3>
+                <div class="spending-list">
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 15px; height: 15px; background: #54B435; border-radius: 50%; margin-right: 15px;"></div>
+                        <div style="flex: 1;">
+                            <h5 style="margin: 0; color: white;">75% Seedlings & Restoration</h5>
+                            <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Direct costs for planting, nursery maintenance, and field operations.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <div style="width: 15px; height: 15px; background: #82CD47; border-radius: 50%; margin-right: 15px;"></div>
+                        <div style="flex: 1;">
+                            <h5 style="margin: 0; color: white;">15% Community Empowerment</h5>
+                            <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Logistics, community training, and local engagement programs.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: 15px; height: 15px; background: #379237; border-radius: 50%; margin-right: 15px;"></div>
+                        <div style="flex: 1;">
+                            <h5 style="margin: 0; color: white;">10% Operations & Admin</h5>
+                            <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.6);">Essential administrative overhead and transparency reporting.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-20">
+                    <button class="btn" onclick="openModal()" style="width: 100%;">Donate with Confidence</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-20">
+            <h2 style="color: white;">Impact Reports</h2>
         </div>
         <div class="grid grid-3 mt-20">
             {% for report in reports %}
@@ -79,5 +118,42 @@
         </div>
     </div>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('financialChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Restoration', 'Community', 'Admin'],
+                datasets: [{
+                    data: [75, 15, 10],
+                    backgroundColor: ['#54B435', '#82CD47', '#379237'],
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw + '%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    });
+</script>
 {% endif %}
 {% endblock %}

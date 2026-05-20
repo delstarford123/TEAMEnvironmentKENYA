@@ -20,22 +20,6 @@
     .hero h3 { color: var(--primary-green); font-weight: 600; margin-bottom: 1rem; }
     .hero p { margin-bottom: 2.5rem; font-size: 1.1rem; opacity: 0.9; }
 
-    /* --- STATS SECTION --- */
-    .stats-numbers {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
-    }
-    .stat-box { 
-        padding: 30px 20px; 
-        border: 1px solid var(--gray-border);
-        border-radius: 12px;
-        text-align: center;
-        background: var(--bg-light);
-    }
-    .stat-box h2 { color: var(--primary-green); margin-bottom: 0.5rem; }
-    .stat-box p { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; margin: 0; }
-
     /* --- MISSION SECTION --- */
     .mission-section { 
         display: flex; 
@@ -116,11 +100,11 @@
         <div class="container">
             <div class="hero-content">
                 <h3>Let Us Go Green, with You.</h3>
-                <h1>Building a Sustainable Heritage</h1>
+                <h1>Building a Sustainable Future </h1>
                 <p>A Socio-economic, Environmental and Humanitarian Membership Association dedicated to Greening and Environmental Conservation across Kenya.</p>
                 <div class="flex">
-                    <a href="/services" class="btn">Our Services</a>
-                    <a href="/contact" class="btn btn-outline" style="border-color: white; color: white;">Contact Us</a>
+                    <a href="/calculator" class="btn" style="background: var(--primary-green); border-color: var(--primary-green);"><i class="fas fa-calculator"></i> Calculate Footprint</a>
+                    <a href="/services" class="btn btn-outline" style="border-color: white; color: white;">Our Services</a>
                 </div>
             </div>
         </div>
@@ -151,10 +135,36 @@
                     </div>
                 </div>
                 <div class="stats-numbers">
-                    <div class="stat-box"><h2>32+</h2><p>Projects Finished</p></div>
-                    <div class="stat-box"><h2>7</h2><p>Years Experience</p></div>
-                    <div class="stat-box"><h2>120+</h2><p>Investments</p></div>
-                    <div class="stat-box"><h2>1.5k</h2><p>Colleagues</p></div>
+                    <div class="stat-box">
+                        <h2 class="counter" data-target="32">0</h2><span class="stat-suffix">+</span>
+                        <p>Projects Finished</p>
+                    </div>
+                    <div class="stat-box">
+                        <h2 class="counter" data-target="7">0</h2>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="stat-box">
+                        <h2 class="counter" data-target="120">0</h2><span class="stat-suffix">+</span>
+                        <p>Investments</p>
+                    </div>
+                    <div class="stat-box">
+                        <h2 class="counter" data-target="1500">0</h2><span class="stat-suffix">+</span>
+                        <p>Colleagues</p>
+                    </div>
+                </div>
+
+                <div class="impact-progress-container">
+                    <div class="progress-header">
+                        <h4>Reforestation Goal: 15 Billion Trees by 2032</h4>
+                        <span class="progress-percentage">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" data-width="12"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>180,000 Seedlings (Ngong Hills)</span>
+                        <span>Target: 15B Trees</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -225,6 +235,25 @@
         </div>
     </section>
 
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <div class="text-center mb-20">
+                <h4 class="text-green">Our Reach</h4>
+                <h2>Where We Work</h2>
+                <p>Restoring ecosystems and empowering communities across Kenya.</p>
+            </div>
+            
+            <div class="map-container">
+                <div class="map-overlay-card">
+                    <h3>Explore Our Projects</h3>
+                    <p>Click on the pins to see how we're making a difference in different regions of Kenya.</p>
+                </div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Team Section -->
     <section class="team-section" style="background-color: var(--bg-light);">
         <div class="container">
@@ -250,6 +279,60 @@
                         <h3>Ms. Janet Ruto</h3>
                         <p>CEO - Jani Mpya Solutions</p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Corporate Partners Section -->
+    <section class="partners-section">
+        <div class="container">
+            <h5 class="partners-title">Our Corporate Partners & Collaborators</h5>
+            <div class="logo-slider-container">
+                <div class="logo-slider">
+                    <!-- 20 Unique Images -->
+                    <img src="{{ url_for('static', filename='images/Capacity building.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Climate resilience.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/community.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Conflict resolution and monitoring.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Disaster preparedness and mitigation.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Green best practices.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/HT.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Kids working on seedlings.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Landscapes.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/People collborating.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Reclaim land.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Resource mobilisation and fundraising.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/TEAM .jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/TEK.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Trees for policy markers.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/youths and women.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.03 youths.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.590.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.56.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.00455.jpeg') }}" alt="Partner" class="partner-logo">
+
+                    <!-- Repeated for seamless infinite scroll -->
+                    <img src="{{ url_for('static', filename='images/Capacity building.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Climate resilience.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/community.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Conflict resolution and monitoring.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Disaster preparedness and mitigation.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Green best practices.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/HT.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Kids working on seedlings.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Landscapes.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/People collborating.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Reclaim land.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Resource mobilisation and fundraising.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/TEAM .jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/TEK.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/Trees for policy markers.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/youths and women.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.03 youths.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.590.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.56.jpeg') }}" alt="Partner" class="partner-logo">
+                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.00455.jpeg') }}" alt="Partner" class="partner-logo">
                 </div>
             </div>
         </div>

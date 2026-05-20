@@ -1,0 +1,213 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Corporate ESG Partnerships | TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .corporate-hero {
+        background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('{{ url_for('static', filename='images/TEAM .jpeg') }}');
+        background-size: cover;
+        background-position: center;
+        padding: 120px 0;
+        color: white;
+        text-align: center;
+    }
+    
+    .esg-package-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        transition: all 0.4s ease;
+        border: 1px solid var(--gray-border);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .esg-package-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border-color: var(--primary-green);
+    }
+
+    .package-price {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+        margin: 20px 0;
+    }
+
+    .package-features {
+        list-style: none;
+        padding: 0;
+        margin: 30px 0;
+        flex-grow: 1;
+    }
+
+    .package-features li {
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.95rem;
+    }
+
+    .package-features li i { color: var(--primary-green); }
+
+    .esg-badge {
+        display: inline-block;
+        padding: 6px 15px;
+        background: #f0fdf4;
+        color: var(--primary-green);
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+
+    .corporate-benefits {
+        background-color: #f8fafc;
+        padding: 80px 0;
+    }
+
+    .benefit-icon {
+        width: 60px;
+        height: 60px;
+        background: white;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: var(--primary-green);
+        margin-bottom: 20px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="corporate-hero">
+    <div class="container">
+        <h4 class="text-green">B2B & Corporate Social Responsibility</h4>
+        <h1 style="color: white; font-size: clamp(2.5rem, 5vw, 4rem);">Elevate Your Company's ESG Impact</h1>
+        <p style="max-width: 700px; margin: 20px auto; opacity: 0.9; font-size: 1.1rem;">Partner with TEAMEnvironment KENYA to achieve your environmental sustainability goals, engage your workforce, and build a greener heritage for Kenya.</p>
+        <div class="mt-20">
+            <a href="#packages" class="btn">View Partnership Packages</a>
+            <a href="{{ url_for('contact') }}" class="btn btn-outline" style="border-color: white; color: white; margin-left: 15px;">Contact Partnership Manager</a>
+        </div>
+    </div>
+</section>
+
+<section class="corporate-benefits">
+    <div class="container">
+        <div class="text-center mb-50">
+            <h4 class="text-green">Why Partner With Us?</h4>
+            <h2>Measurable ESG Solutions</h2>
+        </div>
+        <div class="grid grid-3">
+            <div class="card p-30">
+                <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
+                <h4>Verified Impact Reports</h4>
+                <p>Receive comprehensive data and documentation on tree survival rates and CO2 sequestration for your annual stakeholder meetings.</p>
+            </div>
+            <div class="card p-30">
+                <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                <h4>Staff Engagement</h4>
+                <p>Boost employee morale with hands-on corporate tree planting days, teambuilding, and climate education workshops.</p>
+            </div>
+            <div class="card p-30">
+                <div class="benefit-icon"><i class="fas fa-bullhorn"></i></div>
+                <h4>Brand Visibility</h4>
+                <p>Get featured in our national media campaigns, impact stories, and on-site branding at our various ecosystem restoration sites.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="packages" class="py-80">
+    <div class="container">
+        <div class="text-center mb-50">
+            <h4 class="text-green">Partnership Tiers</h4>
+            <h2>Choose Your Impact Level</h2>
+        </div>
+        
+        <div class="grid grid-3">
+            <!-- Bronze Package -->
+            <div class="esg-package-card">
+                <span class="esg-badge">Ecosystem Starter</span>
+                <h3>Bronze Partner</h3>
+                <div class="package-price">KES 100,000</div>
+                <ul class="package-features">
+                    <li><i class="fas fa-check-circle"></i> 2,000 Trees Planted in Company Name</li>
+                    <li><i class="fas fa-check-circle"></i> Digital Certificate of Impact</li>
+                    <li><i class="fas fa-check-circle"></i> Annual Progress Update</li>
+                    <li><i class="fas fa-check-circle"></i> Website Logo Placement</li>
+                </ul>
+                <a href="{{ url_for('contact', subject='Bronze Partnership Inquiry') }}" class="btn btn-outline" style="width: 100%;">Select Package</a>
+            </div>
+
+            <!-- Silver Package -->
+            <div class="esg-package-card" style="border-color: var(--primary-green); transform: scale(1.05); z-index: 5; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);">
+                <span class="esg-badge" style="background: var(--primary-green); color: white;">Most Popular</span>
+                <h3>Silver Partner</h3>
+                <div class="package-price">KES 250,000</div>
+                <ul class="package-features">
+                    <li><i class="fas fa-check-circle"></i> 5,000 Trees Planted & Maintained</li>
+                    <li><i class="fas fa-check-circle"></i> Staff Planting Day (Up to 50 Staff)</li>
+                    <li><i class="fas fa-check-circle"></i> Detailed ESG Impact Report</li>
+                    <li><i class="fas fa-check-circle"></i> Social Media Feature Story</li>
+                    <li><i class="fas fa-check-circle"></i> On-site Signage Branding</li>
+                </ul>
+                <a href="{{ url_for('contact', subject='Silver Partnership Inquiry') }}" class="btn" style="width: 100%;">Select Package</a>
+            </div>
+
+            <!-- Gold Package -->
+            <div class="esg-package-card">
+                <span class="esg-badge">Corporate Hero</span>
+                <h3>Gold Partner</h3>
+                <div class="package-price">KES 500,000+</div>
+                <ul class="package-features">
+                    <li><i class="fas fa-check-circle"></i> 10,000+ Trees (Full Acre Adoption)</li>
+                    <li><i class="fas fa-check-circle"></i> Custom VIP Planting Event</li>
+                    <li><i class="fas fa-check-circle"></i> Verified Carbon Credit Documentation</li>
+                    <li><i class="fas fa-check-circle"></i> Press Release & Media Feature</li>
+                    <li><i class="fas fa-check-circle"></i> Dedicated Impact Dashboard</li>
+                </ul>
+                <a href="{{ url_for('contact', subject='Gold Partnership Inquiry') }}" class="btn btn-outline" style="width: 100%;">Contact for Custom Proposal</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-80" style="background-color: var(--primary-dark); color: white;">
+    <div class="container">
+        <div class="grid grid-2" style="align-items: center;">
+            <div>
+                <h2>Ready to Lead the Green Revolution?</h2>
+                <p style="opacity: 0.8; margin: 20px 0;">Our partnership managers are ready to help you tailor a conservation project that aligns with your corporate values and stakeholder expectations.</p>
+                <div class="flex">
+                    <div style="margin-right: 40px;">
+                        <h3 style="color: var(--primary-green); margin-bottom: 0;">150k+</h3>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">Trees Managed</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--primary-green); margin-bottom: 0;">100%</h3>
+                        <p style="font-size: 0.8rem; opacity: 0.7;">Transparent Reporting</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <div style="background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h4>Book a Consultation</h4>
+                    <p style="font-size: 0.9rem; margin-bottom: 30px;">Speak with our Executive Director about a strategic partnership.</p>
+                    <a href="mailto:teamenvironment.ke@gmail.com" class="btn" style="width: 100%;">Email Partnership Manager</a>
+                    <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6;">Or call: +254 718 052745</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

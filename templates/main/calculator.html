@@ -1,119 +1,295 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Tree Impact Calculator - TEAMEnvironment KENYA{% endblock %}
+{% block title %}Carbon Footprint Calculator - TEAMEnvironment KENYA{% endblock %}
 
 {% block extra_css %}
 <style>
     .calc-card {
-        max-width: 900px;
+        max-width: 800px;
         margin: 0 auto;
         padding: clamp(30px, 5vw, 60px);
         background: white;
-        border-radius: 20px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
-        text-align: center;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         border: 1px solid var(--gray-border);
+        position: relative;
+        overflow: hidden;
     }
     
-    .calc-input-group { text-align: left; }
-    .calc-input-group label { display: block; font-weight: 700; margin-bottom: 10px; color: var(--primary-dark); font-size: 0.9rem; }
+    .calc-step { display: none; animation: fadeIn 0.5s ease-out; }
+    .calc-step.active { display: block; }
     
-    input {
-        width: 100%;
-        padding: 15px 18px;
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .calc-input-group { margin-bottom: 25px; text-align: left; }
+    .calc-input-group label { display: block; font-weight: 800; margin-bottom: 12px; color: var(--primary-dark); font-size: 1rem; }
+    
+    .option-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .option-card {
+        padding: 20px;
         border: 2px solid var(--gray-border);
-        border-radius: 10px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        background: #f8fafc;
+    }
+    .option-card:hover { border-color: var(--primary-green); background: #f0fdf4; }
+    .option-card.selected { border-color: var(--primary-green); background: var(--bg-light); box-shadow: 0 4px 12px rgba(84, 180, 53, 0.15); }
+    .option-card i { font-size: 1.5rem; margin-bottom: 10px; color: var(--primary-green); display: block; }
+    .option-card span { font-weight: 700; font-size: 0.9rem; }
+
+    input[type="number"], select {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid var(--gray-border);
+        border-radius: 12px;
         font-size: 1.1rem;
         transition: var(--transition);
         background-color: #f8fafc;
     }
-    input:focus { outline: none; border-color: var(--primary-green); background-color: #fff; box-shadow: 0 0 0 4px rgba(84, 180, 53, 0.1); }
+    input:focus { outline: none; border-color: var(--primary-green); background-color: #fff; }
 
-    .result-box {
-        padding: 30px 20px;
-        background: var(--bg-light);
-        border-radius: 15px;
-        transition: var(--transition);
-        border: 1px solid transparent;
-        height: 100%;
+    .progress-bar-container {
+        width: 100%;
+        height: 8px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        margin-bottom: 40px;
     }
-    .result-box:hover { border-color: var(--primary-green); transform: translateY(-5px); }
-    .result-box i { font-size: 2.2rem; color: var(--primary-green); margin-bottom: 15px; }
-    .result-box h4 { font-size: 1.8rem; margin: 5px 0; color: var(--primary-dark); }
-    .result-box p { font-size: 0.85rem; font-weight: 700; color: #888; text-transform: uppercase; margin: 0; letter-spacing: 0.5px; }
+    .progress-bar-fill {
+        height: 100%;
+        background: var(--primary-green);
+        width: 25%;
+        border-radius: 10px;
+        transition: width 0.4s ease;
+    }
+
+    .result-cta {
+        background: linear-gradient(135deg, var(--primary-green) 0%, #388E3C 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        margin-top: 30px;
+        text-align: center;
+    }
+    .result-cta h3 { color: white; margin-bottom: 15px; font-size: 2rem; }
+    .result-cta p { font-size: 1.1rem; margin-bottom: 25px; opacity: 0.9; }
+
+    .btn-next { width: 100%; padding: 18px; margin-top: 20px; }
+    .btn-back { background: none; border: none; color: #64748b; font-weight: 700; cursor: pointer; margin-top: 15px; }
+    .btn-back:hover { color: var(--primary-dark); }
 </style>
 {% endblock %}
 
 {% block content %}
-<section style="background-color: var(--bg-light); padding: 80px 0;">
+<section style="background-color: #f1f5f9; padding: 100px 0; min-height: 80vh;">
     <div class="container">
-        <div class="calc-card">
-            <h4 class="text-green">Measure Your Change</h4>
-            <h2>Tree Impact Calculator</h2>
-            <p style="max-width: 600px; margin: 15px auto 40px; color: #666;">Estimate the positive environmental impact your donation can make over 20 years of tree growth.</p>
-            
-            <div class="grid grid-2" style="margin-bottom: 50px;">
-                <div class="calc-input-group">
-                    <label>Investment (KES)</label>
-                    <input type="number" id="calcAmount" value="1000" oninput="calculateImpact()">
-                </div>
-                <div class="calc-input-group">
-                    <label>Number of Trees</label>
-                    <input type="number" id="calcTrees" value="2" oninput="calculateFromTrees()">
-                </div>
+        <div class="text-center mb-20">
+            <h4 class="text-green">Personal Climate Impact</h4>
+            <h2>Carbon Footprint Calculator</h2>
+            <p style="max-width: 600px; margin: 0 auto; color: #64748b;">Understand your annual CO2 emissions and discover how many trees it takes to balance your impact on our planet.</p>
+        </div>
+
+        <div class="calc-card" id="calcContainer">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBar"></div>
             </div>
 
-            <div class="grid grid-3">
-                <div class="result-box">
-                    <i class="fas fa-cloud"></i>
-                    <h4 id="resCO2">440</h4>
-                    <p>kg CO2 Sequestered</p>
+            <!-- Step 1: Transport (Driving) -->
+            <div class="calc-step active" id="step1">
+                <div class="calc-input-group">
+                    <label><i class="fas fa-car text-green"></i> How much do you drive per year?</label>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Estimate your total mileage in kilometers (km).</p>
+                    <input type="number" id="inputDriving" placeholder="e.g. 10000" min="0">
                 </div>
-                <div class="result-box">
-                    <i class="fas fa-tint"></i>
-                    <h4 id="resWater">5,000</h4>
-                    <p>Liters of Water Filtered</p>
-                </div>
-                <div class="result-box">
-                    <i class="fas fa-leaf"></i>
-                    <h4 id="resO2">240</h4>
-                    <p>Days of Oxygen Provided</p>
-                </div>
+                <button class="btn btn-next" onclick="nextStep(2)">Continue <i class="fas fa-arrow-right"></i></button>
             </div>
-            
-            <div class="mt-20">
-                <button class="btn" style="width: 100%; padding: 18px;" onclick="openModal()">Donate to Plant These Trees</button>
+
+            <!-- Step 2: Flights -->
+            <div class="calc-step" id="step2">
+                <div class="calc-input-group">
+                    <label><i class="fas fa-plane text-green"></i> How many flights do you take annually?</label>
+                    <div class="grid grid-2">
+                        <div>
+                            <span style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 5px;">Short Haul (&lt;3 hrs)</span>
+                            <input type="number" id="inputShortFlights" value="0" min="0">
+                        </div>
+                        <div>
+                            <span style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 5px;">Long Haul (&gt;3 hrs)</span>
+                            <input type="number" id="inputLongFlights" value="0" min="0">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-next" onclick="nextStep(3)">Continue <i class="fas fa-arrow-right"></i></button>
+                <div class="text-center"><button class="btn-back" onclick="prevStep(1)">Go Back</button></div>
+            </div>
+
+            <!-- Step 3: Energy -->
+            <div class="calc-step" id="step3">
+                <div class="calc-input-group">
+                    <label><i class="fas fa-bolt text-green"></i> What is your household electricity usage?</label>
+                    <div class="option-grid">
+                        <div class="option-card" onclick="selectOption('electricity', 'low', this)">
+                            <i class="fas fa-leaf"></i>
+                            <span>Low (Small Apt)</span>
+                        </div>
+                        <div class="option-card selected" onclick="selectOption('electricity', 'medium', this)">
+                            <i class="fas fa-home"></i>
+                            <span>Medium (Average)</span>
+                        </div>
+                        <div class="option-card" onclick="selectOption('electricity', 'high', this)">
+                            <i class="fas fa-building"></i>
+                            <span>High (Large Home)</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="inputElectricity" value="medium">
+                </div>
+                <button class="btn btn-next" onclick="nextStep(4)">Continue <i class="fas fa-arrow-right"></i></button>
+                <div class="text-center"><button class="btn-back" onclick="prevStep(2)">Go Back</button></div>
+            </div>
+
+            <!-- Step 4: Diet -->
+            <div class="calc-step" id="step4">
+                <div class="calc-input-group">
+                    <label><i class="fas fa-utensils text-green"></i> Which best describes your diet?</label>
+                    <div class="option-grid">
+                        <div class="option-card" onclick="selectOption('diet', 'vegan', this)">
+                            <i class="fas fa-carrot"></i>
+                            <span>Vegan</span>
+                        </div>
+                        <div class="option-card" onclick="selectOption('diet', 'vegetarian', this)">
+                            <i class="fas fa-cheese"></i>
+                            <span>Vegetarian</span>
+                        </div>
+                        <div class="option-card selected" onclick="selectOption('diet', 'omnivore', this)">
+                            <i class="fas fa-drumstick-bite"></i>
+                            <span>Omnivore</span>
+                        </div>
+                        <div class="option-card" onclick="selectOption('diet', 'meat_heavy', this)">
+                            <i class="fas fa-steak"></i>
+                            <span>Meat Heavy</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="inputDiet" value="omnivore">
+                </div>
+                <button class="btn btn-next" id="calculateBtn" onclick="calculateFinal()">See My Result <i class="fas fa-calculator"></i></button>
+                <div class="text-center"><button class="btn-back" onclick="prevStep(3)">Go Back</button></div>
+            </div>
+
+            <!-- Result Step -->
+            <div class="calc-step" id="resultStep">
+                <div id="loadingState" style="padding: 40px;">
+                    <div class="spinner"></div>
+                    <p>Calculating your personal footprint...</p>
+                </div>
+                
+                <div id="resultContent" style="display: none;">
+                    <div class="result-cta">
+                        <h3>Your Carbon Footprint</h3>
+                        <p id="footprintMessage"></p>
+                        <button class="btn" style="background: white; color: var(--primary-green); border: none;" onclick="openOffsetModal()">Offset My Footprint Now</button>
+                    </div>
+                    <div class="text-center mt-20">
+                        <button class="btn-back" onclick="resetCalc()"><i class="fas fa-redo"></i> Start Over</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    const COST_PER_TREE = 500; 
-    const CO2_PER_TREE = 220; 
-    const WATER_PER_TREE = 2500; 
-    const O2_PER_TREE = 120; 
+    let currentStep = 1;
+    let treesToPlant = 0;
+    let amountToDonate = 0;
 
-    function calculateImpact() {
-        const amount = document.getElementById('calcAmount').value;
-        const numTrees = Math.floor(amount / COST_PER_TREE);
-        document.getElementById('calcTrees').value = numTrees;
-        updateResults(numTrees);
+    function nextStep(step) {
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        document.getElementById(`step${step}`).classList.add('active');
+        currentStep = step;
+        updateProgress();
     }
 
-    function calculateFromTrees() {
-        const numTrees = document.getElementById('calcTrees').value;
-        document.getElementById('calcAmount').value = numTrees * COST_PER_TREE;
-        updateResults(numTrees);
+    function prevStep(step) {
+        document.getElementById(`step${currentStep}`).classList.remove('active');
+        document.getElementById(`step${step}`).classList.add('active');
+        currentStep = step;
+        updateProgress();
     }
 
-    function updateResults(num) {
-        document.getElementById('resCO2').innerText = (num * CO2_PER_TREE).toLocaleString();
-        document.getElementById('resWater').innerText = (num * WATER_PER_TREE).toLocaleString();
-        document.getElementById('resO2').innerText = (num * O2_PER_TREE).toLocaleString();
+    function updateProgress() {
+        const progress = (currentStep / 4) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
     }
-    
-    // Initial calculation
-    calculateImpact();
+
+    function selectOption(type, value, element) {
+        // Clear previous selections in the same group
+        const container = element.parentElement;
+        container.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+        
+        // Select current
+        element.classList.add('selected');
+        
+        // Update hidden input
+        const inputId = `input${type.charAt(0).toUpperCase() + type.slice(1)}`;
+        document.getElementById(inputId).value = value;
+    }
+
+    async function calculateFinal() {
+        document.getElementById('step4').classList.remove('active');
+        document.getElementById('resultStep').classList.add('active');
+        document.getElementById('loadingState').style.display = 'block';
+        document.getElementById('resultContent').style.display = 'none';
+        document.getElementById('progressBar').style.width = '100%';
+
+        const data = {
+            driving: document.getElementById('inputDriving').value || 0,
+            short_flights: document.getElementById('inputShortFlights').value || 0,
+            long_flights: document.getElementById('inputLongFlights').value || 0,
+            electricity: document.getElementById('inputElectricity').value,
+            diet: document.getElementById('inputDiet').value
+        };
+
+        try {
+            const response = await fetch('/calculate-footprint', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            
+            treesToPlant = result.trees_needed;
+            amountToDonate = result.offset_cost;
+
+            document.getElementById('footprintMessage').innerText = result.message;
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('resultContent').style.display = 'block';
+
+        } catch (error) {
+            alert("Calculation failed. Please try again.");
+            resetCalc();
+        }
+    }
+
+    function resetCalc() {
+        currentStep = 1;
+        document.querySelectorAll('.calc-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step1').classList.add('active');
+        document.getElementById('progressBar').style.width = '25%';
+    }
+
+    function openOffsetModal() {
+        // If we have a donation modal, pre-fill it
+        if (typeof openModal === 'function') {
+            openModal();
+            // Optionally set the amount in the modal if it's available
+            const modalAmount = document.getElementById('amount');
+            if (modalAmount) modalAmount.value = amountToDonate;
+        } else {
+            window.location.href = `/gift-a-tree?amount=${amountToDonate}`;
+        }
+    }
 </script>
 {% endblock %}

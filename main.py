@@ -26,6 +26,7 @@ from werkzeug.utils import secure_filename
 from firebase_config import initialize_firebase, db
 from dotenv import load_dotenv
 from receipt_utils import generate_donation_receipt
+from certificate_utils import generate_certificate
 
 # Load environment variables
 load_dotenv()
@@ -93,8 +94,12 @@ def generate_password(timestamp):
     data_to_encode = BUSINESS_SHORT_CODE + PASSKEY + timestamp
     return base64.b64encode(data_to_encode.encode()).decode('utf-8')
 
-def send_email(subject, recipient, body, attachment_path=None):
+def send_email(subject, recipient, body, attachments=None):
     from email.mime.application import MIMEApplication
+    from email.mime.base import MIMEBase
+    from email import encoders
+    import mimetypes
+
     SMTP_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com') 
     SMTP_PORT = int(os.environ.get('MAIL_PORT', 587)) 
     SENDER_EMAIL = os.environ.get('MAIL_USERNAME')
@@ -110,12 +115,34 @@ def send_email(subject, recipient, body, attachment_path=None):
     msg['Subject'] = subject
     msg.attach(MIMEText(body, 'plain'))
 
-    # Optional Attachment
-    if attachment_path and os.path.exists(attachment_path):
-        with open(attachment_path, "rb") as f:
-            attach = MIMEApplication(f.read(), _subtype="pdf")
-            attach.add_header('Content-Disposition', 'attachment', filename=os.path.basename(attachment_path))
-            msg.attach(attach)
+    # Handle multiple attachments
+    if attachments:
+        for attachment in attachments:
+            if isinstance(attachment, str): # If it's a file path
+                if os.path.exists(attachment):
+                    filename = os.path.basename(attachment)
+                    ctype, encoding = mimetypes.guess_type(attachment)
+                    if ctype is None or encoding is not None:
+                        ctype = 'application/octet-stream'
+                    maintype, subtype = ctype.split('/', 1)
+                    
+                    with open(attachment, "rb") as f:
+                        part = MIMEBase(maintype, subtype)
+                        part.set_payload(f.read())
+                        encoders.encode_base64(part)
+                        part.add_header('Content-Disposition', 'attachment', filename=filename)
+                        msg.attach(part)
+            else: # If it's a file-like object (e.g., from Flask request.files)
+                filename = secure_filename(attachment.filename)
+                ctype = attachment.content_type or 'application/octet-stream'
+                maintype, subtype = ctype.split('/', 1)
+                
+                part = MIMEBase(maintype, subtype)
+                part.set_payload(attachment.read())
+                encoders.encode_base64(part)
+                part.add_header('Content-Disposition', 'attachment', filename=filename)
+                msg.attach(part)
+                attachment.seek(0) # Reset file pointer for next recipient if needed
 
     try:
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
@@ -125,7 +152,7 @@ def send_email(subject, recipient, body, attachment_path=None):
         server.quit()
         return True
     except Exception as e:
-        print(f"❌ Failed to send email: {str(e)}")
+        print(f"❌ Failed to send email to {recipient}: {str(e)}")
         return False
 
 # ==========================================
@@ -213,6 +240,43 @@ def team():
 def contact():
     return render_template('main/contact.html')
 
+@app.route('/submit-contact', methods=['POST'])
+def submit_contact():
+    data = request.json
+    name = data.get('name')
+    email = data.get('email')
+    subject = data.get('subject', 'No Subject')
+    message = data.get('message')
+    
+    if not name or not email or not message:
+        return jsonify({"error": "Please fill in all required fields."}), 400
+    
+    # Save to Firebase
+    contact_data = {
+        'name': name,
+        'email': email,
+        'subject': subject,
+        'message': message,
+        'submitted_at': datetime.now().isoformat()
+    }
+    db.reference('contact_messages').push(contact_data)
+    
+    # Send Email to Admin
+    admin_body = f"""
+    New Contact Form Submission:
+    Name: {name}
+    Email: {email}
+    Subject: {subject}
+    Message: {message}
+    """
+    send_email(f"Contact Form: {subject}", 'teamenvironment.ke@gmail.com', admin_body)
+    
+    # Optional: Auto-reply to User
+    user_body = f"Hi {name},\n\nThank you for reaching out to TEAMEnvironment KENYA. We have received your message regarding '{subject}' and will get back to you shortly.\n\nBest regards,\nTEAMEnvironment KENYA"
+    send_email("We've received your message", email, user_body)
+    
+    return jsonify({"success": "Thank you! Your message has been sent successfully."}), 200
+
 @app.route('/work')
 @app.route('/work.html')
 def work():
@@ -289,7 +353,61 @@ def admin_dashboard():
     bookings = bookings_ref.get()
     activities_ref = db.reference('activities')
     activities = activities_ref.get()
-    return render_template('admin/admin.html', events=events, bookings=bookings, activities=activities)
+    contact_messages_ref = db.reference('contact_messages')
+    contact_messages = contact_messages_ref.get()
+    
+    # Fetch newsletter subscribers
+    subs_ref = db.reference('newsletter_subs')
+    subscribers = subs_ref.get()
+    
+    return render_template('admin/admin.html', 
+                           events=events, 
+                           bookings=bookings, 
+                           activities=activities, 
+                           subscribers=subscribers,
+                           contact_messages=contact_messages)
+
+@app.route('/admin/broadcast-email', methods=['POST'])
+@login_required
+def broadcast_email():
+    subject = request.form.get('subject')
+    body = request.form.get('body')
+    # Filter out empty files (happens when no file is selected in an input[type="file"])
+    attachments = [f for f in request.files.getlist('attachments') if f.filename]
+    
+    if not subject or not body:
+        flash('Subject and Body are required!', 'danger')
+        return redirect(url_for('admin_dashboard'))
+    
+    # Fetch all subscribers
+    subs_ref = db.reference('newsletter_subs')
+    subscribers = subs_ref.get()
+    
+    if not subscribers:
+        flash('No subscribers found!', 'warning')
+        return redirect(url_for('admin_dashboard'))
+    
+    emails = [sub.get('email') for sub in subscribers.values() if sub.get('email')]
+    
+    success_count = 0
+    fail_count = 0
+    
+    # To avoid re-reading files for each email, we can read them once if we want,
+    # but send_email handles file objects. 
+    # NOTE: File objects need to be seek(0) after each read.
+    
+    for email in emails:
+        if send_email(subject, email, body, attachments):
+            success_count += 1
+        else:
+            fail_count += 1
+            
+    if fail_count == 0:
+        flash(f'Broadcast sent successfully to {success_count} subscribers!', 'success')
+    else:
+        flash(f'Broadcast sent to {success_count} subscribers. Failed to send to {fail_count}.', 'warning')
+        
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/add-event', methods=['POST'])
 @login_required
@@ -377,29 +495,28 @@ def book_event():
     # Save to Firebase
     db.reference('bookings').push(booking_data)
     
-    # Send Email to Admin
-    admin_body = f"""
-    New Event Booking Received:
-    Event: {event_title}
-    Name: {name}
-    Email: {email}
-    Phone: {phone}
-    """
-    send_email(f"New Booking: {event_title}", 'teamenvironment.ke@gmail.com', admin_body)
-    
-    # Send Confirmation to User
+    # Generate Impact Certificate
+    cert_path = generate_certificate(name, certificate_type="Volunteer", impact_details=f"Contributing to: {event_title}")
+
+    # Send Confirmation to User with Certificate
     user_body = f"""
     Hi {name},
     
     Thank you for booking for the event: {event_title}.
     We have received your application and will contact you soon with more details.
     
+    Attached is your Certificate of Impact for choosing to volunteer with TEAMEnvironment KENYA.
+    
     Best regards,
     TEAMEnvironment KENYA
     """
-    send_email(f"Booking Confirmation: {event_title}", email, user_body)
+    send_email(f"Booking Confirmation: {event_title}", email, user_body, attachments=[cert_path])
     
-    return jsonify({"success": "Booking successful! Check your email for confirmation."}), 200
+    # Send Email to Admin
+    admin_body = f"New Event Booking Received:\nEvent: {event_title}\nName: {name}\nEmail: {email}\nPhone: {phone}"
+    send_email(f"New Booking: {event_title}", 'teamenvironment.ke@gmail.com', admin_body)
+    
+    return jsonify({"success": "Booking successful! Check your email for your certificate."}), 200
 
 @app.route('/submit-application', methods=['POST'])
 def submit_application():
@@ -425,6 +542,8 @@ def submit_application():
 @app.route('/pay', methods=['POST'])
 def pay():
     data = request.json
+    name = data.get('name')
+    email = data.get('email')
     phone = data.get('phone')
     amount = data.get('amount')
 
@@ -442,6 +561,15 @@ def pay():
 
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     password = generate_password(timestamp)
+
+    # Store pending donation info to retrieve in callback
+    pending_ref = db.reference('pending_donations')
+    pending_ref.child(phone).set({
+        'name': name,
+        'email': email,
+        'amount': amount,
+        'timestamp': timestamp
+    })
 
     payload = {
         "BusinessShortCode": BUSINESS_SHORT_CODE,
@@ -493,18 +621,29 @@ def callback():
                 
                 amount = payment_info.get('Amount')
                 receipt_no = payment_info.get('MpesaReceiptNumber')
-                phone = payment_info.get('PhoneNumber')
+                phone = str(payment_info.get('PhoneNumber'))
                 
-                # In a real app, you'd look up the user by phone or session
-                # For now, we use a generic name or look up from a 'pending_donations' table
-                donor_name = "Valued Supporter"
+                # Retrieve donor details
+                pending_ref = db.reference('pending_donations')
+                donor_data = pending_ref.child(phone).get()
                 
-                # Generate PDF Receipt
-                pdf_path = generate_donation_receipt(donor_name, amount, receipt_no)
-                print(f"✅ Receipt generated: {pdf_path}")
+                donor_name = donor_data.get('name', 'Valued Supporter') if donor_data else "Valued Supporter"
+                donor_email = donor_data.get('email') if donor_data else None
                 
-                # Optional: If you had the donor's email, you'd send it here
-                # send_email("Your Donation Receipt", donor_email, "Thank you...", pdf_path)
+                # 1. Generate PDF Receipt
+                receipt_path = generate_donation_receipt(donor_name, amount, receipt_no)
+                
+                # 2. Generate Impact Certificate
+                num_trees = int(amount) // 500
+                impact_text = f"Donated KES {amount} to plant {num_trees} trees." if num_trees > 0 else f"Donated KES {amount} to conservation."
+                cert_path = generate_certificate(donor_name, certificate_type="Donor", impact_details=impact_text)
+
+                if donor_email:
+                    body = f"Hi {donor_name},\n\nThank you for your generous donation of KES {amount}.\n\nAttached are your official receipt and Certificate of Impact.\n\nBest regards,\nTEAMEnvironment KENYA"
+                    send_email("Your Impact Certificate & Receipt", donor_email, body, attachments=[receipt_path, cert_path])
+                
+                # Clean up pending
+                pending_ref.child(phone).delete()
                 
     except Exception as e:
         print(f"❌ Error processing callback: {str(e)}")
@@ -551,9 +690,61 @@ def transparency():
 def calculator():
     return render_template('main/calculator.html')
 
+@app.route('/calculate-footprint', methods=['POST'])
+def calculate_footprint():
+    data = request.json
+    
+    # Helper to safe-convert to float/int
+    def safe_float(val, default=0):
+        try: return float(val) if val else default
+        except: return default
+    
+    def safe_int(val, default=0):
+        try: return int(val) if val else default
+        except: return default
+
+    # 1. Driving
+    km_per_year = safe_float(data.get('driving'))
+    driving_co2 = km_per_year * 0.17  # Average car ~170g/km
+    
+    # 2. Flights
+    short_flights = safe_int(data.get('short_flights'))
+    long_flights = safe_int(data.get('long_flights'))
+    flight_co2 = (short_flights * 250) + (long_flights * 1100) # kg CO2
+    
+    # 3. Electricity
+    usage_level = data.get('electricity', 'medium')
+    usage_map = {'low': 400, 'medium': 1200, 'high': 3000} # kg per year
+    electricity_co2 = usage_map.get(usage_level, 1200)
+    
+    # 4. Diet
+    diet_type = data.get('diet', 'omnivore')
+    diet_map = {'vegan': 500, 'vegetarian': 1000, 'omnivore': 2000, 'meat_heavy': 3000} # kg per year
+    diet_co2 = diet_map.get(diet_type, 2000)
+    
+    total_co2_kg = driving_co2 + flight_co2 + electricity_co2 + diet_co2
+    total_co2_tons = round(total_co2_kg / 1000, 2)
+    
+    # Offset Calculation: 1 tree = 220kg CO2 (over lifetime/20yrs)
+    trees_needed = int(total_co2_kg / 220)
+    if trees_needed < 1: trees_needed = 1
+    
+    offset_cost = trees_needed * 500 # KES 500 per tree
+    
+    return jsonify({
+        "total_co2_tons": total_co2_tons,
+        "trees_needed": trees_needed,
+        "offset_cost": offset_cost,
+        "message": f"Your estimated annual footprint is {total_co2_tons} tons of CO2. You can offset this by planting {trees_needed} trees with us today for just KES {offset_cost:,}."
+    })
+
 @app.route('/corporate')
 def corporate():
     return render_template('main/services.html', corporate_mode=True)
+
+@app.route('/corporate-partnerships')
+def corporate_partnerships():
+    return render_template('main/corporate.html')
 
 @app.route('/ambassadors')
 def ambassadors():
