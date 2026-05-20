@@ -24,9 +24,6 @@ html {
     scroll-behavior: smooth;
     font-size: 16px;
     scrollbar-gutter: stable; /* Prevent layout shifts when scrollbar disappears */
-    overflow-y: hidden;
-    overflow-x: auto;
-    height: 100%;
 }
 
 .main-header.nav-open {
@@ -40,9 +37,7 @@ body {
     line-height: 1.7;
     background-color: #fff;
     -webkit-font-smoothing: antialiased;
-    overflow-y: hidden;
-    overflow-x: auto;
-    height: 100%;
+    overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5 { 
@@ -306,8 +301,8 @@ section {
 .dropdown {
     position: absolute;
     top: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(15px);
+    left: 0;
+    transform: translateY(15px);
     background-color: #ffffff;
     min-width: 250px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
@@ -316,7 +311,7 @@ section {
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     list-style: none;
-    padding: 15px;
+    padding: 15px 0;
     z-index: 1001;
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -325,8 +320,7 @@ section {
     content: '';
     position: absolute;
     top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 20px;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-bottom: 8px solid #fff;
@@ -335,11 +329,11 @@ section {
 .has-dropdown:hover > .dropdown {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
 }
 
 .dropdown li {
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .dropdown li:last-child {
@@ -348,13 +342,13 @@ section {
 
 .dropdown a {
     display: block;
-    padding: 10px 15px;
+    padding: 10px 25px;
     color: var(--primary-dark);
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
     transition: var(--transition);
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 .dropdown a:hover {
@@ -506,10 +500,10 @@ section {
         transform: none;
         box-shadow: none;
         border: none;
-        padding: 0 0 15px 20px;
+        padding: 0 0 15px 0; /* Removed horizontal padding here */
         display: none; 
         width: 100%;
-        background-color: #f9f9f9;
+        background-color: #ffffff; /* Solid white background */
         margin-top: 0;
         border-radius: 0;
     }
@@ -527,7 +521,7 @@ section {
     }
 
     .dropdown a {
-        padding: 12px 15px;
+        padding: 12px 30px; /* Indented left padding for sub-menu links */
         border-radius: 0;
     }
 
