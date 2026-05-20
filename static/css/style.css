@@ -24,6 +24,9 @@ html {
     scroll-behavior: smooth;
     font-size: 16px;
     scrollbar-gutter: stable; /* Prevent layout shifts when scrollbar disappears */
+    overflow-y: hidden;
+    overflow-x: auto;
+    height: 100%;
 }
 
 .main-header.nav-open {
@@ -37,7 +40,9 @@ body {
     line-height: 1.7;
     background-color: #fff;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    overflow-y: hidden;
+    overflow-x: auto;
+    height: 100%;
 }
 
 h1, h2, h3, h4, h5 { 
@@ -355,7 +360,7 @@ section {
 .dropdown a:hover {
     background-color: var(--bg-light);
     color: var(--primary-green);
-    transform: translateX(5px);
+    transform: none !important;
 }
 
 .dropdown a.active {
