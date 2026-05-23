@@ -315,11 +315,12 @@
         max-width: 350px; /* Increased max-width to 350px */
         width: auto;
         object-fit: contain;
-        filter: none;
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        filter: brightness(1.1) contrast(1.05) drop-shadow(0 4px 12px rgba(0,0,0,0.08)); /* Brighter, crisper, and with subtle depth */
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .partner-logo:hover {
-        transform: scale(1.05);
+        filter: brightness(1.2) contrast(1.1) drop-shadow(0 10px 25px rgba(0,0,0,0.15)); /* Even more vivid and depth on hover */
+        transform: scale(1.08);
     }
     
     @media (max-width: 992px) {
