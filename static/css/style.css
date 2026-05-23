@@ -547,7 +547,7 @@ section {
 .floating-donate-btn {
     position: fixed;
     bottom: 30px;
-    right: 30px;
+    left: 30px;
     background-color: var(--mpesa-green);
     color: white;
     padding: 15px 30px;
@@ -576,7 +576,7 @@ section {
 @media (max-width: 600px) {
     .floating-donate-btn {
         bottom: 20px;
-        right: 20px;
+        left: 20px;
         padding: 12px 20px;
         font-size: 0.9rem;
     }
