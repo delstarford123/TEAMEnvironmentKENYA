@@ -277,15 +277,21 @@ def submit_contact():
     
     return jsonify({"success": "Thank you! Your message has been sent successfully."}), 200
 
+
+
 @app.route('/work')
 @app.route('/work.html')
 def work():
     return render_template('main/work.html')
 
+
+
 @app.route('/privacy')
 @app.route('/privacy-policy')
 def privacy():
     return render_template('main/privacy.html')
+
+
 
 @app.route('/terms')
 @app.route('/terms-of-service')
@@ -303,6 +309,7 @@ def impact():
     }
     return render_template('main/impact.html', stats=stats)
 
+
 @app.route('/resources')
 def resources():
     # You could fetch documents from Firebase Storage or a list in DB
@@ -316,6 +323,8 @@ def resources():
 @app.route('/faq')
 def faq():
     return render_template('main/faq.html')
+
+
 
 @app.route('/offline')
 def offline():
@@ -339,10 +348,12 @@ def login():
             
     return render_template('admin/login.html')
 
+
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     return redirect(url_for('home'))
+
 
 @app.route('/admin')
 @login_required
@@ -650,6 +661,7 @@ def callback():
         
     return "OK"
 
+
 @app.route('/projects')
 @app.route('/projects.html')
 def projects():
@@ -665,9 +677,11 @@ def projects():
     
     return render_template('main/work.html', projects=projects_list) # Reusing work.html or creating projects.html
 
+
 @app.route('/gift-a-tree')
 def gift_a_tree():
     return render_template('payments/pay.html', gift_mode=True)
+
 
 @app.route('/transparency')
 def transparency():
@@ -686,9 +700,11 @@ def transparency():
     ]
     return render_template('main/impact.html', reports=reports, stats=stats)
 
+
 @app.route('/calculator')
 def calculator():
     return render_template('main/calculator.html')
+
 
 @app.route('/calculate-footprint', methods=['POST'])
 def calculate_footprint():
@@ -702,10 +718,11 @@ def calculate_footprint():
     def safe_int(val, default=0):
         try: return int(val) if val else default
         except: return default
-
+    
     # 1. Driving
     km_per_year = safe_float(data.get('driving'))
     driving_co2 = km_per_year * 0.17  # Average car ~170g/km
+    
     
     # 2. Flights
     short_flights = safe_int(data.get('short_flights'))
@@ -737,18 +754,23 @@ def calculate_footprint():
         "offset_cost": offset_cost,
         "message": f"Your estimated annual footprint is {total_co2_tons} tons of CO2. You can offset this by planting {trees_needed} trees with us today for just KES {offset_cost:,}."
     })
-
+    
+   
+       
 @app.route('/corporate')
 def corporate():
     return render_template('main/services.html', corporate_mode=True)
+
 
 @app.route('/corporate-partnerships')
 def corporate_partnerships():
     return render_template('main/corporate.html')
 
+
 @app.route('/ambassadors')
 def ambassadors():
     return render_template('main/team.html', ambassadors_mode=True)
+
 
 @app.route('/newsletter-signup', methods=['POST'])
 def newsletter_signup():
@@ -758,13 +780,17 @@ def newsletter_signup():
         return jsonify({"success": "Thank you for joining our mission!"}), 200
     return jsonify({"error": "Email is required"}), 400
 
+
 @app.route('/sw.js')
 def serve_sw():
     return app.send_static_file('sw.js')
+
 
 @app.route('/manifest.json')
 def serve_manifest():
     return app.send_static_file('manifest.json')
 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+                                                          

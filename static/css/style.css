@@ -1066,26 +1066,27 @@ footer {
 }
 
 .partner-logo {
-    width: 200px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    width: 250px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     background: white;
-    padding: 10px;
-    border: 1px solid rgba(0,0,0,0.05);
+    padding: 20px;
+    border: 1px solid rgba(0,0,0,0.06);
 }
 
 .partner-logo:hover {
-    transform: scale(1.1) translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    transform: scale(1.08) translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    border-color: var(--primary-green);
     z-index: 10;
 }
 
 @keyframes scrollLogos {
     0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-240px * 20)); } /* (Width 200px + Gap 40px) * 20 images */
+    100% { transform: translateX(calc(-290px * 18)); } /* (Width 250px + Gap 40px) * 18 images */
 }
 
 .partners-title {

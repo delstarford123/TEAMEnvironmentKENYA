@@ -4,71 +4,193 @@
 
 {% block extra_css %}
 <style>
+    /* --- ANIMATIONS --- */
+    @keyframes ticker {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    
+    @keyframes logo-slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     /* --- HERO SECTION --- */
     .hero {
-        background-image: linear-gradient(90deg, rgba(12, 20, 6, 0.7) 0%, rgba(255, 255, 255, 0.1) 100%), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
+        background-image: linear-gradient(135deg, rgba(12, 20, 6, 0.9) 0%, rgba(84, 180, 53, 0.2) 100%), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
         background-size: cover;
         background-position: center;
-        min-height: 80vh;
+        min-height: 90vh;
         display: flex;
         align-items: center;
         color: white;
-        padding: 60px 0;
+        padding: 100px 0;
+        position: relative;
     }
 
-    .hero-content { max-width: 800px; }
-    .hero h3 { color: var(--primary-green); font-weight: 600; margin-bottom: 1rem; }
-    .hero p { margin-bottom: 2.5rem; font-size: 1.1rem; opacity: 0.9; }
+    .hero-content { 
+        max-width: 850px; 
+        animation: fadeIn 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .hero h3 { 
+        color: var(--primary-green); 
+        font-weight: 700; 
+        margin-bottom: 1.5rem; 
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.9rem;
+    }
+    .hero h1 {
+        font-size: clamp(3rem, 7vw, 5rem);
+        line-height: 1.1;
+        margin-bottom: 2rem;
+        font-weight: 800;
+    }
+    .hero p { 
+        margin-bottom: 3rem; 
+        font-size: clamp(1.1rem, 1.8vw, 1.4rem); 
+        opacity: 0.95; 
+        line-height: 1.6;
+        max-width: 700px;
+    }
+
+    /* --- IMPACT TICKER --- */
+    .impact-ticker {
+        background: var(--primary-green);
+        color: white;
+        padding: 15px 0;
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        z-index: 5;
+    }
+    .ticker-content {
+        display: inline-block;
+        animation: ticker 30s linear infinite;
+    }
+    .ticker-content:hover {
+        animation-play-state: paused;
+    }
+    .ticker-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-right: 60px;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    /* --- SECTION SPACING --- */
+    section { padding: 120px 0; }
+    .bg-light { background-color: var(--bg-light); }
+
+    /* --- STATS SECTION --- */
+    .stat-box {
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.03);
+        transition: all 0.3s ease;
+    }
+    .stat-box:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(84, 180, 53, 0.1);
+    }
+    .stat-box h2 { color: var(--primary-green); font-size: 3rem; font-weight: 800; }
+    .stat-suffix { color: var(--primary-green); font-size: 2.5rem; font-weight: 800; }
+    
+    .impact-progress-container {
+        background: #fff;
+        padding: 40px;
+        border-radius: 25px;
+        margin-top: 50px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .progress-track {
+        height: 16px;
+        background: #f1f5f9;
+        border-radius: 50px;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-green), #84cc16);
+        width: 0%; /* Animated via JS */
+        border-radius: 50px;
+        transition: width 2s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    .progress-labels { display: flex; justify-content: space-between; font-size: 0.9rem; color: #64748b; font-weight: 600; }
 
     /* --- MISSION SECTION --- */
     .mission-section { 
         display: flex; 
-        min-height: 500px; 
-        border-radius: 20px;
+        min-height: 600px; 
+        border-radius: 30px;
         overflow: hidden;
-        margin: 40px 0;
+        margin: 60px 0;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.1);
     }
     .mission-image { flex: 1; background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2021/11/mission-vission-min.jpg'); background-size: cover; background-position: center; }
     .mission-text { flex: 1; padding: clamp(40px, 8vw, 80px); background-color: var(--primary-dark); color: white; display: flex; flex-direction: column; justify-content: center; }
-    .mission-text h4 { color: var(--primary-green); }
-    .mission-text p { color: rgba(255,255,255,0.7); }
+    .mission-text h4 { color: var(--primary-green); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1.5rem; }
+    .mission-text h2 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 1.5rem; }
+    .mission-text p { color: rgba(255,255,255,0.85); font-size: 1.15rem; line-height: 1.7; }
 
     @media (max-width: 992px) {
         .mission-section { flex-direction: column; }
-        .mission-image { height: 350px; width: 100%; }
+        .mission-image { height: 400px; width: 100%; }
     }
 
     /* --- SDG SECTION --- */
     .sdg-card { 
         background: #fff; 
-        padding: 40px 30px; 
-        border-radius: 15px; 
+        padding: 50px 40px; 
+        border-radius: 20px; 
         text-align: center; 
-        transition: all 0.4s ease;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     .sdg-card:hover {
-        transform: translateY(-10px);
+        transform: translateY(-15px);
         border-color: var(--primary-green);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        box-shadow: 0 30px 60px rgba(84, 180, 53, 0.15);
     }
     .sdg-icon {
-        width: 70px;
-        height: 70px;
+        width: 85px;
+        height: 85px;
         background: var(--bg-light);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 20px;
-        font-size: 1.8rem;
+        margin-bottom: 25px;
+        font-size: 2.2rem;
         color: var(--primary-green);
+        transition: all 0.4s ease;
     }
-    .sdg-number { font-size: 0.8rem; font-weight: 800; color: #aaa; margin-bottom: 0.5rem; display: block; text-transform: uppercase; }
-    .sdg-card h3 { font-size: 1.3rem; margin-bottom: 1rem; }
-    .sdg-card p { font-size: 0.9rem; color: #666; margin: 0; }
+    .sdg-card:hover .sdg-icon {
+        background: var(--primary-green);
+        color: white;
+        transform: rotateY(360deg);
+    }
+    .sdg-number { font-size: 0.8rem; font-weight: 800; color: #cbd5e1; margin-bottom: 0.75rem; display: block; text-transform: uppercase; letter-spacing: 2px; }
+    .sdg-card h3 { font-size: 1.5rem; margin-bottom: 1.25rem; font-weight: 700; }
+    .sdg-card p { font-size: 1rem; color: #64748b; margin: 0; line-height: 1.6; }
 
     /* --- TEAM SECTION --- */
     .team-card { 
@@ -76,21 +198,154 @@
         background-size: cover; 
         background-position: center; 
         position: relative; 
-        border-radius: 15px; 
+        border-radius: 25px; 
         overflow: hidden; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .team-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.25);
     }
     .team-info { 
         position: absolute; 
         bottom: 0; 
         left: 0; 
         width: 100%; 
-        padding: 30px; 
-        background: linear-gradient(transparent, rgba(0,0,0,0.9)); 
+        padding: 40px 30px; 
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%); 
         color: white; 
+        transition: all 0.5s ease;
     }
-    .team-info h3 { color: white; margin-bottom: 5px; font-size: 1.4rem; }
-    .team-info p { color: var(--primary-green); font-weight: 700; margin: 0; font-size: 0.9rem; }
+    .team-card:hover .team-info {
+        padding-bottom: 50px;
+        background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 60%, transparent 100%);
+    }
+    .team-info h3 { color: white; margin-bottom: 8px; font-size: 1.5rem; font-weight: 700; }
+    .team-info p { color: var(--primary-green); font-weight: 800; margin: 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; }
+    .team-info .member-desc { font-size: 0.85rem; display: block; margin-top: 15px; color: rgba(255,255,255,0.85); line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
+
+    .patron-card {
+        border: 4px solid var(--primary-green);
+        height: 550px;
+    }
+    .patron-card::before {
+        content: 'PATRON';
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: var(--primary-green);
+        color: white;
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        z-index: 10;
+        box-shadow: 0 10px 20px rgba(84, 180, 53, 0.3);
+    }
+    .patron-card .team-info h3 {
+        font-size: 2.2rem;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .patron-card .team-info .member-desc {
+        font-size: 1.1rem;
+        color: white;
+        border-top-color: rgba(255,255,255,0.4);
+    }
+
+    /* --- PARTNERS SLIDER --- */
+    .partners-section {
+        padding: 100px 0;
+        background: #fff;
+        border-top: 1px solid rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+    .partners-title {
+        text-align: center;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 50px;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+    .logo-slider-container {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        padding: 20px 0;
+    }
+    /* Fade effect on edges */
+    .logo-slider-container::before,
+    .logo-slider-container::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 150px;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none;
+    }
+    .logo-slider-container::before {
+        left: 0;
+        background: linear-gradient(to right, white, transparent);
+    }
+    .logo-slider-container::after {
+        right: 0;
+        background: linear-gradient(to left, white, transparent);
+    }
+    .logo-slider {
+        display: flex;
+        width: max-content;
+        animation: logo-slide 25s linear infinite; /* Increased speed (was 40s) */
+        align-items: center;
+    }
+    .logo-slider:hover {
+        animation-play-state: paused;
+    }
+    .partner-logo-wrapper {
+        padding: 0 40px; /* Adjusted spacing for larger logos */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .partner-logo {
+        height: 200px; /* Increased height to 200px */
+        max-width: 350px; /* Increased max-width to 350px */
+        width: auto;
+        object-fit: contain;
+        filter: none;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .partner-logo:hover {
+        transform: scale(1.05);
+    }
+    
+    @media (max-width: 992px) {
+        .partner-logo { height: 150px; }
+        .partner-logo-wrapper { padding: 0 30px; }
+    }
+    
+    @media (max-width: 768px) {
+        .partner-logo { height: 110px; }
+        .partner-logo-wrapper { padding: 0 20px; }
+    }
+
+    /* Utility Helpers */
+    .grid { display: grid; gap: 40px; }
+    .grid-1 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    .text-center { text-align: center; }
+    .text-green { color: var(--primary-green); }
+    .mb-20 { margin-bottom: 20px; }
+    .mb-40 { margin-bottom: 40px; }
+    .mb-60 { margin-bottom: 60px; }
+    .mt-20 { margin-top: 20px; }
+    .mt-40 { margin-top: 40px; }
+    .flex-center { display: flex; justify-content: center; align-items: center; }
 </style>
 {% endblock %}
 
@@ -100,11 +355,15 @@
         <div class="container">
             <div class="hero-content">
                 <h3>Let Us Go Green, with You.</h3>
-                <h1>Building a Sustainable Future </h1>
+                <h1>Building a Sustainable Future</h1>
                 <p>A Socio-economic, Environmental and Humanitarian Membership Association dedicated to Greening and Environmental Conservation across Kenya.</p>
-                <div class="flex">
-                    <a href="/calculator" class="btn" style="background: var(--primary-green); border-color: var(--primary-green);"><i class="fas fa-calculator"></i> Calculate Footprint</a>
-                    <a href="/services" class="btn btn-outline" style="border-color: white; color: white;">Our Services</a>
+                <div class="flex" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <a href="/calculator" class="btn btn-green" style="background: var(--primary-green); color: white; border: 2px solid var(--primary-green); padding: 16px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease;">
+                        <i class="fas fa-calculator"></i> Calculate Footprint
+                    </a>
+                    <a href="/services" class="btn btn-outline" style="border: 2px solid white; color: white; background: transparent; padding: 16px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; transition: all 0.3s ease;">
+                        Our Services
+                    </a>
                 </div>
             </div>
         </div>
@@ -117,67 +376,86 @@
             <span class="ticker-item"><i class="fas fa-tree"></i> <strong>Sarah K.</strong> gifted 5 trees to Ngong Hills</span>
             <span class="ticker-item"><i class="fas fa-globe"></i> <strong>EcoCorp</strong> offset 10 tons of CO2</span>
             <span class="ticker-item"><i class="fas fa-users"></i> <strong>David M.</strong> joined as a Volunteer</span>
+            <span class="ticker-item"><i class="fas fa-seedling"></i> <strong>Alice W.</strong> planted 10 mangroves</span>
+            <span class="ticker-item"><i class="fas fa-tint"></i> <strong>WaterTrust</strong> restored 2km of riverbank</span>
+            <!-- Doubled for seamless loop -->
             <span class="ticker-item"><i class="fas fa-seedling"></i> <strong>John D.</strong> protected 50m² of forest</span>
             <span class="ticker-item"><i class="fas fa-tree"></i> <strong>Sarah K.</strong> gifted 5 trees to Ngong Hills</span>
+            <span class="ticker-item"><i class="fas fa-globe"></i> <strong>EcoCorp</strong> offset 10 tons of CO2</span>
+            <span class="ticker-item"><i class="fas fa-users"></i> <strong>David M.</strong> joined as a Volunteer</span>
+            <span class="ticker-item"><i class="fas fa-seedling"></i> <strong>Alice W.</strong> planted 10 mangroves</span>
+            <span class="ticker-item"><i class="fas fa-tint"></i> <strong>WaterTrust</strong> restored 2km of riverbank</span>
         </div>
     </div>
 
     <!-- Stats Section -->
-    <section class="stats-section">
+    <section class="stats-section bg-light">
         <div class="container">
             <div class="grid grid-2">
                 <div class="stats-content">
-                    <h4 class="text-green">Let's Go Green, with You.</h4>
-                    <h2>7 Years Of Undefeated Success</h2>
-                    <p>We pride ourselves in creating measurable impact. Through strategic partnerships and community dedication, we've built a robust network for climate action.</p>
-                    <div class="mt-20">
-                        <a href="/work" class="btn" style="background: var(--primary-dark); border-color: var(--primary-dark);">Work With Us</a>
-                    </div>
+                    <h4 class="text-green" style="text-transform: uppercase; font-weight: 800; letter-spacing: 2px;">Impact Measurement</h4>
+                    <h2 style="font-size: 2.8rem; margin: 20px 0; line-height: 1.2;">7 Years Of Measurable Environmental Success</h2>
+                    <p style="color: #64748b; font-size: 1.2rem; line-height: 1.8; margin-bottom: 40px;">We pride ourselves in creating measurable impact. Through strategic partnerships and community dedication, we've built a robust network for climate action across the continent.</p>
+                    <a href="/work" class="btn btn-green" style="background: var(--primary-dark); color: white; border: 2px solid var(--primary-dark); padding: 14px 35px; border-radius: 50px; font-weight: 700; text-decoration: none;">Work With Us</a>
                 </div>
-                <div class="stats-numbers">
-                    <div class="stat-box">
-                        <h2 class="counter" data-target="32">0</h2><span class="stat-suffix">+</span>
-                        <p>Projects Finished</p>
+                <div>
+                    <div class="grid grid-2" style="gap: 25px;">
+                        <div class="stat-box">
+                            <h2 class="counter" data-target="32">32</h2><span class="stat-suffix">+</span>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Projects Finished</p>
+                        </div>
+                        <div class="stat-box">
+                            <h2 class="counter" data-target="7">7</h2>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Years Experience</p>
+                        </div>
+                        <div class="stat-box">
+                            <h2 class="counter" data-target="120">120</h2><span class="stat-suffix">+</span>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Investments</p>
+                        </div>
+                        <div class="stat-box">
+                            <h2 class="counter" data-target="1500">1500</h2><span class="stat-suffix">+</span>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Colleagues</p>
+                        </div>
                     </div>
-                    <div class="stat-box">
-                        <h2 class="counter" data-target="7">0</h2>
-                        <p>Years Experience</p>
-                    </div>
-                    <div class="stat-box">
-                        <h2 class="counter" data-target="120">0</h2><span class="stat-suffix">+</span>
-                        <p>Investments</p>
-                    </div>
-                    <div class="stat-box">
-                        <h2 class="counter" data-target="1500">0</h2><span class="stat-suffix">+</span>
-                        <p>Colleagues</p>
-                    </div>
-                </div>
 
-                <div class="impact-progress-container">
-                    <div class="progress-header">
-                        <h4>Reforestation Goal: 15 Billion Trees by 2032</h4>
-                        <span class="progress-percentage">0%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" data-width="12"></div>
-                    </div>
-                    <div class="progress-labels">
-                        <span>180,000 Seedlings (Ngong Hills)</span>
-                        <span>Target: 15B Trees</span>
+                    <div class="impact-progress-container">
+                        <div class="progress-header">
+                            <h4 style="margin: 0; color: var(--primary-dark); font-weight: 800;">Reforestation Goal: 15B Trees</h4>
+                            <span class="progress-percentage" style="font-weight: 800; color: var(--primary-green); font-size: 1.2rem;">12%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" data-width="12"></div>
+                        </div>
+                        <div class="progress-labels">
+                            <span>1.8B Seedlings Planted</span>
+                            <span>Target: 2032</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Values Bar -->
-    <section class="values-section py-80" style="background-color: var(--bg-light);">
+    <!-- Values Section -->
+    <section class="values-section py-80">
         <div class="container">
-            <div class="flex flex-between">
-                <div class="value-item"><h3><i class="fas fa-people-arrows text-green"></i> Socially</h3></div>
-                <div class="value-item"><h3><i class="fas fa-money-bill-wave text-green"></i> Economically</h3></div>
-                <div class="value-item"><h3><i class="fas fa-leaf text-green"></i> Environmentally</h3></div>
-                <div class="value-item"><h3><i class="fas fa-check text-green"></i> Humanitarian</h3></div>
+            <div class="grid grid-4 text-center">
+                <div class="value-item">
+                    <i class="fas fa-people-arrows text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                    <h3 style="font-weight: 800;">Socially</h3>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-money-bill-wave text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                    <h3 style="font-weight: 800;">Economically</h3>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-leaf text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                    <h3 style="font-weight: 800;">Environmentally</h3>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-hand-holding-heart text-green" style="font-size: 2.5rem; margin-bottom: 20px;"></i>
+                    <h3 style="font-weight: 800;">Humanitarian</h3>
+                </div>
             </div>
         </div>
     </section>
@@ -185,28 +463,30 @@
     <!-- Mission Section -->
     <div class="container">
         <section class="mission-section">
-            <div class="mission-image"></div>
+            <div class="mission-image" aria-label="Tree planting restoration activities"></div>
             <div class="mission-text">
                 <h4>Our Mission</h4>
-                <h2>Transform Communities Across the Globe</h2>
+                <h2>Empowering Communities through Environmental Action</h2>
                 <p>To foster climate change adaptation and mitigation by catalyzing community-level interventions that enhances well-being, livelihood security, environmental conservation and sustainable asset-based community development.</p>
-                <div class="mt-20">
-                    <a href="/contact" class="btn btn-outline" style="border-color: var(--primary-green); color: var(--primary-green);">Get In Touch</a>
+                <div class="mt-40">
+                    <a href="/contact" class="btn btn-outline" style="border: 2px solid var(--primary-green); color: var(--primary-green); padding: 14px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; transition: all 0.3s ease; background: transparent;">
+                        Get In Touch
+                    </a>
                 </div>
             </div>
         </section>
     </div>
 
     <!-- SDG Section -->
-    <section class="sdg-section">
+    <section class="sdg-section bg-light">
         <div class="container">
-            <div class="text-center mb-20">
-                <h4 class="text-green">Global Impact</h4>
-                <h2>Our Commitment to the SDGs</h2>
-                <p style="max-width: 800px; margin: 0 auto;">We align our local conservation efforts with the United Nations Sustainable Development Goals to ensure a lasting impact on our planet and its people.</p>
+            <div class="text-center mb-60">
+                <h4 class="text-green" style="text-transform: uppercase; font-weight: 800; letter-spacing: 2px;">Global Alignment</h4>
+                <h2 style="font-size: 3rem; margin-top: 15px; margin-bottom: 25px;">Our Commitment to the SDGs</h2>
+                <p style="max-width: 800px; margin: 0 auto; color: #64748b; font-size: 1.2rem; line-height: 1.8;">We align our local conservation efforts with the United Nations Sustainable Development Goals to ensure a lasting impact on our planet and its people.</p>
             </div>
             
-            <div class="grid grid-4 mt-20">
+            <div class="grid grid-4">
                 <div class="sdg-card">
                     <span class="sdg-number">Goal 13</span>
                     <div class="sdg-icon"><i class="fas fa-globe-africa"></i></div>
@@ -238,101 +518,143 @@
     <!-- Map Section -->
     <section class="map-section">
         <div class="container">
-            <div class="text-center mb-20">
-                <h4 class="text-green">Our Reach</h4>
-                <h2>Where We Work</h2>
-                <p>Restoring ecosystems and empowering communities across Kenya.</p>
+            <div class="text-center mb-60">
+                <h4 class="text-green" style="text-transform: uppercase; font-weight: 800; letter-spacing: 2px;">Our Footprint</h4>
+                <h2 style="font-size: 3rem; margin-top: 15px;">Where We Make an Impact</h2>
+                <p style="color: #64748b; font-size: 1.2rem; margin-top: 10px;">Restoring ecosystems and empowering local communities across the Republic of Kenya.</p>
             </div>
             
-            <div class="map-container">
-                <div class="map-overlay-card">
-                    <h3>Explore Our Projects</h3>
-                    <p>Click on the pins to see how we're making a difference in different regions of Kenya.</p>
+            <div class="map-container" style="position: relative; height: 600px; background: #f8fafc; border-radius: 35px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.1);">
+                <div class="map-overlay-card" style="position: absolute; top: 40px; left: 40px; background: white; padding: 35px; border-radius: 20px; max-width: 350px; z-index: 10; box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+                    <h3 style="color: var(--primary-dark); margin-bottom: 15px; font-weight: 800;">Interactive Impact Map</h3>
+                    <p style="color: #64748b; font-size: 1rem; line-height: 1.6;">Explore our active restoration sites and community projects. Click on the pins for detailed impact metrics.</p>
                 </div>
-                <div id="map"></div>
+                <div id="map" style="width: 100%; height: 100%;"></div>
             </div>
         </div>
     </section>
 
     <!-- Team Section -->
-    <section class="team-section" style="background-color: var(--bg-light);">
+    <section class="team-section bg-light" style="padding: 120px 0;">
         <div class="container">
-            <div class="text-center mb-20">
-                <h4 class="text-green">Our Leadership</h4>
-                <h2>Meet the Team</h2>
+            <div class="text-center mb-60">
+                <h4 class="text-green" style="text-transform: uppercase; font-weight: 800; letter-spacing: 2px;">Leadership</h4>
+                <h2 class="mb-20" style="font-size: 3rem;">Meet Our Team</h2>
+                <div style="width: 100px; height: 6px; background: var(--primary-green); margin: 0 auto; border-radius: 10px;"></div>
             </div>
-            <div class="grid grid-3 mt-20">
-                <div class="team-card" style="background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Mr._Joseph_Kithyaka_-_-removebg-preview.png');">
+            
+            <div class="text-center mb-40">
+                <h3 style="font-size: 1.8rem; letter-spacing: 4px; color: #475569; font-weight: 800;">PATRON</h3>
+            </div>
+     
+            <div class="grid grid-1 flex-center mb-80">
+                <div class="team-card patron-card" style="background-image: url('{{ url_for('static', filename='images/partner_people/Dr.Kalua.jpeg') }}'); max-width: 550px; width: 100%;">
                     <div class="team-info">
-                        <h3>Mr. Joseph Kithyaka</h3>
-                        <p>National Chairman & Patron</p>
+                        <h3>Dr. Kalua Green</h3>
+                        <p>Patron</p>
+                        <span class="member-desc">President Honda East Africa, Steward Green Group of Companies</span>
                     </div>
                 </div>
-                <div class="team-card" style="background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/PHOTO_PASSPORT.-removebg-preview.png');">
+            </div>
+
+            <div class="text-center mb-60">
+                <h3 style="font-size: 1.8rem; letter-spacing: 4px; color: #475569; font-weight: 800;">BOARD OF DIRECTORS</h3>
+            </div>
+
+            <div class="grid grid-3">
+                <!-- Board Member 1 -->
+                <div class="team-card" style="background-image: url('https://ui-avatars.com/api/?name=Beryl+Atieno&background=54B435&color=fff&size=512');">
                     <div class="team-info">
-                        <h3>Ochanda Mathew</h3>
-                        <p>Executive Director</p>
+                        <h3>Dr. Beryl Atieno</h3>
+                        <p>Board Member</p>
                     </div>
                 </div>
-                <div class="team-card" style="background-image: url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Ms._Janet_Ruto.1jpeg-removebg-preview.png');">
+                <!-- Board Member 2 -->
+                <div class="team-card" style="background-image: url('{{ url_for('static', filename='images/partner_people/Dr.Abduluhu Byakatonda.jpeg') }}');">
                     <div class="team-info">
-                        <h3>Ms. Janet Ruto</h3>
-                        <p>CEO - Jani Mpya Solutions</p>
+                        <h3>Dr. Byakatonda Abdulluhu</h3>
+                        <p>Board Member</p>
+                        <span class="member-desc">Workers MP Uganda Reigns</span>
+                    </div>
+                </div>
+                <!-- Board Member 3 -->
+                <div class="team-card" style="background-image: url('https://ui-avatars.com/api/?name=Benjamin+Kinyili&background=54B435&color=fff&size=512');">
+                    <div class="team-info">
+                        <h3>Dr. Benjamin Kinyili</h3>
+                        <p>Board Member</p>
+                    </div>
+                </div>
+                <!-- Board Member 4 -->
+                <div class="team-card" style="background-image: url('https://ui-avatars.com/api/?name=Robert+Juma&background=54B435&color=fff&size=512');">
+                    <div class="team-info">
+                        <h3>Eng. Robert Juma</h3>
+                        <p>Board Member</p>
+                    </div>
+                </div>
+                <!-- Board Member 5 -->
+                <div class="team-card" style="background-image: url('{{ url_for('static', filename='images/partner_people/Tobias Olekina.jpeg') }}');">
+                    <div class="team-info">
+                        <h3>Tobias Olekina Jnr</h3>
+                        <p>Policy Expert & Int. Relations</p>
+                    </div>
+                </div>
+                <!-- Board Member 6 -->
+                <div class="team-card" style="background-image: url('{{ url_for('static', filename='images/partner_people/Eden Mayane.jpeg') }}');">
+                    <div class="team-info">
+                        <h3>Eden Yemane</h3>
+                        <p>Board Member</p>
+                    </div>
+                </div>
+                <!-- Board Member 7 -->
+                <div class="team-card" style="background-image: url('https://ui-avatars.com/api/?name=Edna+Wavinya&background=54B435&color=fff&size=512');">
+                    <div class="team-info">
+                        <h3>Edna Wavinya</h3>
+                        <p>Board Member</p>
+                    </div>
+                </div>
+                <!-- Board Member 8 -->
+                <div class="team-card" style="background-image: url('https://ui-avatars.com/api/?name=Oliver+Oguttu&background=54B435&color=fff&size=512');">
+                    <div class="team-info">
+                        <h3>Oliver Oguttu</h3>
+                        <p>Software Engineer</p>
+                    </div>
+                </div>
+                <!-- Board Member 9 -->
+                <div class="team-card" style="background-image: url('{{ url_for('static', filename='images/partner_people/Mr.Ochanda Methew.jpeg') }}');">
+                    <div class="team-info">
+                        <h3>Mathew Ochanda</h3>
+                        <p>Sustainability Expert</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Corporate Partners Section -->
+    
+    <!-- Corporate Partners Slider -->
     <section class="partners-section">
         <div class="container">
             <h5 class="partners-title">Our Corporate Partners & Collaborators</h5>
             <div class="logo-slider-container">
                 <div class="logo-slider">
-                    <!-- 20 Unique Images -->
-                    <img src="{{ url_for('static', filename='images/Capacity building.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Climate resilience.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/community.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Conflict resolution and monitoring.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Disaster preparedness and mitigation.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Green best practices.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/HT.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Kids working on seedlings.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Landscapes.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/People collborating.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Reclaim land.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Resource mobilisation and fundraising.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/TEAM .jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/TEK.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Trees for policy markers.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/youths and women.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.03 youths.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.590.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.56.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.00455.jpeg') }}" alt="Partner" class="partner-logo">
+                    <!-- Set 1 -->
+                    {% for i in range(1, 11) %}{% if i != 4 %}
+                    <div class="partner-logo-wrapper">
+                        <img src="{{ url_for('static', filename='images/partners/' ~ i ~ '.jpeg') }}" alt="Partner {{ i }}" class="partner-logo" loading="lazy">
+                    </div>
+                    {% endif %}{% endfor %}
+                    <div class="partner-logo-wrapper">
+                        <img src="{{ url_for('static', filename='images/partners/DEL SVG.svg') }}" alt="DEL SVG" class="partner-logo" loading="lazy">
+                    </div>
 
-                    <!-- Repeated for seamless infinite scroll -->
-                    <img src="{{ url_for('static', filename='images/Capacity building.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Climate resilience.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/community.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Conflict resolution and monitoring.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Disaster preparedness and mitigation.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Green best practices.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/HT.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Kids working on seedlings.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Landscapes.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/People collborating.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Reclaim land.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Resource mobilisation and fundraising.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/TEAM .jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/TEK.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/Trees for policy markers.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/youths and women.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.03 youths.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.590.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.50.56.jpeg') }}" alt="Partner" class="partner-logo">
-                    <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-12-24 at 14.51.00455.jpeg') }}" alt="Partner" class="partner-logo">
+                    <!-- Set 2 (for seamless loop) -->
+                    {% for i in range(1, 11) %}{% if i != 4 %}
+                    <div class="partner-logo-wrapper">
+                        <img src="{{ url_for('static', filename='images/partners/' ~ i ~ '.jpeg') }}" alt="Partner {{ i }}" class="partner-logo" loading="lazy">
+                    </div>
+                    {% endif %}{% endfor %}
+                    <div class="partner-logo-wrapper">
+                        <img src="{{ url_for('static', filename='images/partners/DEL SVG.svg') }}" alt="DEL SVG" class="partner-logo" loading="lazy">
+                    </div>
                 </div>
             </div>
         </div>
