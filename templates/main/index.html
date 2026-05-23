@@ -318,8 +318,8 @@
         justify-content: center;
     }
     .partner-logo {
-        height: 200px; /* Increased height to 200px */
-        max-width: 350px; /* Increased max-width to 350px */
+        height: 280px; /* Increased height to 280px */
+        max-width: 450px; /* Increased max-width to 450px */
         width: auto;
         object-fit: contain;
         filter: brightness(1.1) contrast(1.05) drop-shadow(0 4px 12px rgba(0,0,0,0.08)); /* Brighter, crisper, and with subtle depth */
@@ -331,13 +331,15 @@
     }
     
     @media (max-width: 992px) {
-        .partner-logo { height: 150px; }
-        .partner-logo-wrapper { padding: 0 30px; }
+        .partner-logo { height: 160px; }
+        .partner-logo-wrapper { padding: 0 35px; }
+        .logo-slider { animation-duration: 20s; } /* Faster on tablets */
     }
     
     @media (max-width: 768px) {
-        .partner-logo { height: 110px; }
-        .partner-logo-wrapper { padding: 0 20px; }
+        .partner-logo { height: 130px; }
+        .partner-logo-wrapper { padding: 0 25px; }
+        .logo-slider { animation-duration: 15s; } /* High speed on mobile */
     }
 
     /* Utility Helpers */
