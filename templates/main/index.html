@@ -20,6 +20,13 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Prevent horizontal scroll globally on this page */
+    :host, body {
+        overflow-x: hidden !important;
+        width: 100%;
+        position: relative;
+    }
+
     /* --- HERO SECTION --- */
     .hero {
         background-image: linear-gradient(135deg, rgba(12, 20, 6, 0.9) 0%, rgba(84, 180, 53, 0.2) 100%), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
