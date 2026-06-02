@@ -1,0 +1,403 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}GIS Forest Canopy Auditing | Teamenvironment.KE.Africa{% endblock %}
+
+{% block extra_css %}
+<style>
+    .audit-header {
+        background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2021/11/about-us-2-min.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: clamp(60px, 10vh, 120px) 0;
+        text-align: center;
+        color: white;
+    }
+    .audit-header h1 { color: white; margin-bottom: 10px; }
+
+    .audit-indicator-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid var(--gray-border);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+        text-align: center;
+        transition: var(--transition);
+        height: 100%;
+    }
+    .audit-indicator-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-green);
+        box-shadow: 0 20px 35px rgba(0,0,0,0.05);
+    }
+    .audit-indicator-icon {
+        font-size: 2.2rem;
+        color: var(--primary-green);
+        margin-bottom: 15px;
+    }
+    .audit-indicator-card h2 {
+        font-size: 2rem;
+        color: var(--primary-dark);
+        margin-bottom: 5px;
+    }
+    .audit-indicator-card p {
+        font-weight: 700;
+        color: #64748B;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    /* Leaflet Map wrapper */
+    .map-grid-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-top: 50px;
+    }
+    .map-wrapper {
+        background: #0F172A;
+        border-radius: 24px;
+        padding: 12px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.05);
+        height: 550px;
+        position: relative;
+    }
+    #auditMap {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        background: #e2e8f0;
+    }
+    
+    .plot-details-panel {
+        background: white;
+        border-radius: 24px;
+        padding: 35px;
+        border: 1px solid var(--gray-border);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Before/After Canopy Slider */
+    .slider-section {
+        background-color: var(--bg-light);
+        border-top: 1px solid var(--gray-border);
+        border-bottom: 1px solid var(--gray-border);
+    }
+    .canopy-comparison-container {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        height: 500px;
+        margin: 40px auto 0 auto;
+        overflow: hidden;
+        border-radius: 24px;
+        box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+        border: 4px solid white;
+    }
+    .canopy-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        user-select: none;
+    }
+    .canopy-before {
+        background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80'); /* Dry, degraded land view */
+    }
+    .canopy-after {
+        background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80'); /* Dense lush green canopy */
+        width: 50%; /* Initial split width */
+    }
+    .comparison-slider-handle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 4px;
+        background: white;
+        cursor: ew-resize;
+        z-index: 10;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .comparison-slider-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 44px;
+        height: 44px;
+        background: var(--primary-green);
+        border: 4px solid white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 10px rgba(84, 180, 53, 0.3);
+        z-index: 11;
+        pointer-events: none;
+    }
+
+    @media (max-width: 992px) {
+        .map-grid-container {
+            grid-template-columns: 1fr;
+        }
+        .map-wrapper {
+            height: 450px;
+        }
+        .canopy-comparison-container {
+            height: 350px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="audit-header">
+    <div class="container">
+        <h1>GIS Forest Canopy Auditing</h1>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Forest Audit</span>
+        </div>
+    </div>
+</section>
+
+<!-- Auditing Parameters Indicators -->
+<section class="py-80" style="background-color: #ffffff;">
+    <div class="container">
+        <div class="text-center mb-50">
+            <h4 class="text-green" style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px;"><i class="fas fa-microscope"></i> Verifiable Integrity</h4>
+            <h2>Environmental Audit Indicators</h2>
+            <p style="max-width: 600px; margin: 0 auto; color: #64748b; font-size: 0.95rem;">Our re-greening outputs are physically audited using satellite imagery, soil chemistry tests, and drone survival counts.</p>
+        </div>
+
+        <div class="grid grid-4">
+            <div class="audit-indicator-card">
+                <div class="audit-indicator-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <h2>5 Plots</h2>
+                <p>Audited Zones</p>
+            </div>
+            <div class="audit-indicator-card">
+                <div class="audit-indicator-icon"><i class="fas fa-heartbeat"></i></div>
+                <h2>90.6%</h2>
+                <p>Survival Rate</p>
+            </div>
+            <div class="audit-indicator-card">
+                <div class="audit-indicator-icon"><i class="fas fa-cloud-sun"></i></div>
+                <h2>1.4k Tons</h2>
+                <p>CO2 Sequestered</p>
+            </div>
+            <div class="audit-indicator-card">
+                <div class="audit-indicator-icon"><i class="fas fa-clipboard-check"></i></div>
+                <h2>May 2026</h2>
+                <p>Last Audit Date</p>
+            </div>
+        </div>
+        
+        <!-- GIS Map & Auditing Details Panel -->
+        <div class="map-grid-container">
+            <!-- Left: GIS Leaflet Map wrapper -->
+            <div class="map-wrapper">
+                <div id="auditMap"></div>
+            </div>
+
+            <!-- Right: Interactive Plot Audits Panel -->
+            <div class="plot-details-panel">
+                <div>
+                    <h4 class="text-green" style="text-transform: uppercase; letter-spacing: 1px; font-weight: 700; font-size: 0.8rem; margin-bottom: 15px;"><i class="fas fa-tree"></i> Audited Zone Details</h4>
+                    <h3 id="plotTitle" style="margin-bottom: 15px; color: var(--primary-dark); font-weight: 800;">Ngong Hills Adopted Plot</h3>
+                    <p id="plotDesc" style="color: #555; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6;">Adoption area within Ngong Hills forest ecosystem. Heavy concentration of indigenous tree rehabilitation (Acacia, bamboo buffer zones) in strategic water catchments.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 0.9rem; color: #64748b;">Soil Chemistry (Nitrogen):</span>
+                            <span id="plotNitrogen" style="font-weight: 800; color: var(--primary-dark);">0.22% (Optimal)</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 0.9rem; color: #64748b;">Moisture Index:</span>
+                            <span id="plotMoisture" style="font-weight: 800; color: var(--primary-dark);">68% (Adequate)</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px;">
+                            <span style="font-weight: 700; font-size: 0.9rem; color: #64748b;">Trees Managed:</span>
+                            <span id="plotCount" style="font-weight: 800; color: var(--primary-green);">180,000 Seedlings</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px;">
+                    <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Click any green marker on the map to query dynamic verification data.</p>
+                    <button class="btn" onclick="openModal()" style="width: 100%;">Fund This Specific Zone</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Before/After Canopy Slider Section -->
+<section class="slider-section py-80">
+    <div class="container text-center">
+        <h4 class="text-green" style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px;"><i class="fas fa-images"></i> Visual Proof</h4>
+        <h2>Ngong Hills Canopy Growth audit</h2>
+        <p style="max-width: 600px; margin: 0 auto; color: #64748b; font-size: 0.95rem;">Drag the slider handle to compare the dry, degraded pasturelands in 2022 with the dense, growing canopy restored in 2026.</p>
+
+        <!-- Dynamic Before/After Slider Container -->
+        <div class="canopy-comparison-container" id="canopySliderContainer">
+            <!-- Background: degraded before photo -->
+            <div class="canopy-image canopy-before"></div>
+            <!-- Foreground: lush after photo, width toggled by JS slider -->
+            <div class="canopy-image canopy-after" id="canopyAfterImg"></div>
+            <!-- Slider Handle -->
+            <div class="comparison-slider-handle" id="sliderHandle">
+                <div class="comparison-slider-circle">
+                    <i class="fas fa-arrows-alt-h"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- 1. INITIALIZE GIS AUDITING MAP ---
+        const auditMapElement = document.getElementById('auditMap');
+        if (auditMapElement) {
+            // Nairobi (HQ) center
+            const map = L.map('auditMap', {
+                scrollWheelZoom: false
+            }).setView([-0.023559, 37.906193], 7);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Verified Green Marker icon
+            const auditedIcon = L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+
+            // Specific plot metrics
+            const plotsData = {
+                ngong: {
+                    title: "Ngong Hills Reforestation Plot",
+                    desc: "Our primary rehabilitation acreage adopting standard indigenous buffers. Key species planted include Acacia and bamboo buffer layers to secure local moisture capture.",
+                    nitrogen: "0.22% (Optimal)",
+                    moisture: "68% (Adequate)",
+                    count: "180,000 Trees"
+                },
+                kakamega: {
+                    title: "Kakamega KALRO Plot",
+                    desc: "An indigenous rainforest biodiversity sanctuary in western Kenya. Managed in direct collaboration with KALRO, protecting valuable hardwood species.",
+                    nitrogen: "0.28% (Rich)",
+                    moisture: "82% (Excellent)",
+                    count: "45,000 Hardwoods"
+                },
+                nyeri: {
+                    title: "Nyeri Watershed Catchment",
+                    desc: "Watershed conservation area along Aberdares water catchment pathways. Reforesting indigenous Prunus Africana and Podocarpus tree buffers.",
+                    nitrogen: "0.19% (Good)",
+                    moisture: "74% (Adequate)",
+                    count: "35,000 Saplings"
+                },
+                nakuru: {
+                    title: "Nakuru Green Belt Project",
+                    desc: "Re-greening degraded urban zones and supporting community woodlots. Excellent integration of social agroforestry and climate resilience.",
+                    nitrogen: "0.16% (Moderate)",
+                    moisture: "59% (Moderate)",
+                    count: "28,000 Woodlots"
+                }
+            };
+
+            // Plot markers list
+            const plotMarkers = [
+                { id: 'ngong', coords: [-1.3611, 36.6569] },
+                { id: 'kakamega', coords: [0.2827, 34.7519] },
+                { id: 'nyeri', coords: [-0.4167, 36.9500] },
+                { id: 'nakuru', coords: [-0.3031, 36.0613] }
+            ];
+
+            // Render and listen
+            plotMarkers.forEach(marker => {
+                const lMarker = L.marker(marker.coords, { icon: auditedIcon }).addTo(map);
+                
+                // Show dynamic content on click
+                lMarker.on('click', function() {
+                    const data = plotsData[marker.id];
+                    document.getElementById('plotTitle').innerText = data.title;
+                    document.getElementById('plotDesc').innerText = data.desc;
+                    document.getElementById('plotNitrogen').innerText = data.nitrogen;
+                    document.getElementById('plotMoisture').innerText = data.moisture;
+                    document.getElementById('plotCount').innerText = data.count;
+                });
+            });
+        }
+
+        // --- 2. BEFORE/AFTER CANOPY COMPARISON SLIDER ---
+        const sliderContainer = document.getElementById('canopySliderContainer');
+        const afterImg = document.getElementById('canopyAfterImg');
+        const handle = document.getElementById('sliderHandle');
+
+        if (sliderContainer && afterImg && handle) {
+            let isDragging = false;
+
+            const setSliderPosition = (clientX) => {
+                const containerRect = sliderContainer.getBoundingClientRect();
+                const containerWidth = containerRect.width;
+                const clientXRelative = clientX - containerRect.left;
+                
+                // Lock positions between 0% and 100%
+                let percentage = (clientXRelative / containerWidth) * 100;
+                if (percentage < 0) percentage = 0;
+                if (percentage > 100) percentage = 100;
+
+                afterImg.style.width = `${percentage}%`;
+                handle.style.left = `${percentage}%`;
+            };
+
+            // Mouse & Touch down
+            const startDrag = () => { isDragging = true; };
+            const stopDrag = () => { isDragging = false; };
+            
+            handle.addEventListener('mousedown', startDrag);
+            handle.addEventListener('touchstart', startDrag);
+            
+            window.addEventListener('mouseup', stopDrag);
+            window.addEventListener('touchend', stopDrag);
+
+            // Move
+            window.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                setSliderPosition(e.clientX);
+            });
+
+            window.addEventListener('touchmove', function(e) {
+                if (!isDragging || e.touches.length === 0) return;
+                setSliderPosition(e.touches[0].clientX);
+            });
+
+            // Enable click-to-move as well
+            sliderContainer.addEventListener('click', function(e) {
+                if (e.target !== handle && !handle.contains(e.target)) {
+                    setSliderPosition(e.clientX);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

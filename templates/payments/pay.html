@@ -6,40 +6,42 @@
 <style>
     /* --- PAGE HEADER --- */
     .page-header {
-        background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/highridge_seeds_of_a_greener_future_1_70.jpg');
+        background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/highridge_seeds_of_a_greener_future_1_70.jpg');
         background-size: cover;
         background-position: center;
         padding: clamp(60px, 10vh, 100px) 0;
         text-align: center;
         color: white;
     }
-    .page-header h1 { color: white; margin-bottom: 10px; }
+    .page-header h1 { color: white; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.5px; }
     
     /* --- PAY CARD --- */
     .pay-card {
-        max-width: 500px;
+        max-width: 550px;
         margin: 0 auto;
         background: white;
-        padding: clamp(30px, 6vw, 60px);
-        border-radius: 20px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+        padding: clamp(30px, 5vw, 50px);
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
         border: 1px solid var(--gray-border);
-        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    .pay-card:hover {
+        transform: translateY(-2px);
     }
 
-    .mpesa-logo { height: 50px; margin-bottom: 30px; }
-
-    label { display: block; font-weight: 700; margin-bottom: 10px; text-align: left; font-size: 0.9rem; color: var(--primary-dark); }
+    label { display: block; font-weight: 700; margin-bottom: 8px; text-align: left; font-size: 0.85rem; color: var(--primary-dark); text-transform: uppercase; letter-spacing: 0.5px; }
     
     input { 
         width: 100%; 
-        padding: 15px; 
+        padding: 14px 16px; 
         border: 2px solid var(--gray-border); 
-        border-radius: 10px; 
-        font-size: 1.1rem;
+        border-radius: 12px; 
+        font-size: 1rem;
+        font-family: inherit;
         transition: var(--transition);
         background-color: #f8fafc;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
     input:focus {
         border-color: var(--primary-green);
@@ -48,15 +50,21 @@
         box-shadow: 0 0 0 4px rgba(84, 180, 53, 0.1);
     }
 
+    .form-group {
+        position: relative;
+        text-align: left;
+    }
+
     .status-msg {
         padding: 15px;
-        border-radius: 10px;
+        border-radius: 12px;
         font-size: 0.9rem;
         font-weight: 700;
         margin-top: 25px;
         display: none;
+        text-align: left;
     }
-    .status-msg.active { display: block; }
+    .status-msg.active { display: block; animation: fadeIn 0.3s ease; }
     .status-msg.success { background-color: #f0fdf4; color: var(--primary-green); border: 1px solid rgba(84, 180, 53, 0.2); }
     .status-msg.error { background-color: #fef2f2; color: #e11d48; border: 1px solid rgba(225, 29, 72, 0.2); }
     .status-msg.info { background-color: #eff6ff; color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.2); }
@@ -68,10 +76,21 @@
         justify-content: center;
         gap: 10px;
         color: #94a3b8;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 1px;
+    }
+
+    .inline-processing-state {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 0;
+        text-align: center;
+    }
+    .inline-processing-state.active {
+        display: flex;
     }
 </style>
 {% endblock %}
@@ -79,8 +98,8 @@
 {% block content %}
 <section class="page-header">
     <div class="container">
-        <h1>Secure Payment</h1>
-        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
+        <h1>Secure Payment Portal</h1>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.85;">
             <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Payment</span>
         </div>
     </div>
@@ -89,26 +108,90 @@
 <section class="pay-section" style="background-color: var(--bg-light); padding: 80px 0;">
     <div class="container">
         <div class="pay-card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa" class="mpesa-logo">
-            <h2>Support Our Mission</h2>
-            <p style="color: #666; margin-bottom: 40px;">Your contribution directly funds reforestation and community sustainability projects across Kenya.</p>
             
-            <div class="form-group">
-                <label for="payPhone">M-Pesa Phone Number</label>
-                <input type="text" id="payPhone" placeholder="07XXXXXXXX" value="07">
-            </div>
-            
-            <div class="form-group">
-                <label for="payAmount">Amount to Donate (KES)</label>
-                <input type="number" id="payAmount" placeholder="Enter amount" value="1000">
+            <div id="inline-form-container">
+                <h2 style="font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; text-align: center;">Support Our Mission</h2>
+                <p style="color: #64748b; margin-bottom: 30px; font-size: 0.95rem; text-align: center; line-height: 1.5;">
+                    Your contribution directly funds reforestation, conservation advocacy, and youth livelihood empowerment projects across Kenya.
+                </p>
+
+                <!-- Unified Input Fields -->
+                <div class="form-group">
+                    <label for="inline_donor_name">Full Name</label>
+                    <input type="text" id="inline_donor_name" placeholder="Enter your full name" required>
+                    <div class="validation-message" id="inline_donor_name-validation"></div>
+                </div>
+                <div class="form-group">
+                    <label for="inline_donor_email">Email Address</label>
+                    <input type="email" id="inline_donor_email" placeholder="youremail@gmail.com" required>
+                    <div class="validation-message" id="inline_donor_email-validation"></div>
+                </div>
+                <div class="form-group">
+                    <label for="inline_amount">Donation Amount (KES)</label>
+                    <input type="number" id="inline_amount" placeholder="e.g. 1000" value="1000" required>
+                    <div class="validation-message" id="inline_amount-validation"></div>
+                    <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; margin-top: -15px; margin-bottom: 20px; text-align: left;">
+                        <i class="fas fa-coins"></i> Approx. <span id="inline-usd-converted">$7.69</span> USD (1 USD ≈ 130 KES)
+                    </div>
+                </div>
+
+                <!-- Payment Method Toggles -->
+                <label style="margin-bottom: 12px;">Select Payment Method</label>
+                <div class="payment-methods" style="margin-bottom: 25px;">
+                    <div class="method-card active" onclick="switchInlinePayment('mpesa')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa">
+                        <p>M-Pesa</p>
+                    </div>
+                    <div class="method-card" onclick="switchInlinePayment('pesapal')">
+                        <img src="https://www.pesapal.com/assets/img/pesapal-logo.png" alt="PesaPal">
+                        <p>PesaPal</p>
+                    </div>
+                    <div class="method-card" onclick="switchInlinePayment('paypal')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1200px-PayPal.svg.png" alt="PayPal">
+                        <p>PayPal</p>
+                    </div>
+                </div>
+
+                <!-- M-Pesa Tab -->
+                <div id="inline-mpesa-tab" class="payment-tab active">
+                    <div class="form-group">
+                        <label for="inline_phone">M-Pesa Phone Number</label>
+                        <input type="text" id="inline_phone" placeholder="07XXXXXXXX" value="07">
+                        <div class="validation-message" id="inline_phone-validation"></div>
+                    </div>
+                    <button onclick="initiateInlineMpesa()" id="inlineMpesaBtn" class="btn" style="width: 100%; padding: 16px; background-color: var(--mpesa-green); border-color: var(--mpesa-green);">Initiate STK Push</button>
+                </div>
+
+                <!-- PesaPal Tab -->
+                <div id="inline-pesapal-tab" class="payment-tab">
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px; text-align: left; line-height: 1.5;">
+                        <i class="fas fa-info-circle"></i> Donate securely via PesaPal, supporting Visa, Mastercard, Airtel Money, and local banking options.
+                    </p>
+                    <button onclick="initiateInlinePesapal()" id="inlinePesapalBtn" class="btn" style="width: 100%; padding: 16px; background-color: #00A651; border-color: #00A651;">Donate via PesaPal</button>
+                </div>
+
+                <!-- PayPal Tab -->
+                <div id="inline-paypal-tab" class="payment-tab">
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 20px; text-align: left; line-height: 1.5;">
+                        <i class="fas fa-info-circle"></i> Complete your donation internationally using secure PayPal checkout.
+                    </p>
+                    <div id="paypal-button-container-inline" style="margin-top: 10px;"></div>
+                </div>
             </div>
 
-            <button onclick="payNow()" id="paySubmitBtn" class="btn" style="width: 100%; padding: 18px;">Initiate STK Push</button>
-            
-            <div id="payStatus" class="status-msg"></div>
+            <!-- Processing Screen -->
+            <div id="inline-processing" class="inline-processing-state">
+                <div class="spinner"></div>
+                <h4 style="font-weight: 700; margin-top: 15px;" id="inline-processing-title">Processing...</h4>
+                <p style="color: #64748b; font-size: 0.9rem;" id="inline-processing-desc">Please check your phone / redirection shortly.</p>
+                <button class="btn btn-outline" onclick="resetInlineForm()" style="margin-top: 20px; font-size: 0.8rem; padding: 8px 15px;">Cancel / Back</button>
+            </div>
+
+            <!-- Status Banner -->
+            <div id="inlineStatus" class="status-msg"></div>
 
             <div class="secure-badge">
-                <i class="fas fa-lock"></i> Secured by Safaricom Daraja
+                <i class="fas fa-lock"></i> SSL Secured & Gateways Encrypted
             </div>
         </div>
     </div>
@@ -117,50 +200,262 @@
 
 {% block extra_js %}
 <script>
-    async function payNow() {
-        const phone = document.getElementById('payPhone').value;
-        const amount = document.getElementById('payAmount').value;
-        const status = document.getElementById('payStatus');
-        const btn = document.getElementById('paySubmitBtn');
-        
-        if(!phone || !amount || amount <= 0) {
-            status.className = 'status-msg active error';
-            status.innerHTML = '❌ Please enter a valid phone and amount.';
+    let paypalInlineBtnRendered = false;
+
+    // Switch payment tabs
+    function switchInlinePayment(method) {
+        document.querySelectorAll('.pay-section .payment-tab').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(`inline-${method}-tab`).classList.add('active');
+
+        document.querySelectorAll('.pay-section .method-card').forEach(card => card.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        if (method === 'paypal') {
+            renderInlinePaypalButtons();
+        }
+    }
+
+    // Dynamic USD Conversion Display
+    document.getElementById('inline_amount').addEventListener('input', function() {
+        const val = parseFloat(this.value) || 0;
+        document.getElementById('inline-usd-converted').innerText = '$' + (val / 130).toFixed(2);
+    });
+
+    // Helper functions
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    function validatePhone(phone) {
+        return /^(254|0)(7|1)\d{8}$/.test(phone);
+    }
+
+    function showInlineValidation(id, msg) {
+        const input = document.getElementById(id);
+        const errDiv = document.getElementById(`${id}-validation`);
+        if (input && errDiv) {
+            input.classList.add('invalid');
+            errDiv.innerText = msg;
+            errDiv.classList.add('active');
+        }
+    }
+
+    function clearInlineValidation(id) {
+        const input = document.getElementById(id);
+        const errDiv = document.getElementById(`${id}-validation`);
+        if (input && errDiv) {
+            input.classList.remove('invalid');
+            errDiv.innerText = '';
+            errDiv.classList.remove('active');
+        }
+    }
+
+    function validateInlineForm() {
+        const name = document.getElementById('inline_donor_name').value.trim();
+        const email = document.getElementById('inline_donor_email').value.trim();
+        const amount = parseFloat(document.getElementById('inline_amount').value);
+        let valid = true;
+
+        if (!name) { showInlineValidation('inline_donor_name', 'Full name is required'); valid = false; }
+        if (!validateEmail(email)) { showInlineValidation('inline_donor_email', 'A valid email is required'); valid = false; }
+        if (isNaN(amount) || amount <= 0) { showInlineValidation('inline_amount', 'Please enter a valid amount'); valid = false; }
+
+        return valid;
+    }
+
+    // Bind real-time validation clearers
+    ['inline_donor_name', 'inline_donor_email', 'inline_amount'].forEach(id => {
+        document.getElementById(id).addEventListener('input', function() {
+            if (id === 'inline_donor_email') {
+                if (validateEmail(this.value)) clearInlineValidation(id);
+            } else if (id === 'inline_amount') {
+                if (parseFloat(this.value) > 0) clearInlineValidation(id);
+            } else {
+                if (this.value.trim()) clearInlineValidation(id);
+            }
+        });
+    });
+
+    const phoneInp = document.getElementById('inline_phone');
+    if (phoneInp) {
+        phoneInp.addEventListener('input', function() {
+            if (validatePhone(this.value)) clearInlineValidation('inline_phone');
+            else showInlineValidation('inline_phone', 'Format: 07XXXXXXXX');
+        });
+    }
+
+    function resetInlineForm() {
+        document.getElementById('inline-form-container').style.display = 'block';
+        document.getElementById('inline-processing').classList.remove('active');
+        document.getElementById('inlineStatus').className = 'status-msg';
+        document.getElementById('inlineStatus').style.display = 'none';
+        ['inline_donor_name', 'inline_donor_email', 'inline_amount', 'inline_phone'].forEach(clearInlineValidation);
+    }
+
+    // M-PESA STK Push execution
+    async function initiateInlineMpesa() {
+        if (!validateInlineForm()) return;
+        const phone = document.getElementById('inline_phone').value.trim();
+        if (!validatePhone(phone)) {
+            showInlineValidation('inline_phone', 'Please enter a valid M-Pesa phone number');
             return;
         }
 
-        const originalBtnText = btn.innerText;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        
-        status.className = 'status-msg active info';
-        status.innerHTML = '<i class="fas fa-mobile-alt"></i> Sending STK Push... Check your phone.';
+        const formCont = document.getElementById('inline-form-container');
+        const procCont = document.getElementById('inline-processing');
+        const procTitle = document.getElementById('inline-processing-title');
+        const procDesc = document.getElementById('inline-processing-desc');
+        const statusBanner = document.getElementById('inlineStatus');
+
+        formCont.style.display = 'none';
+        procCont.classList.add('active');
+        statusBanner.style.display = 'none';
+        procTitle.innerText = 'Initiating M-Pesa payment...';
+        procDesc.innerText = 'Sending secure STK Push request to your phone. Ensure it is unlocked.';
 
         try {
-            const response = await fetch('/pay', {
+            const res = await fetch('/pay', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: phone, amount: amount })
+                body: JSON.stringify({
+                    name: document.getElementById('inline_donor_name').value,
+                    email: document.getElementById('inline_donor_email').value,
+                    phone: phone,
+                    amount: document.getElementById('inline_amount').value
+                })
             });
-            
-            const data = await response.json();
-            
-            if(data.ResponseCode === "0") {
-                status.className = 'status-msg active success';
-                status.innerHTML = '✔ STK Push Sent! Enter your PIN on your phone to complete the payment.';
-                document.getElementById('payAmount').value = '';
+            const data = await res.json();
+            if (res.ok && data.ResponseCode === "0") {
+                procDesc.innerHTML = '<span style="color:#54B435; font-weight:700;">✔ STK Push Sent successfully! Enter PIN on your phone. We will email your receipt shortly.</span>';
             } else {
-                status.className = 'status-msg active error';
-                status.innerHTML = `❌ Error: ${data.errorMessage || data.error || 'Initiation failed'}`;
-                btn.disabled = false;
-                btn.innerText = originalBtnText;
+                throw new Error(data.CustomerMessage || data.errorMessage || 'STK Initiation failed.');
             }
         } catch (error) {
-            status.className = 'status-msg active error';
-            status.innerHTML = '❌ Connection failed. Please check your internet.';
-            btn.disabled = false;
-            btn.innerText = originalBtnText;
+            procCont.classList.remove('active');
+            formCont.style.display = 'block';
+            statusBanner.className = 'status-msg active error';
+            statusBanner.innerText = `❌ Error: ${error.message}`;
         }
+    }
+
+    // PesaPal Gateway Redirection
+    async function initiateInlinePesapal() {
+        if (!validateInlineForm()) return;
+
+        const formCont = document.getElementById('inline-form-container');
+        const procCont = document.getElementById('inline-processing');
+        const procTitle = document.getElementById('inline-processing-title');
+        const procDesc = document.getElementById('inline-processing-desc');
+        const statusBanner = document.getElementById('inlineStatus');
+
+        formCont.style.display = 'none';
+        procCont.classList.add('active');
+        statusBanner.style.display = 'none';
+        procTitle.innerText = 'Connecting to PesaPal gateway...';
+        procDesc.innerText = 'Preparing secure multi-method checkout terminal.';
+
+        try {
+            const res = await fetch('/pay-pesapal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: document.getElementById('inline_donor_name').value,
+                    email: document.getElementById('inline_donor_email').value,
+                    amount: document.getElementById('inline_amount').value
+                })
+            });
+            const data = await res.json();
+            if (res.ok && data.redirect_url) {
+                procDesc.innerHTML = '<span style="color:#54B435; font-weight:700;">✔ Secure checkout loaded! Redirecting...</span>';
+                setTimeout(() => {
+                    window.location.href = data.redirect_url;
+                }, 1500);
+            } else {
+                throw new Error(data.error || 'Failed to initiate PesaPal transaction.');
+            }
+        } catch (error) {
+            procCont.classList.remove('active');
+            formCont.style.display = 'block';
+            statusBanner.className = 'status-msg active error';
+            statusBanner.innerText = `❌ Error: ${error.message}`;
+        }
+    }
+
+    // PayPal smart button rendering
+    function renderInlinePaypalButtons() {
+        if (paypalInlineBtnRendered) return;
+        const btnContainer = document.getElementById('paypal-button-container-inline');
+        if (!btnContainer) return;
+        paypalInlineBtnRendered = true;
+
+        paypal.Buttons({
+            onInit: function(data, actions) {
+                actions.disable();
+                const checkInp = () => {
+                    if (validateInlineForm()) actions.enable();
+                    else actions.disable();
+                };
+                ['inline_donor_name', 'inline_donor_email', 'inline_amount'].forEach(id => {
+                    document.getElementById(id).addEventListener('input', checkInp);
+                });
+                checkInp();
+            },
+            createOrder: function(data, actions) {
+                const amountKes = parseFloat(document.getElementById('inline_amount').value);
+                const amountUsd = (amountKes / 130).toFixed(2);
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: { value: amountUsd },
+                        description: "Donation to TEAMEnvironment KENYA"
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(async function(details) {
+                    const formCont = document.getElementById('inline-form-container');
+                    const procCont = document.getElementById('inline-processing');
+                    const procTitle = document.getElementById('inline-processing-title');
+                    const procDesc = document.getElementById('inline-processing-desc');
+                    const statusBanner = document.getElementById('inlineStatus');
+
+                    formCont.style.display = 'none';
+                    procCont.classList.add('active');
+                    procTitle.innerText = 'Capturing PayPal transaction...';
+                    procDesc.innerText = 'Finalizing donation ledger & certificates.';
+
+                    const amountKes = parseFloat(document.getElementById('inline_amount').value);
+                    const amountUsd = (amountKes / 130).toFixed(2);
+
+                    try {
+                        const res = await fetch('/save-paypal-donation', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                name: document.getElementById('inline_donor_name').value,
+                                email: document.getElementById('inline_donor_email').value,
+                                amount_kes: amountKes,
+                                amount_usd: amountUsd,
+                                paypal_order_id: details.id
+                            })
+                        });
+                        const resData = await res.json();
+                        if (res.ok && resData.success) {
+                            window.location.href = `/donation-success?name=${encodeURIComponent(document.getElementById('inline_donor_name').value)}&email=${encodeURIComponent(document.getElementById('inline_donor_email').value)}&amount=${amountKes}&receipt_no=${resData.receipt_no}&filename=${resData.filename}`;
+                        } else {
+                            throw new Error(resData.message || 'Ledger write failed.');
+                        }
+                    } catch (error) {
+                        procCont.classList.remove('active');
+                        formCont.style.display = 'block';
+                        statusBanner.className = 'status-msg active error';
+                        statusBanner.innerText = `❌ Error: ${error.message}`;
+                    }
+                });
+            },
+            onError: function(err) {
+                document.getElementById('inlineStatus').className = 'status-msg active error';
+                document.getElementById('inlineStatus').innerText = `❌ PayPal Error: ${err}`;
+            }
+        }).render('#paypal-button-container-inline');
     }
 </script>
 {% endblock %}

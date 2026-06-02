@@ -108,7 +108,19 @@
                     <td class="value">{{ donor_name }}</td>
                 </tr>
                 <tr>
-                    <td class="label">M-Pesa Receipt No:</td>
+                    <td class="label">Payment Method:</td>
+                    <td class="value">{{ payment_method }}</td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        {% if payment_method == 'PayPal' %}
+                            PayPal Order ID:
+                        {% elif payment_method == 'PesaPal' %}
+                            PesaPal Ref No:
+                        {% else %}
+                            M-Pesa Receipt No:
+                        {% endif %}
+                    </td>
                     <td class="value">{{ mpesa_receipt_number }}</td>
                 </tr>
                 <tr>
@@ -136,7 +148,13 @@
         </div>
 
         <div class="stamp">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" style="width: 100px;" alt="Verified">
+            {% if payment_method == 'PayPal' %}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1200px-PayPal.svg.png" style="height: 30px; display: block; margin: 0 auto 5px;" alt="PayPal Logo">
+            {% elif payment_method == 'PesaPal' %}
+                <img src="https://www.pesapal.com/assets/img/pesapal-logo.png" style="height: 30px; display: block; margin: 0 auto 5px;" alt="PesaPal Logo">
+            {% else %}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" style="height: 30px; display: block; margin: 0 auto 5px;" alt="M-Pesa Logo">
+            {% endif %}
             <p style="color: #54B435; font-weight: bold; margin: 0;">OFFICIAL COPY</p>
         </div>
     </div>

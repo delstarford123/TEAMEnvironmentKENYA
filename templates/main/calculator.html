@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Carbon Footprint Calculator - TEAMEnvironment KENYA{% endblock %}
+{% block title %}Carbon Footprint Calculator - Teamenvironment.KE.Africa{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -179,18 +179,46 @@
 
             <!-- Result Step -->
             <div class="calc-step" id="resultStep">
-                <div id="loadingState" style="padding: 40px;">
-                    <div class="spinner"></div>
+                <div id="loadingState" style="padding: 40px; text-align: center;">
+                    <div class="spinner" style="margin: 0 auto 20px auto;"></div>
                     <p>Calculating your personal footprint...</p>
                 </div>
                 
                 <div id="resultContent" style="display: none;">
-                    <div class="result-cta">
-                        <h3>Your Carbon Footprint</h3>
-                        <p id="footprintMessage"></p>
-                        <button class="btn" style="background: white; color: var(--primary-green); border: none;" onclick="openOffsetModal()">Offset My Footprint Now</button>
+                    <div class="grid grid-2" style="align-items: center; gap: 40px; text-align: left;">
+                        <!-- Left Column: Details & Actions -->
+                        <div class="result-details-column">
+                            <h3 style="color: var(--primary-dark); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; margin-bottom: 15px;">Your Carbon Footprint</h3>
+                            <p id="footprintMessage" style="font-size: 1.05rem; color: #475569; margin-bottom: 25px; line-height: 1.6;"></p>
+                            
+                            <!-- Dynamic Name Input for Live Preview -->
+                            <div class="calc-input-group" style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid var(--gray-border); margin-bottom: 25px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                                <label for="certNameInput" style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary-dark);"><i class="fas fa-signature text-green"></i> Personalize Your Certificate</label>
+                                <input type="text" id="certNameInput" placeholder="Enter name for certificate" value="Green Hero" style="background: white; border: 2px solid var(--gray-border); padding: 12px 15px; border-radius: 8px; width: 100%; font-size: 1rem;">
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <button class="btn" style="width: 100%; background: linear-gradient(135deg, var(--primary-green) 0%, #388E3C 100%); color: white; border: none; padding: 16px 24px; font-size: 1rem; border-radius: 50px; box-shadow: 0 10px 20px rgba(84, 180, 53, 0.2);" onclick="openOffsetModal()">
+                                    <i class="fas fa-hand-holding-heart"></i> Offset My Footprint Now
+                                </button>
+                                
+                                <button class="btn btn-outline" style="width: 100%; padding: 14px 24px; border-radius: 50px; font-size: 0.95rem; font-weight: 700; border-color: #64748B; color: #64748B;" onclick="downloadCanvasCertificate()">
+                                    <i class="fas fa-download"></i> Save Certificate Preview
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column: Interactive Canvas preview -->
+                        <div class="result-canvas-column" style="text-align: center;">
+                            <div style="background: #0F172A; padding: 12px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.12); border: 1px solid rgba(255,255,255,0.05); display: inline-block; max-width: 100%;">
+                                <canvas id="certificateCanvas" width="650" height="460" style="max-width: 100%; height: auto; border-radius: 12px; display: block; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"></canvas>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #64748b; margin-top: 12px; font-weight: 600;"><i class="fas fa-magic text-green"></i> Repaints in real-time as you personalize your name!</p>
+                        </div>
                     </div>
-                    <div class="text-center mt-20">
+                    
+                    <div class="text-center mt-40" style="border-top: 1px solid var(--gray-border); padding-top: 25px;">
                         <button class="btn-back" onclick="resetCalc()"><i class="fas fa-redo"></i> Start Over</button>
                     </div>
                 </div>
@@ -203,6 +231,7 @@
     let currentStep = 1;
     let treesToPlant = 0;
     let amountToDonate = 0;
+    let totalCO2Tons = 0;
 
     function nextStep(step) {
         document.getElementById(`step${currentStep}`).classList.remove('active');
@@ -262,10 +291,15 @@
             
             treesToPlant = result.trees_needed;
             amountToDonate = result.offset_cost;
+            totalCO2Tons = result.total_co2_tons;
 
             document.getElementById('footprintMessage').innerText = result.message;
             document.getElementById('loadingState').style.display = 'none';
             document.getElementById('resultContent').style.display = 'block';
+
+            // Draw Initial Certificate Preview
+            const nameVal = document.getElementById('certNameInput').value || 'Green Hero';
+            drawCertificate(nameVal);
 
         } catch (error) {
             alert("Calculation failed. Please try again.");
@@ -284,12 +318,191 @@
         // If we have a donation modal, pre-fill it
         if (typeof openModal === 'function') {
             openModal();
-            // Optionally set the amount in the modal if it's available
+            // Pre-fill fields in the global modal
             const modalAmount = document.getElementById('amount');
-            if (modalAmount) modalAmount.value = amountToDonate;
+            const modalName = document.getElementById('donor_name');
+            const certName = document.getElementById('certNameInput').value;
+            
+            if (modalAmount) {
+                modalAmount.value = amountToDonate;
+                // Dispatch input event to update USD conversion badge
+                modalAmount.dispatchEvent(new Event('input'));
+            }
+            if (modalName && certName) {
+                modalName.value = certName;
+                modalName.dispatchEvent(new Event('input'));
+            }
         } else {
             window.location.href = `/gift-a-tree?amount=${amountToDonate}`;
         }
+    }
+
+    // --- HTML5 Canvas Certificate Painter ---
+    function drawCertificate(name) {
+        const canvas = document.getElementById('certificateCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        const w = canvas.width;
+        const h = canvas.height;
+        
+        // 1. Draw elegant paper background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+        
+        // 2. Draw sophisticated double border
+        ctx.strokeStyle = '#0F172A'; // Outer dark green border
+        ctx.lineWidth = 14;
+        ctx.strokeRect(10, 10, w - 20, h - 20);
+        
+        ctx.strokeStyle = '#54B435'; // Inner thin green border
+        ctx.lineWidth = 2;
+        ctx.strokeRect(22, 22, w - 44, h - 44);
+        
+        // 3. Draw ornate corner accents
+        ctx.fillStyle = '#54B435';
+        const d = 26;
+        // Top Left
+        ctx.fillRect(d, d, 25, 4);
+        ctx.fillRect(d, d, 4, 25);
+        // Top Right
+        ctx.fillRect(w - d - 25, d, 25, 4);
+        ctx.fillRect(w - d - 4, d, 4, 25);
+        // Bottom Left
+        ctx.fillRect(d, h - d - 4, 25, 4);
+        ctx.fillRect(d, h - d - 25, 4, 25);
+        // Bottom Right
+        ctx.fillRect(w - d - 25, h - d - 4, 25, 4);
+        ctx.fillRect(w - d - 4, h - d - 25, 4, 25);
+        
+        // 4. Subtle leaf watermark pattern in background
+        ctx.beginPath();
+        ctx.arc(w / 2, h / 2 + 10, 130, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(84, 180, 53, 0.02)';
+        ctx.fill();
+        
+        // 5. Draw Header Text
+        ctx.textAlign = 'center';
+        
+        // Organization title
+        ctx.fillStyle = '#54B435';
+        ctx.font = 'bold 15px Montserrat, sans-serif';
+        ctx.fillText('TEAMENVIRONMENT.KE.AFRICA', w / 2, 60);
+        
+        // Main title
+        ctx.fillStyle = '#0F172A';
+        ctx.font = 'bold 30px Montserrat, sans-serif';
+        ctx.fillText('CERTIFICATE OF STEWARDSHIP', w / 2, 105);
+        
+        // Sub-heading
+        ctx.fillStyle = '#64748B';
+        ctx.font = 'italic 15px Georgia, serif';
+        ctx.fillText('This certificate is proudly awarded to', w / 2, 145);
+        
+        // 6. Draw Name (large and elegant)
+        ctx.fillStyle = '#0F172A';
+        ctx.font = 'bold 34px Georgia, serif';
+        ctx.fillText(name || 'Green Hero', w / 2, 205);
+        
+        // Decorative underline for name
+        ctx.strokeStyle = '#54B435';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(w / 2 - 160, 218);
+        ctx.lineTo(w / 2 + 160, 218);
+        ctx.stroke();
+        
+        // 7. Statement of Stewardship Impact
+        ctx.fillStyle = '#475569';
+        ctx.font = '500 13px Montserrat, sans-serif';
+        ctx.fillText('for calculating their annual carbon footprint and taking key dynamic steps', w / 2, 255);
+        
+        // Dynamic carbon offset metrics
+        ctx.fillStyle = '#0F172A';
+        ctx.font = 'bold 16px Montserrat, sans-serif';
+        const offsetText = `to Offset ${treesToPlant} Trees (Equivalent to ${totalCO2Tons} Tons of CO2 emissions)`;
+        ctx.fillText(offsetText, w / 2, 288);
+        
+        ctx.fillStyle = '#475569';
+        ctx.font = '500 13px Montserrat, sans-serif';
+        ctx.fillText('towards building a greener, cleaner and sustainable heritage in Kenya.', w / 2, 320);
+        
+        // 8. Seal and Signatures
+        const sealX = w / 2;
+        const sealY = 380;
+        
+        // Draw elegant circular green army seal
+        ctx.beginPath();
+        ctx.arc(sealX, sealY, 26, 0, Math.PI * 2);
+        ctx.fillStyle = '#54B435';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(sealX, sealY, 22, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.fillStyle = '#54B435';
+        ctx.font = 'bold 8px Montserrat, sans-serif';
+        ctx.fillText('GREEN', sealX, sealY - 4);
+        ctx.fillText('ARMY', sealX, sealY + 6);
+        
+        // Left Signature: Director
+        ctx.strokeStyle = '#94A3B8';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(60, 395);
+        ctx.lineTo(200, 395);
+        ctx.stroke();
+        
+        ctx.fillStyle = '#64748B';
+        ctx.font = '11px Montserrat, sans-serif';
+        ctx.fillText('Authorized Signature', 130, 412);
+        // Signature handwriting mock
+        ctx.fillStyle = '#54B435';
+        ctx.font = 'italic 16px Georgia, serif';
+        ctx.fillText('TEAMEnvironment', 130, 388);
+        
+        // Right Signature: Date
+        ctx.strokeStyle = '#94A3B8';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(w - 200, 395);
+        ctx.lineTo(w - 60, 395);
+        ctx.stroke();
+        
+        ctx.fillStyle = '#64748B';
+        ctx.font = '11px Montserrat, sans-serif';
+        ctx.fillText('Date of Issue', w - 130, 412);
+        // Draw today's date
+        ctx.fillStyle = '#0F172A';
+        ctx.font = '13px Montserrat, sans-serif';
+        const todayStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        ctx.fillText(todayStr, w - 130, 388);
+    }
+
+    // Attach dynamic redraw input listener
+    document.addEventListener('DOMContentLoaded', function() {
+        const certInput = document.getElementById('certNameInput');
+        if (certInput) {
+            certInput.addEventListener('input', function() {
+                drawCertificate(this.value);
+            });
+        }
+    });
+
+    // Save/Download Preview as PNG
+    function downloadCanvasCertificate() {
+        const canvas = document.getElementById('certificateCanvas');
+        if (!canvas) return;
+        
+        const dataUrl = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        
+        const inputName = document.getElementById('certNameInput').value.trim() || 'Hero';
+        const cleanName = inputName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        
+        link.download = `tek_climate_steward_${cleanName}.png`;
+        link.href = dataUrl;
+        link.click();
     }
 </script>
 {% endblock %}

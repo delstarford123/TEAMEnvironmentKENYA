@@ -1,0 +1,521 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Green Army Ecological Academy | TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .academy-header {
+        background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2021/11/about-us-1-min.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: clamp(60px, 10vh, 120px) 0;
+        text-align: center;
+        color: white;
+    }
+    .academy-header h1 { color: white; margin-bottom: 10px; }
+
+    .quiz-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 24px;
+        padding: clamp(30px, 5vw, 50px);
+        border: 1px solid var(--gray-border);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+    }
+
+    .question-box {
+        margin-bottom: 30px;
+    }
+    
+    .question-text {
+        font-family: var(--font-heading);
+        font-weight: 800;
+        font-size: 1.25rem;
+        color: var(--primary-dark);
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .quiz-options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .option-btn {
+        width: 100%;
+        padding: 16px 20px;
+        border: 2px solid var(--gray-border);
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: left;
+        background: #f8fafc;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: var(--text-dark);
+    }
+    .option-btn:hover {
+        border-color: var(--primary-green);
+        background: #f0fdf4;
+    }
+    .option-btn.correct {
+        border-color: var(--primary-green);
+        background: #dcfce7;
+        color: #15803d;
+    }
+    .option-btn.incorrect {
+        border-color: #f43f5e;
+        background: #ffe4e6;
+        color: #be123c;
+    }
+    
+    .option-letter {
+        width: 28px;
+        height: 28px;
+        background: white;
+        border: 1px solid var(--gray-border);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+    
+    .explanation-box {
+        margin-top: 20px;
+        padding: 18px;
+        background: #f8fafc;
+        border-left: 4px solid var(--primary-green);
+        border-radius: 0 12px 12px 0;
+        font-size: 0.9rem;
+        color: #475569;
+        display: none;
+    }
+
+    .academy-badge-card {
+        background: #0F172A;
+        padding: 15px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        border: 1px solid rgba(255,255,255,0.05);
+        display: inline-block;
+        max-width: 100%;
+    }
+    #badgeCanvas {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        display: block;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="academy-header">
+    <div class="container">
+        <h1>Green Army Ecological Academy</h1>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Academy</span>
+        </div>
+    </div>
+</section>
+
+<section class="py-80" style="background-color: var(--bg-light);">
+    <div class="container">
+        <div class="text-center mb-50">
+            <h4 class="text-green" style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px;"><i class="fas fa-graduation-cap"></i> Eco-Literacy Quiz</h4>
+            <h2>Test Your Ecological Knowledge</h2>
+            <p style="max-width: 600px; margin: 0 auto; color: #64748b; font-size: 0.95rem;">Test your environmental wisdom, earn your virtual Green Army Ambassador Badge, and download a custom preview of your eco-credentials!</p>
+        </div>
+
+        <div class="quiz-container" id="quizContainer">
+            <!-- Progress Tracker -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-weight: 700; font-size: 0.85rem; color: #64748b;">
+                <span id="quizQuestionNum">Question 1 of 5</span>
+                <span id="quizScoreText">Score: 0/0</span>
+            </div>
+            <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; margin-bottom: 40px; overflow: hidden;">
+                <div id="quizProgressBar" style="height: 100%; width: 20%; background: var(--primary-green); border-radius: 10px; transition: width 0.4s ease;"></div>
+            </div>
+
+            <!-- Quiz Main Frame -->
+            <div id="quizFrame">
+                <div class="question-box">
+                    <div class="question-text" id="questionText">Why are indigenous trees (like Acacia) preferred over exotic species (like Eucalyptus) in water catchment areas?</div>
+                    <div class="quiz-options-list" id="optionsWrapper">
+                        <!-- Buttons rendered via JS -->
+                    </div>
+                </div>
+
+                <div class="explanation-box" id="explanationText">
+                    <strong>Why?</strong> Indigenous trees absorb less water and retain local aquifers, preserving streamflows, unlike Eucalyptus which has extremely high transpiration rates and can dry out catchments.
+                </div>
+
+                <div style="text-align: right; margin-top: 30px;">
+                    <button class="btn" id="nextQuizBtn" onclick="submitAnswer()" style="padding: 12px 30px;">Submit Answer</button>
+                </div>
+            </div>
+
+            <!-- Completed Score Page Layout -->
+            <div id="quizScorePage" style="display: none; text-align: center;">
+                <div class="grid grid-2" style="align-items: center; gap: 40px; text-align: left;">
+                    
+                    <!-- Left: Details & Downloads -->
+                    <div class="score-details-column">
+                        <h3 style="color: var(--primary-dark); font-size: 2rem; font-weight: 800; margin-bottom: 10px;" id="scoreHeading">Congratulations!</h3>
+                        <p style="font-size: 1rem; color: #475569; margin-bottom: 25px; line-height: 1.6;" id="scoreSummaryText"></p>
+                        
+                        <!-- Name personalization for badge drawing -->
+                        <div class="calc-input-group" style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid var(--gray-border); margin-bottom: 25px;">
+                            <label for="badgeNameInput" style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary-dark);"><i class="fas fa-user-edit text-green"></i> Personalize Your Badge</label>
+                            <input type="text" id="badgeNameInput" placeholder="Enter your name" value="Eco Leader" style="background: white; border: 2px solid var(--gray-border); padding: 12px 15px; border-radius: 8px; width: 100%; font-size: 1rem;">
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button class="btn" style="width: 100%;" onclick="downloadQuizBadge()">
+                                <i class="fas fa-download"></i> Save Ambassador Badge
+                            </button>
+                            <button class="btn btn-outline" style="width: 100%; border-color: #64748B; color: #64748B;" onclick="resetQuiz()">
+                                <i class="fas fa-redo"></i> Retake the Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Canvas badge previewer -->
+                    <div class="score-canvas-column" style="text-align: center;">
+                        <div class="academy-badge-card">
+                            <canvas id="badgeCanvas" width="400" height="400"></canvas>
+                        </div>
+                        <p style="font-size: 0.8rem; color: #64748b; margin-top: 12px; font-weight: 600;"><i class="fas fa-magic text-green"></i> Personalized instantly as you type!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 1. QUIZ QUESTIONS INVENTORY
+    const questions = [
+        {
+            q: "Why are indigenous trees (like Acacia or Prunus Africana) preferred over exotic species (like Eucalyptus) in water catchment areas?",
+            options: [
+                "Indigenous trees absorb less water and retain local aquifers",
+                "Indigenous trees grow three times faster than exotics",
+                "Indigenous trees require synthetic chemical fertilizers to propagate"
+            ],
+            correct: 0,
+            exp: "Indigenous trees are adapted to local soils, absorbing water sustainably. Conversely, Eucalyptus species act as 'water pumps' with extremely high transpiration rates, which can dry out precious local streams and aquifers."
+        },
+        {
+            q: "How much carbon dioxide (CO2) does an average mature tree absorb annually?",
+            options: [
+                "Approximately 2.2 kg of CO2",
+                "Approximately 22 kg of CO2",
+                "Approximately 220 kg of CO2"
+            ],
+            correct: 1,
+            exp: "On average, a mature tree absorbs roughly 22 kilograms of carbon dioxide from the atmosphere each year, storing it and releasing oxygen, making reforestation a key tool in climate change mitigation."
+        },
+        {
+            q: "What is the primary role of a 'Bamboo Buffer Layer' planted along Kenyan riverbeds?",
+            options: [
+                "To cultivate commercial timber assets",
+                "To prevent bank erosion and naturally filter agricultural runoff",
+                "To serve as nesting pathways for migratory birds"
+            ],
+            correct: 1,
+            exp: "Bamboo has dense, interlaced root systems that secure riverbanks against devastating erosion and flash floods while naturally filtering chemical fertilizers and agricultural runoff before it enters the water."
+        },
+        {
+            q: "Which forest ecosystem is recognized as Kenya's largest vital 'Water Tower'?",
+            options: [
+                "The Mau Forest Complex",
+                "The Ngong Forest Reserve",
+                "The Arabuko Sokoke Coastal Forest"
+            ],
+            correct: 0,
+            exp: "The Mau Forest Complex is Kenya's largest water tower, storing rain, cooling regional climates, and feeding major rivers flowing into Lake Victoria, Lake Nakuru, and Lake Natron."
+        },
+        {
+            q: "What propagates soil water retention in newly planted seedling pits?",
+            options: [
+                "Adding chemical salinizers to the baseline soil",
+                "Standard mulching with organic crop straw/compost",
+                "Increasing the gravel ratio in the backfill soil"
+            ],
+            correct: 1,
+            exp: "Mulching with straw, leaves, or compost blocks direct sunlight, reducing soil evaporation. It locks in crucial moisture around seedling roots and decomposes over time to enrich soil organic nutrients."
+        }
+    ];
+
+    let currentQIdx = 0;
+    let score = 0;
+    let selectedOpt = -1;
+    let answered = false;
+
+    // Load quiz elements
+    const qText = document.getElementById('questionText');
+    const optWrap = document.getElementById('optionsWrapper');
+    const expText = document.getElementById('explanationText');
+    const nextBtn = document.getElementById('nextQuizBtn');
+    const qNumText = document.getElementById('quizQuestionNum');
+    const scoreText = document.getElementById('quizScoreText');
+    const qProgressBar = document.getElementById('quizProgressBar');
+
+    function loadQuestion() {
+        answered = false;
+        selectedOpt = -1;
+        expText.style.display = 'none';
+        nextBtn.innerText = "Submit Answer";
+        
+        const currentQ = questions[currentQIdx];
+        qText.innerText = currentQ.q;
+        
+        // Progress display
+        qNumText.innerText = `Question ${currentQIdx + 1} of ${questions.length}`;
+        scoreText.innerText = `Score: ${score}/${currentQIdx}`;
+        qProgressBar.style.width = `${((currentQIdx + 1) / questions.length) * 100}%`;
+
+        optWrap.innerHTML = "";
+        currentQ.options.forEach((opt, idx) => {
+            const letter = String.fromCharCode(65 + idx); // A, B, C
+            const btn = document.createElement('button');
+            btn.className = "option-btn";
+            btn.innerHTML = `<span class="option-letter">${letter}</span> <span style="flex:1;">${opt}</span>`;
+            btn.onclick = () => selectOption(idx, btn);
+            optWrap.appendChild(btn);
+        });
+    }
+
+    function selectOption(idx, btn) {
+        if (answered) return;
+        
+        // Reset selections
+        document.querySelectorAll('.option-btn').forEach(b => b.style.borderColor = "var(--gray-border)");
+        
+        selectedOpt = idx;
+        btn.style.borderColor = "var(--primary-green)";
+    }
+
+    function submitAnswer() {
+        if (selectedOpt === -1) {
+            alert("Please choose an option before submitting.");
+            return;
+        }
+
+        const currentQ = questions[currentQIdx];
+
+        if (!answered) {
+            answered = true;
+            
+            // Paint options
+            const buttons = optWrap.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                if (idx === currentQ.correct) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedOpt) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            // Adjust score
+            if (selectedOpt === currentQ.correct) {
+                score++;
+            }
+            
+            // Show explanation
+            expText.innerText = currentQ.exp;
+            expText.style.display = 'block';
+            
+            // Update score tracker immediately
+            scoreText.innerText = `Score: ${score}/${currentQIdx + 1}`;
+
+            // Adjust button action
+            if (currentQIdx + 1 < questions.length) {
+                nextBtn.innerText = "Next Question";
+            } else {
+                nextBtn.innerText = "See Quiz Results";
+            }
+        } else {
+            // Move forward
+            if (currentQIdx + 1 < questions.length) {
+                currentQIdx++;
+                loadQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+    }
+
+    function showQuizResults() {
+        document.getElementById('quizFrame').style.display = 'none';
+        document.getElementById('quizQuestionNum').style.display = 'none';
+        document.getElementById('quizScoreText').style.display = 'none';
+        document.getElementById('quizProgressBar').parentElement.style.display = 'none';
+        
+        document.getElementById('quizScorePage').style.display = 'block';
+
+        const percent = (score / questions.length) * 100;
+        
+        let scoreHeading = "";
+        let scoreSummary = "";
+        
+        if (score >= 4) {
+            scoreHeading = "Outstanding! Ecological Ambassador 🎖";
+            scoreSummary = `Spectacular achievement! You scored ${score} out of 5 (${percent}%). You clearly demonstrate a high awareness of forestry conservation and ecological integrity. Personalize your Ambassador Badge below and share it proudly!`;
+        } else if (score >= 3) {
+            scoreHeading = "Well Done! Green Steward 🌱";
+            scoreSummary = `Great job! You scored ${score} out of 5 (${percent}%). You show a solid understanding of environmental buffers and tree preservation. Personalize your Stewardship Badge below!`;
+        } else {
+            scoreHeading = "Keep Learning! Soil Ally 🌾";
+            scoreSummary = `You scored ${score} out of 5 (${percent}%). Reforestation and ecology can be complex, but every seedling is a step towards learning. Personalize your badge below and join our upcoming conservation activities!`;
+        }
+
+        document.getElementById('scoreHeading').innerText = scoreHeading;
+        document.getElementById('scoreSummaryText').innerText = scoreSummary;
+
+        // Draw initial badge
+        drawBadge("Eco Leader");
+    }
+
+    function resetQuiz() {
+        currentQIdx = 0;
+        score = 0;
+        selectedOpt = -1;
+        answered = false;
+
+        document.getElementById('quizFrame').style.display = 'block';
+        document.getElementById('quizQuestionNum').style.display = 'block';
+        document.getElementById('quizScoreText').style.display = 'block';
+        document.getElementById('quizProgressBar').parentElement.style.display = 'block';
+        
+        document.getElementById('quizScorePage').style.display = 'none';
+        
+        loadQuestion();
+    }
+
+    // --- HTML5 CANVAS BADGE DRAWER ---
+    function drawBadge(name) {
+        const canvas = document.getElementById('badgeCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const w = canvas.width;
+        const h = canvas.height;
+
+        // 1. Clear background to deep slate dark
+        ctx.fillStyle = '#0F172A';
+        ctx.fillRect(0, 0, w, h);
+
+        // 2. Draw circular badge border
+        const cx = w / 2;
+        const cy = h / 2;
+        
+        // Outer thin gold circle
+        ctx.strokeStyle = '#F59E0B';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 180, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Inner thick green circle
+        ctx.strokeStyle = '#54B435';
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 168, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Inner gold line
+        ctx.strokeStyle = '#F59E0B';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 156, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Inner badge solid dark fills
+        ctx.fillStyle = '#1E293B';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 154, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 3. Ornate leaves / laurel wreath in center background
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#54B435';
+        ctx.font = '28px FontAwesome, Arial';
+        ctx.fillText('🌱', cx, cy - 65);
+
+        // 4. Badge Title
+        ctx.fillStyle = '#F59E0B';
+        ctx.font = 'bold 15px Montserrat, sans-serif';
+        ctx.fillText('GREEN ARMY', cx, cy - 25);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 18px Montserrat, sans-serif';
+        ctx.fillText('ECO-AMBASSADOR', cx, cy - 2);
+
+        // 5. User name Personalized
+        ctx.fillStyle = '#54B435';
+        ctx.font = 'bold 22px Georgia, serif';
+        ctx.fillText(name || 'Eco Leader', cx, cy + 35);
+
+        // Underline for name
+        ctx.strokeStyle = '#F59E0B';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(cx - 90, cy + 46);
+        ctx.lineTo(cx + 90, cy + 46);
+        ctx.stroke();
+
+        // 6. Score and Audit statement
+        ctx.fillStyle = '#94A3B8';
+        ctx.font = '600 11px Montserrat, sans-serif';
+        ctx.fillText(`QUIZ SCORE: ${score} OUT OF 5 (${Math.round((score/5)*100)}%)`, cx, cy + 75);
+        ctx.fillText('TEAMENVIRONMENT KENYA', cx, cy + 95);
+
+        // 7. Date of issue
+        ctx.fillStyle = '#F59E0B';
+        ctx.font = 'bold 9px Montserrat, sans-serif';
+        const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        ctx.fillText(`ISSUED: ${dateStr.toUpperCase()}`, cx, cy + 125);
+    }
+
+    // Attach dynamic input personalization repaint
+    document.addEventListener('DOMContentLoaded', function() {
+        loadQuestion();
+
+        const badgeNameInput = document.getElementById('badgeNameInput');
+        if (badgeNameInput) {
+            badgeNameInput.addEventListener('input', function() {
+                drawBadge(this.value);
+            });
+        }
+    });
+
+    // Save Badge as PNG
+    function downloadQuizBadge() {
+        const canvas = document.getElementById('badgeCanvas');
+        if (!canvas) return;
+
+        const dataUrl = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+
+        const inputName = document.getElementById('badgeNameInput').value.trim() || 'Ambassador';
+        const cleanName = inputName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+        link.download = `tek_eco_ambassador_${cleanName}.png`;
+        link.href = dataUrl;
+        link.click();
+    }
+</script>
+{% endblock %}

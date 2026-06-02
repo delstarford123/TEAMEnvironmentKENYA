@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 2. M-PESA MODAL LOGIC ---
+    // --- 2. MULTI-METHOD PAYMENT & MODAL LOGIC ---
     const modal = document.getElementById('mpesaModal');
     const statusDiv = document.getElementById('status-message');
     const formContainer = document.getElementById('modal-form-container');
@@ -100,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (processingContainer) processingContainer.classList.remove('active');
         if (statusDiv) statusDiv.innerHTML = '';
         if (processingStatus) processingStatus.innerHTML = '';
+        
+        // Clear all validation errors
+        ['donor_name', 'donor_email', 'amount', 'phone'].forEach(clearValidation);
     }
 
     // Close modal if clicking outside the box
@@ -109,7 +112,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- 3. PAYMENT METHOD SWITCHER ---
+    // --- 3. DYNAMIC CONVERSION BADGE ---
+    const amountField = document.getElementById('amount');
+    const usdConvertedSpan = document.getElementById('usd-converted-amount');
+    if (amountField && usdConvertedSpan) {
+        amountField.addEventListener('input', function() {
+            const value = parseFloat(this.value) || 0;
+            usdConvertedSpan.innerText = '$' + (value / 130).toFixed(2);
+        });
+    }
+
+    // --- 4. PAYMENT METHOD SWITCHER ---
+    let paypalModalBtnRendered = false;
+
     window.switchPayment = function(method) {
         // Update tabs
         document.querySelectorAll('.payment-tab').forEach(tab => tab.classList.remove('active'));
@@ -118,68 +133,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update method cards
         document.querySelectorAll('.method-card').forEach(card => card.classList.remove('active'));
         event.currentTarget.classList.add('active');
-    }
 
-    // --- 4. INITIATE PAYMENT ---
-    window.initiatePayment = async function() {
-        const nameInput = document.getElementById('donor_name');
-        const emailInput = document.getElementById('donor_email');
-        const phoneInput = document.getElementById('phone');
-        const amountInput = document.getElementById('amount');
-        const btn = document.getElementById('payBtn');
-
-        if (!nameInput || !emailInput || !phoneInput || !amountInput || !btn) return;
-
-        const name = nameInput.value;
-        const email = emailInput.value;
-        const phone = phoneInput.value;
-        const amount = amountInput.value;
-
-        // Validation
-        if(!name || !validateEmail(email) || !validatePhone(phone) || !amount || amount <= 0) {
-            if(!name) showValidation('donor_name', 'Please enter your full name');
-            if(!validateEmail(email)) showValidation('donor_email', 'Please enter a valid email');
-            if(!validatePhone(phone)) showValidation('phone', 'Please enter a valid phone');
-            if(!amount || amount <= 0) showValidation('amount', 'Please enter a valid amount');
-            return;
-        }
-
-        // Switch to processing state
-        formContainer.classList.add('hidden');
-        processingContainer.classList.add('active');
-        statusDiv.innerHTML = '';
-
-        try {
-            const response = await fetch('/pay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    name: name,
-                    email: email,
-                    phone: phone, 
-                    amount: amount 
-                })
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                processingStatus.innerHTML = '<span class="status-success">✔ STK Push Sent! Enter PIN on your phone.</span>';
-                // Automatically close after 8 seconds if successful
-                setTimeout(closeModal, 8000);
-            } else {
-                processingContainer.classList.remove('active');
-                formContainer.classList.remove('hidden');
-                statusDiv.innerHTML = `<span class="status-error">❌ Error: ${result.error || 'Payment failed'}</span>`;
-            }
-        } catch (error) {
-            processingContainer.classList.remove('active');
-            formContainer.classList.remove('hidden');
-            statusDiv.innerHTML = '<span class="status-error">❌ Connection failed. Check your internet.</span>';
+        // If PayPal is chosen, render Smart Buttons
+        if (method === 'paypal') {
+            renderModalPaypalButtons();
         }
     }
 
-    // --- 4. INLINE VALIDATION HELPERS ---
+    // --- 5. UNIFIED VALIDATION HELPERS ---
     function validatePhone(phone) {
         const regex = /^(254|0)(7|1)\d{8}$/;
         return regex.test(phone);
@@ -211,14 +172,223 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Attach listeners to modal fields
+    function validateModalForm() {
+        const nameInput = document.getElementById('donor_name');
+        const emailInput = document.getElementById('donor_email');
+        const amountInput = document.getElementById('amount');
+        if (!nameInput || !emailInput || !amountInput) return false;
+
+        const name = nameInput.value.trim();
+        const email = emailInput.value.trim();
+        const amount = parseFloat(amountInput.value);
+
+        let isValid = true;
+        if (!name) { showValidation('donor_name', 'Full name is required'); isValid = false; }
+        if (!validateEmail(email)) { showValidation('donor_email', 'Please enter a valid email'); isValid = false; }
+        if (isNaN(amount) || amount <= 0) { showValidation('amount', 'Please enter a valid amount'); isValid = false; }
+
+        return isValid;
+    }
+
+    // Attach real-time input cleaners
+    ['donor_name', 'donor_email', 'amount'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => {
+                if (id === 'donor_email') {
+                    if (validateEmail(el.value)) clearValidation(id);
+                } else if (id === 'amount') {
+                    if (parseFloat(el.value) > 0) clearValidation(id);
+                } else {
+                    if (el.value.trim()) clearValidation(id);
+                }
+            });
+        }
+    });
+
     const modalPhone = document.getElementById('phone');
     if (modalPhone) {
         modalPhone.addEventListener('input', function() {
             if (validatePhone(this.value)) clearValidation('phone');
-            else showValidation('phone', 'Format: 2547XXXXXXXX');
+            else showValidation('phone', 'Format: 07XXXXXXXX');
         });
     }
+
+    // --- 6. INITIATE PAYMENT FLOWS (M-PESA & PESAPAL & PAYPAL) ---
+    
+    // M-PESA STK Push
+    window.initiatePayment = async function() {
+        if (!validateModalForm()) return;
+        
+        const phoneInput = document.getElementById('phone');
+        if (!phoneInput) return;
+        const phone = phoneInput.value.trim();
+
+        if (!validatePhone(phone)) {
+            showValidation('phone', 'Phone number format: 07XXXXXXXX');
+            return;
+        }
+
+        const name = document.getElementById('donor_name').value;
+        const email = document.getElementById('donor_email').value;
+        const amount = document.getElementById('amount').value;
+
+        formContainer.classList.add('hidden');
+        processingContainer.classList.add('active');
+        statusDiv.innerHTML = '';
+        processingStatus.innerHTML = '<i class="fas fa-mobile-alt"></i> Sending secure STK Push request to your phone...';
+
+        try {
+            const response = await fetch('/pay', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    name: name,
+                    email: email,
+                    phone: phone, 
+                    amount: amount 
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.ResponseCode === "0") {
+                processingStatus.innerHTML = '<span class="status-success">✔ STK Push Sent! Enter your M-Pesa PIN on your phone to complete. We will email your receipt and certificate.</span>';
+                setTimeout(closeModal, 8000);
+            } else {
+                processingContainer.classList.remove('active');
+                formContainer.classList.remove('hidden');
+                statusDiv.innerHTML = `<span class="status-error">❌ M-Pesa Error: ${result.CustomerMessage || result.errorMessage || result.error || 'STK Initiation failed'}</span>`;
+            }
+        } catch (error) {
+            processingContainer.classList.remove('active');
+            formContainer.classList.remove('hidden');
+            statusDiv.innerHTML = '<span class="status-error">❌ Connection failed. Check your internet.</span>';
+        }
+    }
+
+    // PESAPAL gateway redirect
+    window.initiatePesapalPayment = async function() {
+        if (!validateModalForm()) return;
+
+        const name = document.getElementById('donor_name').value;
+        const email = document.getElementById('donor_email').value;
+        const amount = document.getElementById('amount').value;
+
+        formContainer.classList.add('hidden');
+        processingContainer.classList.add('active');
+        statusDiv.innerHTML = '';
+        processingStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Contacting secure PesaPal checkout...';
+
+        try {
+            const response = await fetch('/pay-pesapal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, amount })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.redirect_url) {
+                processingStatus.innerHTML = '<span class="status-success">✔ Gateway secured! Redirecting to secure payment checkout...</span>';
+                setTimeout(() => {
+                    window.location.href = result.redirect_url;
+                }, 1500);
+            } else {
+                processingContainer.classList.remove('active');
+                formContainer.classList.remove('hidden');
+                statusDiv.innerHTML = `<span class="status-error">❌ PesaPal Error: ${result.error || 'Checkout initiation failed'}</span>`;
+            }
+        } catch (error) {
+            processingContainer.classList.remove('active');
+            formContainer.classList.remove('hidden');
+            statusDiv.innerHTML = '<span class="status-error">❌ Connection failed. Check your internet.</span>';
+        }
+    }
+
+    // PAYPAL Smart Buttons Rendering & Capturing
+    function renderModalPaypalButtons() {
+        if (paypalModalBtnRendered) return;
+        
+        const container = document.getElementById('paypal-button-container-modal');
+        if (!container) return;
+        
+        paypalModalBtnRendered = true;
+
+        paypal.Buttons({
+            onInit: function(data, actions) {
+                actions.disable();
+                
+                const checkFields = () => {
+                    if (validateModalForm()) {
+                        actions.enable();
+                    } else {
+                        actions.disable();
+                    }
+                };
+
+                // Listen to form inputs to enable/disable buttons
+                ['donor_name', 'donor_email', 'amount'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.addEventListener('input', checkFields);
+                });
+                
+                checkFields();
+            },
+            createOrder: function(data, actions) {
+                const amountKes = parseFloat(document.getElementById('amount').value);
+                const amountUsd = (amountKes / 130).toFixed(2);
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: { value: amountUsd },
+                        description: "Donation to TEAMEnvironment KENYA"
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(async function(details) {
+                    formContainer.classList.add('hidden');
+                    processingContainer.classList.add('active');
+                    statusDiv.innerHTML = '';
+                    processingStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> finalising your transaction records & generating dynamic certificates...';
+
+                    const amountKes = parseFloat(document.getElementById('amount').value);
+                    const amountUsd = (amountKes / 130).toFixed(2);
+
+                    try {
+                        const res = await fetch('/save-paypal-donation', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                name: document.getElementById('donor_name').value,
+                                email: document.getElementById('donor_email').value,
+                                amount_kes: amountKes,
+                                amount_usd: amountUsd,
+                                paypal_order_id: details.id
+                            })
+                        });
+
+                        const resData = await res.json();
+                        if (res.ok && resData.success) {
+                            // Redirect to successful thank you page
+                            window.location.href = `/donation-success?name=${encodeURIComponent(document.getElementById('donor_name').value)}&email=${encodeURIComponent(document.getElementById('donor_email').value)}&amount=${amountKes}&receipt_no=${resData.receipt_no}&filename=${resData.filename}`;
+                        } else {
+                            throw new Error(resData.message || 'Saving transaction details failed.');
+                        }
+                    } catch (error) {
+                        processingContainer.classList.remove('active');
+                        formContainer.classList.remove('hidden');
+                        statusDiv.innerHTML = `<span class="status-error">❌ Document generation failed: ${error.message}</span>`;
+                    }
+                });
+            },
+            onError: function(err) {
+                console.error("PayPal Error:", err);
+                statusDiv.innerHTML = `<span class="status-error">❌ PayPal Checkout failed: ${err}</span>`;
+            }
+        }).render('#paypal-button-container-modal');
+    }
+
 
     // Generic form validation for all pages
     const forms = document.querySelectorAll('form');
@@ -366,78 +536,86 @@ document.addEventListener('DOMContentLoaded', function() {
         if (pwaBanner) pwaBanner.style.display = 'none';
     });
 
-    // --- 6. ANIMATED COUNTERS & PROGRESS BAR ---
-    const statsSection = document.querySelector('.stats-section');
-    const counters = document.querySelectorAll('.counter');
-    const progressFills = document.querySelectorAll('.progress-fill');
-    const progressPercentages = document.querySelectorAll('.progress-percentage');
-    let animatedTracker = false;
+    // --- 6. ANIMATED COUNTERS & PROGRESS BAR WITH NATIVE JS ---
+    const animatedCounters = document.querySelectorAll('.counter');
+    const animatedProgressFills = document.querySelectorAll('.progress-fill, .milestone-progress-fill');
 
-    function startTrackerAnimations() {
-        if (animatedTracker) return;
-        
-        // Counter Animation
-        counters.forEach(counter => {
-            const target = +counter.getAttribute('data-target');
-            const duration = 2000; 
-            const increment = target / (duration / 16);
-            
-            let current = 0;
-            const updateCount = () => {
-                current += increment;
-                if (current < target) {
-                    counter.innerText = Math.ceil(current).toLocaleString();
-                    requestAnimationFrame(updateCount);
-                } else {
-                    counter.innerText = target.toLocaleString();
-                }
-            };
-            updateCount();
-        });
-
-        // Progress Bar Animation
-        progressFills.forEach((fill, index) => {
-            const targetWidth = fill.getAttribute('data-width');
-            fill.style.width = targetWidth + '%';
-            
-            let currentPercent = 0;
-            const percentDisplay = progressPercentages[index];
-            const interval = setInterval(() => {
-                if (currentPercent < targetWidth) {
-                    currentPercent++;
-                    if (percentDisplay) percentDisplay.innerText = currentPercent + '%';
-                } else {
-                    clearInterval(interval);
-                }
-            }, 20);
-        });
-
-        animatedTracker = true;
-    }
-
-    const trackerObserverOptions = {
-        threshold: 0.2
-    };
-
-    const trackerObserver = new IntersectionObserver((entries) => {
+    const animateOnScroll = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                startTrackerAnimations();
+                const element = entry.target;
+                
+                // Animating Counter Numbers
+                if (element.classList.contains('counter')) {
+                    const target = +element.getAttribute('data-target') || 0;
+                    const duration = 1500; // 1.5 seconds
+                    const startTime = performance.now();
+                    
+                    const updateCount = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        
+                        // Ease out quad formula
+                        const easeProgress = progress * (2 - progress);
+                        const currentValue = Math.floor(easeProgress * target);
+                        
+                        element.innerText = currentValue.toLocaleString();
+                        
+                        if (progress < 1) {
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            element.innerText = target.toLocaleString();
+                        }
+                    };
+                    requestAnimationFrame(updateCount);
+                }
+                
+                // Animating Progress Fills
+                if (element.classList.contains('progress-fill') || element.classList.contains('milestone-progress-fill')) {
+                    const targetWidth = element.getAttribute('data-width') || 0;
+                    element.style.width = targetWidth + '%';
+                    
+                    // Update matching progress percentage indicator if present
+                    const parent = element.closest('.impact-progress-container') || element.parentElement.parentElement;
+                    if (parent) {
+                        const percentDisplay = parent.querySelector('.progress-percentage');
+                        if (percentDisplay) {
+                            const duration = 1500;
+                            const startTime = performance.now();
+                            
+                            const updatePercent = (currentTime) => {
+                                const elapsed = currentTime - startTime;
+                                const progress = Math.min(elapsed / duration, 1);
+                                const currentValue = Math.floor(progress * targetWidth);
+                                
+                                percentDisplay.innerText = currentValue + '%';
+                                
+                                if (progress < 1) {
+                                    requestAnimationFrame(updatePercent);
+                                } else {
+                                    percentDisplay.innerText = targetWidth + '%';
+                                }
+                            };
+                            requestAnimationFrame(updatePercent);
+                        }
+                    }
+                }
+                
+                observer.unobserve(element);
             }
         });
-    }, trackerObserverOptions);
+    }, { threshold: 0.1 });
 
-    if (statsSection) {
-        trackerObserver.observe(statsSection);
-    }
+    animatedCounters.forEach(counter => animateOnScroll.observe(counter));
+    animatedProgressFills.forEach(fill => animateOnScroll.observe(fill));
 
     // --- 7. INTERACTIVE MAP INITIALIZATION ---
     const mapContainer = document.getElementById('map');
     if (mapContainer) {
-        // Center of Kenya: [-1.286389, 36.817223] (Nairobi)
+        // Center on Africa: [4.0, 16.0] at zoom level 3
         const map = L.map('map', {
             scrollWheelZoom: false // Disable accidental zoom while scrolling
-        }).setView([-0.023559, 37.906193], 6.5); // Center on Kenya
+        }).setView([4.0, 16.0], 3);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
@@ -453,39 +631,37 @@ document.addEventListener('DOMContentLoaded', function() {
             shadowSize: [41, 41]
         });
 
-        // Project Locations
+        // African Country Locations
         const locations = [
-            {
-                name: "Nairobi (HQ)",
-                coords: [-1.286389, 36.817223],
-                details: "Headquarters and Urban Greening Initiatives."
-            },
-            {
-                name: "Ngong Hills",
-                coords: [-1.3611, 36.6569],
-                details: "Restoration of 180,000 seedlings in the Ngong Hills Ecosystem."
-            },
-            {
-                name: "Nyeri",
-                coords: [-0.4167, 36.9500],
-                details: "Watershed conservation and community agroforestry."
-            },
-            {
-                name: "Nakuru",
-                coords: [-0.3031, 36.0613],
-                details: "Green City Project and climate resilience programs."
-            },
-            {
-                name: "Kakamega",
-                coords: [0.2827, 34.7519],
-                details: "Indigenous forest restoration in partnership with KALRO."
-            }
+            { key: "kenya", name: "Kenya", region: "East Africa", coords: [-1.286389, 36.817223], trees: "150,000", details: "Core restoration projects in Ngong Hills and Nyeri watersheds." },
+            { key: "uganda", name: "Uganda", region: "East Africa", coords: [0.3476, 32.5825], trees: "85,000", details: "Mabira Forest restoration and community agroforestry." },
+            { key: "tanzania", name: "Tanzania", region: "East Africa", coords: [-6.1612, 35.7454], trees: "95,000", details: "Mount Kilimanjaro slopes conservation and Dodoma dryland regreening." },
+            { key: "rwanda", name: "Rwanda", region: "East Africa", coords: [-1.9403, 29.8739], trees: "60,000", details: "Terraced agroforestry and bamboo riverbank stabilization." },
+            { key: "ethiopia", name: "Ethiopia", region: "East Africa", coords: [9.145, 40.4896], trees: "110,000", details: "Highland watershed restoration and native tree planting." },
+            { key: "nigeria", name: "Nigeria", region: "West Africa", coords: [9.0820, 8.6753], trees: "125,000", details: "Great Green Wall forestation and Niger Delta mangrove recovery." },
+            { key: "ghana", name: "Ghana", region: "West Africa", coords: [7.9465, -1.0232], trees: "75,000", details: "Riparian watershed protection and cocoa agroforestry." },
+            { key: "senegal", name: "Senegal", region: "West Africa", coords: [14.4974, -14.4524], trees: "55,000", details: "Coastal mangrove reforestation and dryland windbreaks." },
+            { key: "ivory-coast", name: "Ivory Coast", region: "West Africa", coords: [7.5400, -5.5471], trees: "65,000", details: "Degraded national park recovery and cocoa soil enrichment." },
+            { key: "egypt", name: "Egypt", region: "North Africa", coords: [26.8206, 30.8025], trees: "45,000", details: "Desert afforestation using treated wastewater and Cairo urban greening." },
+            { key: "morocco", name: "Morocco", region: "North Africa", coords: [31.7917, -7.0926], trees: "70,000", details: "Argan forest restoration in the Atlas mountains." },
+            { key: "algeria", name: "Algeria", region: "North Africa", coords: [28.0339, 1.6596], trees: "50,000", details: "Green Dam pine forestation to combat desertification." },
+            { key: "tunisia", name: "Tunisia", region: "North Africa", coords: [33.8869, 9.5375], trees: "40,000", details: "Semi-arid dryland olive tree integration and rainwater harvest." }
         ];
 
         locations.forEach(loc => {
             L.marker(loc.coords, { icon: greenIcon })
                 .addTo(map)
-                .bindPopup(`<h4>${loc.name}</h4><p>${loc.details}</p>`);
+                .bindPopup(`
+                    <div style="font-family: 'Montserrat', sans-serif; padding: 5px; min-width: 200px;">
+                        <h4 style="margin: 0 0 6px 0; color: #0f172a; font-weight: 700; font-size: 1.1rem; line-height: 1.2;">${loc.name}</h4>
+                        <span style="font-size: 0.72rem; text-transform: uppercase; color: #54B435; font-weight: 800; letter-spacing: 1px; display: block; margin-bottom: 8px;">${loc.region}</span>
+                        <p style="font-size: 0.85rem; color: #64748b; line-height: 1.5; margin: 0 0 12px 0;">${loc.details}</p>
+                        <div style="border-top: 1px solid #e2e8f0; padding-top: 8px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                            <span style="font-size: 0.8rem; color: #475569; font-weight: 700;"><i class="fas fa-tree" style="color: #54B435;"></i> ${loc.trees}</span>
+                            <a href="/country/${loc.key}" style="background: #54B435; color: white; padding: 6px 12px; font-size: 0.75rem; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(84, 180, 53, 0.2); display: inline-block;">Explore</a>
+                        </div>
+                    </div>
+                `);
         });
     }
 
@@ -552,4 +728,5 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
 });

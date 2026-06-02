@@ -1,0 +1,274 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Payment Successful - TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* --- SUCCESS WRAPPER --- */
+    .success-container {
+        max-width: 700px;
+        margin: 60px auto;
+        padding: clamp(30px, 6vw, 60px);
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 30px 70px rgba(15, 23, 42, 0.08);
+        border: 1px solid rgba(84, 180, 53, 0.1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        animation: scaleUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes scaleUp {
+        from { opacity: 0; transform: scale(0.95) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* --- SUCCESS RING --- */
+    .success-ring-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 30px;
+    }
+
+    .success-ring {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(84, 180, 53, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulseRing 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseRing {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(84, 180, 53, 0.4); }
+        70% { transform: scale(1); box-shadow: 0 0 0 25px rgba(84, 180, 53, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(84, 180, 53, 0); }
+    }
+
+    .success-ring i {
+        font-size: 3.5rem;
+        color: var(--primary-green);
+        animation: checkmark 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes checkmark {
+        from { transform: scale(0.6) rotate(-20deg); opacity: 0; }
+        to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* --- IMPACT CARD --- */
+    .impact-stat-card {
+        background: linear-gradient(135deg, rgba(84, 180, 53, 0.05) 0%, rgba(56, 142, 60, 0.05) 100%);
+        border: 2px dashed rgba(84, 180, 53, 0.2);
+        border-radius: 20px;
+        padding: 30px 20px;
+        margin: 30px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .impact-icon {
+        font-size: 3rem;
+        color: var(--primary-green);
+        animation: floatTree 3s ease-in-out infinite;
+    }
+
+    @keyframes floatTree {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+        100% { transform: translateY(0); }
+    }
+
+    .impact-text-group {
+        text-align: left;
+    }
+
+    .impact-text-group h4 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+        margin-bottom: 5px;
+    }
+    .impact-text-group p {
+        font-size: 0.9rem;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    /* --- DETAILS TABLE --- */
+    .tx-receipt-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        text-align: left;
+        background-color: #f8fafc;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--gray-border);
+    }
+
+    .tx-receipt-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(0,0,0,0.03);
+        font-size: 0.95rem;
+    }
+    .tx-receipt-table tr:last-child td { border-bottom: none; }
+
+    .tx-label {
+        font-weight: 700;
+        color: #64748b;
+        width: 35%;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+    }
+
+    .tx-value {
+        font-weight: 600;
+        color: var(--primary-dark);
+    }
+
+    /* --- DOWNLOAD BUTTONS --- */
+    .doc-actions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 35px;
+    }
+
+    @media (max-width: 550px) {
+        .doc-actions-grid { grid-template-columns: 1fr; }
+    }
+
+    .btn-download {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 16px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-download.receipt {
+        background-color: #f1f5f9;
+        color: #334155;
+        border: 2px solid #e2e8f0;
+    }
+
+    .btn-download.receipt:hover {
+        background-color: #e2e8f0;
+        transform: translateY(-2px);
+    }
+
+    .btn-download.certificate {
+        background: linear-gradient(135deg, var(--primary-green) 0%, #388E3C 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(84, 180, 53, 0.25);
+    }
+
+    .btn-download.certificate:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(84, 180, 53, 0.35);
+        filter: brightness(1.05);
+    }
+
+    .btn-back-home {
+        display: inline-block;
+        margin-top: 30px;
+        color: var(--primary-green);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+    .btn-back-home:hover {
+        color: #388E3C;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section style="background-color: var(--bg-light); padding: 80px 0;">
+    <div class="container">
+        <div class="success-container">
+            
+            <!-- Checkmark Animation -->
+            <div class="success-ring-container">
+                <div class="success-ring">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+
+            <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px;">Thank You for Your Support!</h1>
+            <p style="color: #64748b; font-size: 1.05rem; max-width: 500px; margin: 0 auto; line-height: 1.6;">
+                Your donation has been completed successfully. We have dispatched a transaction summary to your inbox.
+            </p>
+
+            <!-- Dynamic Statistical Tree Funded Metric -->
+            {% set amount_int = amount | float | int %}
+            {% set trees_funded = amount_int // 500 %}
+            <div class="impact-stat-card">
+                <div class="impact-icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <div class="impact-text-group">
+                    {% if trees_funded > 0 %}
+                        <h4>{{ trees_funded }} Trees Funded!</h4>
+                        <p>You have made an outstanding impact in reviving high-altitude catchments.</p>
+                    {% else %}
+                        <h4>Conservation Champion!</h4>
+                        <p>Your contribution keeps our green armies marching and seedlings thriving.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Transaction Ledger details -->
+            <table class="tx-receipt-table">
+                <tr>
+                    <td class="tx-label">Donor Name</td>
+                    <td class="tx-value">{{ name }}</td>
+                </tr>
+                <tr>
+                    <td class="tx-label">Transaction ID</td>
+                    <td class="tx-value" style="font-family: monospace; font-size: 1rem; color: var(--primary-green);">{{ receipt_no }}</td>
+                </tr>
+                <tr>
+                    <td class="tx-label">Amount Paid</td>
+                    <td class="tx-value">KES {{ "{:,.2f}".format(amount|float) }}</td>
+                </tr>
+                <tr>
+                    <td class="tx-label">Status</td>
+                    <td class="tx-value" style="color: var(--primary-green);"><i class="fas fa-check-circle"></i> Settled / Documented</td>
+                </tr>
+            </table>
+
+            <!-- Document Actions -->
+            <div class="doc-actions-grid">
+                <a href="/download-receipt/{{ receipt_no }}" class="btn-download receipt">
+                    <i class="fas fa-file-invoice-dollar"></i> Download Receipt (PDF)
+                </a>
+                <a href="/download-certificate/{{ filename }}" class="btn-download certificate">
+                    <i class="fas fa-award"></i> View Impact Certificate
+                </a>
+            </div>
+
+            <a href="{{ url_for('home') }}" class="btn-back-home">
+                <i class="fas fa-arrow-left"></i> Return to Homepage
+            </a>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

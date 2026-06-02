@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Dynamic SEO Meta Tags -->
-    <title>{% if page_title %}{{ page_title }} | TEAMEnvironment KENYA{% else %}{% block title %}TEAMEnvironment KENYA{% endblock %}{% endif %}</title>
+    <title>{% if page_title %}{{ page_title }} | Teamenvironment.KE.Africa{% else %}{% block title %}Teamenvironment.KE.Africa{% endblock %}{% endif %}</title>
     <meta name="description" content="{{ page_description or 'A Socio-economic, Environmental and Humanitarian Membership Association focused on Greening and Environmental Conservation in Kenya.' }}">
-    <meta name="author" content="TEAMEnvironment KENYA">
+    <meta name="author" content="Teamenvironment.KE.Africa">
     <link rel="canonical" href="{{ request.url }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="{{ og_type or 'website' }}">
     <meta property="og:url" content="{{ request.url }}">
-    <meta property="og:title" content="{{ page_title or 'TEAMEnvironment KENYA' }}">
+    <meta property="og:title" content="{{ page_title or 'Teamenvironment.KE.Africa' }}">
     <meta property="og:description" content="{{ page_description or 'Leading the way in climate action and environmental restoration across Africa.' }}">
     <meta property="og:image" content="{{ feature_image_url or url_for('static', filename='images/TEK.jpeg', _external=True) }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ request.url }}">
-    <meta property="twitter:title" content="{{ page_title or 'TEAMEnvironment KENYA' }}">
+    <meta property="twitter:title" content="{{ page_title or 'Teamenvironment.KE.Africa' }}">
     <meta property="twitter:description" content="{{ page_description or 'Leading the way in climate action and environmental restoration across Africa.' }}">
     <meta property="twitter:image" content="{{ feature_image_url or url_for('static', filename='images/TEK.jpeg', _external=True) }}">
 
@@ -79,7 +79,7 @@
         <div class="nav-overlay" id="nav-overlay"></div>
         <div class="container header-container">
             <div class="logo">
-                <a href="{{ url_for('home') }}" aria-label="TEAMEnvironment KENYA Home">
+                <a href="{{ url_for('home') }}" aria-label="Teamenvironment.KE.Africa Home">
                     <img src="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" alt="TEK Logo">
                 </a>
             </div>
@@ -92,11 +92,12 @@
                 <ul class="nav-menu">
                     <!-- Pillar 1: Get Informed -->
                     <li class="has-dropdown">
-                        <a href="#" class="nav-link {% if request.endpoint in ['projects', 'blog', 'calculator', 'resources', 'faq'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                        <a href="#" class="nav-link {% if request.endpoint in ['projects', 'blog', 'calculator', 'resources', 'faq', 'forest_audit'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
                             Get Informed <i class="fas fa-chevron-down"></i>
                         </a>
                         <ul class="dropdown">
                             <li><a href="{{ url_for('projects') }}" class="{% if request.endpoint == 'projects' %}active{% endif %}">Our Projects</a></li>
+                            <li><a href="{{ url_for('forest_audit') }}" class="{% if request.endpoint == 'forest_audit' %}active{% endif %}">Forest Audit Map</a></li>
                             <li><a href="{{ url_for('blog') }}" class="{% if request.endpoint == 'blog' %}active{% endif %}">Impact Stories</a></li>
                             <li><a href="{{ url_for('calculator') }}" class="{% if request.endpoint == 'calculator' %}active{% endif %}">Impact Calculator</a></li>
                             <li><a href="{{ url_for('resources') }}" class="{% if request.endpoint == 'resources' %}active{% endif %}">Resources</a></li>
@@ -106,7 +107,7 @@
 
                     <!-- Pillar 2: Get Involved -->
                     <li class="has-dropdown">
-                        <a href="#" class="nav-link {% if request.endpoint in ['gift_a_tree', 'corporate', 'ambassadors', 'activities'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                        <a href="#" class="nav-link {% if request.endpoint in ['gift_a_tree', 'corporate', 'ambassadors', 'activities', 'academy'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
                             Get Involved <i class="fas fa-chevron-down"></i>
                         </a>
                         <ul class="dropdown">
@@ -115,18 +116,20 @@
                             <li><a href="{{ url_for('corporate_partnerships') }}" class="{% if request.endpoint == 'corporate_partnerships' %}active{% endif %}">Corporate ESG Portal</a></li>
                             <li><a href="{{ url_for('ambassadors') }}" class="{% if request.endpoint == 'ambassadors' %}active{% endif %}">Ambassadors</a></li>
                             <li><a href="{{ url_for('activities') }}" class="{% if request.endpoint == 'activities' %}active{% endif %}">Volunteer / Activities</a></li>
+                            <li><a href="{{ url_for('academy') }}" class="{% if request.endpoint == 'academy' %}active{% endif %}">Academy Quiz</a></li>
                         </ul>
                     </li>
 
                     <!-- Pillar 3: Who We Are -->
                     <li class="has-dropdown">
-                        <a href="#" class="nav-link {% if request.endpoint in ['about', 'team', 'transparency', 'contact'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
+                        <a href="#" class="nav-link {% if request.endpoint in ['about', 'team', 'transparency', 'contact', 'press_news'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
                             Who We Are <i class="fas fa-chevron-down"></i>
                         </a>
                         <ul class="dropdown">
                             <li><a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">Our Mission</a></li>
                             <li><a href="{{ url_for('team') }}" class="{% if request.endpoint == 'team' %}active{% endif %}">The Team</a></li>
                             <li><a href="{{ url_for('transparency') }}" class="{% if request.endpoint == 'transparency' %}active{% endif %}">Transparency</a></li>
+                            <li><a href="{{ url_for('press_news') }}" class="{% if request.endpoint == 'press_news' %}active{% endif %}">Press Room</a></li>
                             <li><a href="{{ url_for('contact') }}" class="{% if request.endpoint == 'contact' %}active{% endif %}">Contact Us</a></li>
                         </ul>
                     </li>
@@ -149,7 +152,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h5>TEAMEnvironment KENYA</h5>
+                    <h5>Teamenvironment.KE.Africa</h5>
                     <p>Our philosophy is to, “Build a Heritage for Future Generations of a Cleaner, Greener (Food & Water) Secure and a Peaceful Environment.”</p>
                 </div>
                 
@@ -185,7 +188,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; <span id="current-year"></span> TEAMEnvironment KENYA. All rights reserved. Powered by <a href="https://www.delstarfordworks.co.ke" target="_blank" class="powered-by-link">DELSTARFORD WORKS</a>. | <a href="/login" style="color: #888; text-decoration: none;" aria-label="Portal"><i class="fas fa-tree"></i></a></p>
+                <p>&copy; <span id="current-year"></span> Teamenvironment.KE.Africa. All rights reserved. Powered by <a href="https://www.delstarfordworks.co.ke" target="_blank" class="powered-by-link">DELSTARFORD WORKS</a>. | <a href="/login" style="color: #888; text-decoration: none;" aria-label="Portal"><i class="fas fa-tree"></i></a></p>
             </div>
         </div>
     </footer>
@@ -198,25 +201,58 @@
     <!-- Donation Modal -->
     <div class="modal-overlay" id="mpesaModal">
         <div class="modal-box" style="max-width: 500px;">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <span class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></span>
             
             <div id="modal-form-container" class="modal-content-form">
                 <img src="{{ url_for('static', filename='images/lot/image.png') }}" alt="Support TEK" class="modal-banner-img">
                 <h3>Support Our Mission</h3>
                 <p style="margin-bottom: 20px; color: #666; font-size: 0.9rem;">Choose your preferred payment method.</p>
 
+                <!-- Unified Input Fields -->
+                <div class="input-group">
+                    <label for="donor_name">Full Name</label>
+                    <input type="text" id="donor_name" placeholder="Enter your full name" required>
+                    <div class="validation-message" id="donor_name-validation"></div>
+                </div>
+                <div class="input-group">
+                    <label for="donor_email">Email Address</label>
+                    <input type="email" id="donor_email" placeholder="youremail@gmail.com" required>
+                    <div class="validation-message" id="donor_email-validation"></div>
+                </div>
+                <div class="input-group">
+                    <label for="amount">Donation Amount (KES)</label>
+                    <input type="number" id="amount" placeholder="e.g. 1000" value="1000" required>
+                    <div class="validation-message" id="amount-validation"></div>
+                    <div style="font-size: 0.8rem; color: #64748b; font-weight: 600; margin-top: -5px; margin-bottom: 15px; text-align: left;" id="conversion-badge">
+                        <i class="fas fa-coins"></i> Approx. <span id="usd-converted-amount">$7.69</span> USD (1 USD ≈ 130 KES)
+                    </div>
+                </div>
+
                 <!-- Payment Method Toggles -->
                 <div class="payment-methods">
                     <div class="method-card active" onclick="switchPayment('mpesa')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa">
+                        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+                            <text x="15" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="22" fill="#4CAF50">M-</text>
+                            <text x="44" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="22" fill="#E53935">PESA</text>
+                            <circle cx="104" cy="20" r="5" fill="#4CAF50"/>
+                        </svg>
                         <p>M-Pesa</p>
                     </div>
                     <div class="method-card" onclick="switchPayment('pesapal')">
-                        <img src="https://www.pesapal.com/assets/img/pesapal-logo.png" alt="PesaPal">
+                        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+                            <text x="10" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="20" fill="#003366">pesa</text>
+                            <text x="54" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="20" fill="#00A651">pal</text>
+                            <path d="M96 14 L106 20 L96 26 Z" fill="#00A651" />
+                        </svg>
                         <p>PesaPal</p>
                     </div>
                     <div class="method-card" onclick="switchPayment('paypal')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1200px-PayPal.svg.png" alt="PayPal">
+                        <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 8 h10 c4 0 7 2 6 6 c-1 4 -4 6 -8 6 h-4 l-2 8 h-4 Z" fill="#003087" />
+                            <path d="M24 12 h10 c4 0 7 2 6 6 c-1 4 -4 6 -8 6 h-4 l-2 8 h-4 Z" fill="#0079C1" opacity="0.85" />
+                            <text x="48" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="19" fill="#00457C">Pay</text>
+                            <text x="82" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="19" fill="#0079C1">Pal</text>
+                        </svg>
                         <p>PayPal</p>
                     </div>
                 </div>
@@ -224,53 +260,30 @@
                 <!-- M-Pesa Tab -->
                 <div id="mpesa-tab" class="payment-tab active">
                     <div class="input-group">
-                        <label>Full Name</label>
-                        <input type="text" id="donor_name" placeholder="Yourname" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Email Address</label>
-                        <input type="email" id="donor_email" placeholder="youremail@gmail.com" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Phone Number</label>
-                        <input type="text" id="phone" placeholder="2547XXXXXXXX" required>
+                        <label for="phone">M-Pesa Phone Number</label>
+                        <input type="text" id="phone" placeholder="07XXXXXXXX" value="07">
                         <div class="validation-message" id="phone-validation"></div>
                     </div>
-                    <div class="input-group">
-                        <label>Amount (KES)</label>
-                        <input type="number" id="amount" placeholder="e.g. 500" required>
-                        <div class="validation-message" id="amount-validation"></div>
-                    </div>
-                    <button class="pay-btn btn" onclick="initiatePayment()" id="payBtn" style="width: 100%; background-color: var(--mpesa-green); border-color: var(--mpesa-green);">Donate via M-Pesa</button>
+                    <button class="pay-btn btn" onclick="initiatePayment()" id="payBtn" style="width: 100%; background-color: var(--mpesa-green); border-color: var(--mpesa-green); padding: 15px;">Donate via M-Pesa</button>
                 </div>
 
                 <!-- PesaPal Tab -->
                 <div id="pesapal-tab" class="payment-tab">
-                    <div class="input-group">
-                        <label>Email Address</label>
-                        <input type="email" id="pesapal-email" placeholder="youremail@gmail.com" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Amount (KES)</label>
-                        <input type="number" id="pesapal-amount" placeholder="e.g. 1000" required>
-                    </div>
-                    <button class="pay-btn btn" onclick="alert('Redirecting to PesaPal secure gateway...')" style="width: 100%; background-color: #00A651; border-color: #00A651;">Donate via PesaPal</button>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px; text-align: left;"><i class="fas fa-info-circle"></i> Donate securely using cards, mobile wallets or bank transfer via PesaPal gateway.</p>
+                    <button class="pay-btn btn" onclick="initiatePesapalPayment()" id="pesapalBtn" style="width: 100%; background-color: #00A651; border-color: #00A651; padding: 15px;">Donate via PesaPal</button>
                 </div>
 
                 <!-- PayPal Tab -->
                 <div id="paypal-tab" class="payment-tab">
-                    <div class="input-group">
-                        <label>Amount (USD)</label>
-                        <input type="number" id="paypal-amount" placeholder="e.g. 10" required>
-                    </div>
-                    <button class="pay-btn btn" onclick="alert('Redirecting to PayPal...')" style="width: 100%; background-color: #003087; border-color: #003087;">Donate via PayPal</button>
+                    <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px; text-align: left;"><i class="fas fa-info-circle"></i> Secure international payment using PayPal.</p>
+                    <div id="paypal-button-container-modal" style="margin-top: 10px;"></div>
                 </div>
             </div>
 
             <div id="modal-processing-container" class="processing-state">
                 <div class="spinner"></div>
-                <h4>Processing...</h4>
-                <p>Please follow the instructions on your device or the next screen.</p>
+                <h4>Processing Your Payment...</h4>
+                <p>Please check your phone / redirecting to the payment gateway shortly.</p>
                 <div id="processing-status-message"></div>
                 <button class="btn btn-outline" onclick="resetModal()" style="margin-top: 20px; font-size: 0.8rem; padding: 8px 15px;">Cancel / Back</button>
             </div>
@@ -279,7 +292,9 @@
         </div>
     </div>
 
+    <script src="https://www.paypal.com/sdk/js?client-id=Aca4kHAlmsUXqNenGzW0LYdaPMnPrVIvOBjw8iE2D-rNdgT91YPZgxr6OCZIIyIZFRP-ErR9u0NIkwrf&currency=USD"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
         // Set current year

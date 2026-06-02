@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}About Us - TEAMEnvironment KENYA{% endblock %}
+{% block title %}About Us - Teamenvironment.KE.Africa{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -55,6 +55,121 @@
     @media (max-width: 768px) {
         .stats-counter { background-attachment: scroll; }
     }
+
+    /* --- TIMELINE SECTION --- */
+    .timeline-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 50px auto 0 auto;
+        padding: 0 20px;
+    }
+    
+    /* The central line */
+    .timeline-container::after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        background-color: var(--gray-border);
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -3px;
+        border-radius: 10px;
+    }
+    
+    /* Timeline item box */
+    .timeline-item {
+        padding: 10px 40px;
+        position: relative;
+        background-color: inherit;
+        width: 50%;
+    }
+    
+    /* Circles on the timeline */
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        right: -11px;
+        background-color: white;
+        border: 4px solid var(--primary-green);
+        top: 30px;
+        border-radius: 50%;
+        z-index: 1;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(84, 180, 53, 0.3);
+    }
+    
+    .timeline-item:hover::after {
+        background-color: var(--primary-green);
+        transform: scale(1.3);
+    }
+    
+    /* Place the container to the left */
+    .left-timeline {
+        left: 0;
+        text-align: right;
+    }
+    
+    /* Place the container to the right */
+    .right-timeline {
+        left: 50%;
+        text-align: left;
+    }
+    
+    /* Fix the circle for right containers */
+    .right-timeline::after {
+        left: -11px;
+    }
+    
+    /* The actual content box */
+    .timeline-content {
+        padding: 25px;
+        background-color: white;
+        position: relative;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+        border: 1px solid var(--gray-border);
+        transition: var(--transition);
+    }
+    
+    .timeline-content:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 30px rgba(0,0,0,0.05);
+        border-color: var(--primary-green);
+    }
+    
+    .timeline-year {
+        font-family: var(--font-heading);
+        font-weight: 800;
+        font-size: 1.8rem;
+        color: var(--primary-green);
+        margin-bottom: 5px;
+    }
+    
+    /* Responsive timeline */
+    @media screen and (max-width: 768px) {
+        .timeline-container::after {
+            left: 31px;
+        }
+        
+        .timeline-item {
+            width: 100%;
+            padding-left: 70px;
+            padding-right: 25px;
+            text-align: left !important;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::after {
+            left: 20px !important;
+        }
+        
+        .right-timeline {
+            left: 0%;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -77,7 +192,7 @@
                 <div class="intro-text">
                     <h4 class="text-green">Who We Are</h4>
                     <h2>A Socio-economic, Environmental & Humanitarian Membership Association</h2>
-                    <p>TEAMEnvironment KENYA is focused on Greening and Environmental Conservation through inclusive, community-based action. We believe that sustainable development starts with local commitment.</p>
+                    <p>Teamenvironment.KE.Africa is focused on Greening and Environmental Conservation through inclusive, community-based action. We believe that sustainable development starts with local commitment.</p>
                     <p>Our Association is dedicated to addressing the Sustainable Development Goals (SDGs) and protecting Kenya's diverse landscapes from the impacts of climate change.</p>
                     <div class="mt-20">
                         <a href="{{ url_for('register') }}" class="btn">Join Our Community</a>
@@ -127,6 +242,73 @@
                 <div class="counter-item">
                     <h2>47</h2>
                     <p>Counties Reached</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reforestation Timeline Section -->
+    <section class="our-journey py-80" style="background-color: #ffffff;">
+        <div class="container">
+            <div class="text-center mb-50">
+                <h4 class="text-green" style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px;"><i class="fas fa-history"></i> Our History</h4>
+                <h2 style="margin-bottom: 15px;">The Reforestation Journey</h2>
+                <p style="max-width: 600px; margin: 0 auto; color: #64748b; font-size: 0.95rem;">From humble roots in 2021 to a nationwide green network, see how our Green Army is transforming landscapes year by year.</p>
+            </div>
+
+            <div class="timeline-container">
+                <!-- 2021 -->
+                <div class="timeline-item left-timeline">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2021</div>
+                        <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 8px;">Founding & Humble Roots</h4>
+                        <p style="margin: 0; color: #555; font-size: 0.9rem;">Teamenvironment.KE.Africa is founded with a handful of visionary conservationists and establishes its first community seed propagation nurseries in Nairobi.</p>
+                    </div>
+                </div>
+
+                <!-- 2022 -->
+                <div class="timeline-item right-timeline">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2022</div>
+                        <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 8px;">KFS Strategic Partnership</h4>
+                        <p style="margin: 0; color: #555; font-size: 0.9rem;">TEK signs a formal Memorandum of Understanding (MOU) with the Kenya Forest Service (KFS), adopting key degraded acreage within the Ngong Hills ecosystem for active rehabilitation.</p>
+                    </div>
+                </div>
+
+                <!-- 2023 -->
+                <div class="timeline-item left-timeline">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
+                        <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 8px;">50,000 Seedlings Milestone</h4>
+                        <p style="margin: 0; color: #555; font-size: 0.9rem;">The Green Army mobilizes local communities, successfully propagating and planting over 50,000 indigenous trees while establishing two community agroforestry hubs.</p>
+                    </div>
+                </div>
+
+                <!-- 2024 -->
+                <div class="timeline-item right-timeline">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024</div>
+                        <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 8px;">Greening Digital Platform</h4>
+                        <p style="margin: 0; color: #555; font-size: 0.9rem;">Launch of our modern, offline-ready progressive web app (PWA) allowing volunteers, members, and supporters to easily track and book reforestation outings.</p>
+                    </div>
+                </div>
+
+                <!-- 2025 -->
+                <div class="timeline-item left-timeline">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 8px;">150,000+ Trees & Automation</h4>
+                        <p style="margin: 0; color: #555; font-size: 0.9rem;">Crossing the 150,000 trees mark. Integrated automated payment gateways (M-Pesa, PayPal, PesaPal) providing immediate Certificates of Impact and receipts to digital supporters globally.</p>
+                    </div>
+                </div>
+
+                <!-- 2026 -->
+                <div class="timeline-item right-timeline">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2026</div>
+                        <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 8px;">Live Stewardship Hub</h4>
+                        <p style="margin: 0; color: #555; font-size: 0.9rem;">Unveiling the dynamic Stewardship Wall of Fame, progress milestones, and custom footprint certificate previews to maximize transparency and community engagement.</p>
+                    </div>
                 </div>
             </div>
         </div>

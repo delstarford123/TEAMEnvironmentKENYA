@@ -1,0 +1,207 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Press Room & Media Hub | TEAMEnvironment KENYA{% endblock %}
+
+{% block extra_css %}
+<style>
+    .press-header {
+        background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: clamp(60px, 10vh, 120px) 0;
+        text-align: center;
+        color: white;
+    }
+    .press-header h1 { color: white; margin-bottom: 10px; }
+
+    .press-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        border: 1px solid var(--gray-border);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.01);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+    .press-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-green);
+        box-shadow: 0 20px 30px rgba(0,0,0,0.05);
+    }
+    
+    .brand-color-swatch {
+        width: 100%;
+        height: 60px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .brand-asset-box {
+        background: #f8fafc;
+        border: 1px dashed var(--gray-border);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: var(--transition);
+    }
+    .brand-asset-box:hover {
+        border-color: var(--primary-green);
+        background: #fff;
+    }
+
+    .press-tag {
+        display: inline-block;
+        padding: 4px 10px;
+        background: rgba(84, 180, 53, 0.1);
+        color: var(--primary-green);
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        margin-bottom: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="press-header">
+    <div class="container">
+        <h1>Press Room & Media Kit</h1>
+        <div class="breadcrumb" style="font-size: 0.9rem; opacity: 0.8;">
+            <a href="{{ url_for('home') }}" style="color: white; text-decoration: none;">Home</a> / <span class="text-green" style="font-weight: 600;">Press Hub</span>
+        </div>
+    </div>
+</section>
+
+<!-- Official Releases Section -->
+<section class="py-80" style="background-color: #ffffff;">
+    <div class="container">
+        <div class="text-center mb-50">
+            <h4 class="text-green" style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px;"><i class="fas fa-bullhorn"></i> Official Announcements</h4>
+            <h2>Latest Media & Press Releases</h2>
+            <p style="max-width: 600px; margin: 0 auto; color: #64748b; font-size: 0.95rem;">Read or download our official public statements regarding strategic MOUs, forest audits, and national conservation campaigns.</p>
+        </div>
+
+        <div class="grid grid-3">
+            <!-- PR 1 -->
+            <div class="press-card">
+                <div>
+                    <span class="press-tag">MOU Agreement</span>
+                    <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 10px;">Ngong Hills Restoration Phase II Signed</h4>
+                    <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;"><i class="far fa-calendar-alt"></i> Released: May 12, 2026</p>
+                    <p style="color: #555; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">TEAMEnvironment Kenya establishes coordinates with the Kenya Forest Service (KFS) adopting an additional 50-hectare plot in the Ngong Hills Ecosystem.</p>
+                </div>
+                <a href="#" class="btn btn-outline" style="width: 100%; border-color: var(--gray-border); color: #64748b;" onclick="alert('PDF press statement initiated.')">
+                    <i class="fas fa-file-pdf"></i> Download PDF (1.2 MB)
+                </a>
+            </div>
+
+            <!-- PR 2 -->
+            <div class="press-card">
+                <div>
+                    <span class="press-tag">B2B Platform</span>
+                    <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 10px;">Dynamic B2B Carbon Auditing Portal Launched</h4>
+                    <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;"><i class="far fa-calendar-alt"></i> Released: April 28, 2026</p>
+                    <p style="color: #555; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">Unveiling new carbon auditing calculators and real-time stewardship widgets to enable small and large enterprises to transparently offset emissions.</p>
+                </div>
+                <a href="#" class="btn btn-outline" style="width: 100%; border-color: var(--gray-border); color: #64748b;" onclick="alert('PDF press statement initiated.')">
+                    <i class="fas fa-file-pdf"></i> Download PDF (980 KB)
+                </a>
+            </div>
+
+            <!-- PR 3 -->
+            <div class="press-card">
+                <div>
+                    <span class="press-tag">Youth Campaign</span>
+                    <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 10px;">Youth Reforestation Project Reaches 5 Counties</h4>
+                    <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;"><i class="far fa-calendar-alt"></i> Released: March 15, 2026</p>
+                    <p style="color: #555; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">Partnering with regional academic institutions to establish primary seedling nurseries managed entirely by youth environmental clubs.</p>
+                </div>
+                <a href="#" class="btn btn-outline" style="width: 100%; border-color: var(--gray-border); color: #64748b;" onclick="alert('PDF press statement initiated.')">
+                    <i class="fas fa-file-pdf"></i> Download PDF (1.5 MB)
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Brand Assets Kit Drawer -->
+<section class="py-80" style="background-color: var(--bg-light); border-top: 1px solid var(--gray-border);">
+    <div class="container">
+        <div class="text-center mb-50">
+            <h4 class="text-green" style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px;"><i class="fas fa-id-card"></i> Press Kit</h4>
+            <h2>Verifiable Identity Brand Assets</h2>
+            <p style="max-width: 600px; margin: 0 auto; color: #64748b; font-size: 0.95rem;">Download approved vector logos, typography specifications, color swatches, and our boilerplate statement.</p>
+        </div>
+
+        <div class="grid grid-2" style="gap: 40px;">
+            <!-- Boilerplate & Description -->
+            <div style="background: white; padding: 40px; border-radius: 24px; border: 1px solid var(--gray-border); box-shadow: 0 10px 25px rgba(0,0,0,0.02);">
+                <h3 style="color: var(--primary-dark); font-weight: 800; margin-bottom: 15px;">TEK Boilerplate Statement</h3>
+                <p style="font-size: 0.95rem; color: #555; line-height: 1.7; margin-bottom: 20px;">
+                    "TEAMEnvironment KENYA is a Socio-economic, Environmental and Humanitarian Membership Association dedicated to Greening, climate resilience, and environmental conservation in Kenya. Guided by the philosophy of building a heritage of a cleaner, greener, food and water secure, and peaceful environment, the organization works in direct partnership with local communities and institutional actors like the Kenya Forest Service (KFS) to reforest water catchments and audit survival rates."
+                </p>
+                
+                <h4 style="color: var(--primary-dark); font-weight: 700; margin-bottom: 10px; font-size: 1.1rem;"><i class="fas fa-envelope text-green"></i> Media Contact Representative</h4>
+                <p style="font-size: 0.9rem; color: #555; margin: 0;">
+                    Email: <strong>teamenvironment.ke@gmail.com</strong><br>
+                    Phone: <strong>+254 718 052745</strong><br>
+                    Office Location: Nairobi, Kenya
+                </p>
+            </div>
+
+            <!-- Logos, Fonts & Colors Grid -->
+            <div style="background: white; padding: 40px; border-radius: 24px; border: 1px solid var(--gray-border); box-shadow: 0 10px 25px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h3 style="color: var(--primary-dark); font-weight: 800; margin-bottom: 20px;">Identity Specifications</h3>
+                    
+                    <!-- Color Swatches -->
+                    <div style="margin-bottom: 25px;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #64748B; display: block; margin-bottom: 10px;">Primary Brand Palette</span>
+                        <div class="grid grid-3" style="gap: 15px;">
+                            <div class="text-center">
+                                <div class="brand-color-swatch" style="background: #54B435;"></div>
+                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-dark);">#54B435</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="brand-color-swatch" style="background: #0F172A;"></div>
+                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-dark);">#0F172A</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="brand-color-swatch" style="background: #64748B;"></div>
+                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--primary-dark);">#64748B</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Typography specs -->
+                    <div style="margin-bottom: 25px;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #64748B; display: block; margin-bottom: 8px;">Font Systems</span>
+                        <p style="margin: 0; font-size: 0.9rem; color: #555;">
+                            Headings: <strong>Montserrat</strong> (Montserrat sans-serif)<br>
+                            Body Text: <strong>Open Sans</strong> (Open Sans sans-serif)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Asset downloads -->
+                <div class="grid grid-2" style="gap: 15px;">
+                    <div class="brand-asset-box">
+                        <i class="fas fa-file-image text-green" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+                        <span style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">SVG Primary Logo</span>
+                        <a href="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" target="_blank" class="btn" style="padding: 6px 12px; font-size: 0.7rem; border-radius: 4px;">View / Save</a>
+                    </div>
+                    <div class="brand-asset-box">
+                        <i class="fas fa-file-archive text-green" style="font-size: 1.5rem; margin-bottom: 10px;"></i>
+                        <span style="font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">Full Brand Kit (.zip)</span>
+                        <a href="#" class="btn" style="padding: 6px 12px; font-size: 0.7rem; border-radius: 4px;" onclick="alert('Asset archive will download shortly.')">Download Kit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

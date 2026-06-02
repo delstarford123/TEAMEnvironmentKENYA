@@ -3,7 +3,7 @@ from flask import render_template
 from weasyprint import HTML
 from datetime import datetime
 
-def generate_donation_receipt(donor_name, amount, mpesa_receipt_number, date=None):
+def generate_donation_receipt(donor_name, amount, mpesa_receipt_number, date=None, payment_method='M-Pesa'):
     """
     Generates a professional PDF receipt from an HTML template.
     Returns the absolute file path to the generated PDF.
@@ -18,7 +18,8 @@ def generate_donation_receipt(donor_name, amount, mpesa_receipt_number, date=Non
         'donor_name': donor_name,
         'amount': amount,
         'mpesa_receipt_number': mpesa_receipt_number,
-        'date': date
+        'date': date,
+        'payment_method': payment_method
     }
 
     # Render HTML from template

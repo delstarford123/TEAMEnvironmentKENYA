@@ -1,6 +1,6 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Home - TEAMEnvironment KENYA{% endblock %}
+{% block title %}Home - Teamenvironment.KE.Africa{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -29,41 +29,80 @@
 
     /* --- HERO SECTION --- */
     .hero {
-        background-image: linear-gradient(135deg, rgba(12, 20, 6, 0.9) 0%, rgba(84, 180, 53, 0.2) 100%), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
+        background-image: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.65) 50%, rgba(84, 180, 53, 0.25) 100%), url('https://i0.wp.com/teamenvironment.org/wp-content/uploads/2025/03/Slide-Picture.jpg');
         background-size: cover;
         background-position: center;
-        min-height: 90vh;
+        min-height: 95vh;
         display: flex;
         align-items: center;
         color: white;
-        padding: 100px 0;
+        padding: 120px 0;
         position: relative;
     }
 
     .hero-content { 
-        max-width: 850px; 
-        animation: fadeIn 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+        max-width: 880px; 
+        animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .hero h3 { 
         color: var(--primary-green); 
-        font-weight: 700; 
+        font-weight: 800; 
         margin-bottom: 1.5rem; 
         text-transform: uppercase;
-        letter-spacing: 4px;
-        font-size: 0.9rem;
+        letter-spacing: 5px;
+        font-size: 0.88rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .hero h3::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--primary-green);
+        box-shadow: 0 0 10px var(--primary-green);
     }
     .hero h1 {
-        font-size: clamp(3rem, 7vw, 5rem);
+        font-size: clamp(3.2rem, 8vw, 5.2rem);
         line-height: 1.1;
         margin-bottom: 2rem;
         font-weight: 800;
+        letter-spacing: -1px;
     }
     .hero p { 
-        margin-bottom: 3rem; 
-        font-size: clamp(1.1rem, 1.8vw, 1.4rem); 
-        opacity: 0.95; 
-        line-height: 1.6;
-        max-width: 700px;
+        margin-bottom: 3.5rem; 
+        font-size: clamp(1.15rem, 1.9vw, 1.45rem); 
+        opacity: 0.92; 
+        line-height: 1.65;
+        max-width: 720px;
+        color: #e2e8f0;
+    }
+    
+    /* Hero Buttons Styling */
+    .hero-btn-green {
+        background: linear-gradient(135deg, var(--primary-green) 0%, #2e7d32 100%);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        box-shadow: 0 4px 20px rgba(84, 180, 53, 0.3);
+    }
+    .hero-btn-green:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(84, 180, 53, 0.45);
+        color: white !important;
+        filter: brightness(1.05);
+    }
+    .hero-btn-outline {
+        border: 2px solid rgba(255, 255, 255, 0.4) !important;
+        color: white !important;
+        backdrop-filter: blur(4px);
+    }
+    .hero-btn-outline:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: white !important;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
     }
 
     /* --- IMPACT TICKER --- */
@@ -99,44 +138,74 @@
 
     /* --- STATS SECTION --- */
     .stat-box {
-        background: #fff;
-        padding: 40px 30px;
-        border-radius: 20px;
+        background: #ffffff;
+        padding: 45px 30px;
+        border-radius: 24px;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        border: 1px solid rgba(0,0,0,0.03);
-        transition: all 0.3s ease;
+        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.03);
+        border: 1px solid rgba(84, 180, 53, 0.08);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    .stat-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-green), #84cc16);
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
     .stat-box:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(84, 180, 53, 0.1);
+        transform: translateY(-8px);
+        border-color: rgba(84, 180, 53, 0.25);
+        box-shadow: 0 24px 50px rgba(84, 180, 53, 0.12);
     }
-    .stat-box h2 { color: var(--primary-green); font-size: 3rem; font-weight: 800; }
-    .stat-suffix { color: var(--primary-green); font-size: 2.5rem; font-weight: 800; }
+    .stat-box:hover::before {
+        opacity: 1;
+    }
+    .stat-box h2 { 
+        color: var(--primary-green); 
+        font-size: 3.2rem; 
+        font-weight: 800; 
+        margin-bottom: 0px;
+        letter-spacing: -1px;
+    }
+    .stat-suffix { 
+        color: var(--primary-green); 
+        font-size: 2.2rem; 
+        font-weight: 800; 
+    }
     
     .impact-progress-container {
-        background: #fff;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         padding: 40px;
-        border-radius: 25px;
+        border-radius: 28px;
         margin-top: 50px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.05);
+        border: 1px solid rgba(84, 180, 53, 0.08);
     }
     .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .progress-track {
-        height: 16px;
+        height: 14px;
         background: #f1f5f9;
         border-radius: 50px;
         overflow: hidden;
-        margin-bottom: 15px;
+        margin-bottom: 18px;
     }
     .progress-fill {
         height: 100%;
         background: linear-gradient(90deg, var(--primary-green), #84cc16);
         width: 0%; /* Animated via JS */
         border-radius: 50px;
-        transition: width 2s cubic-bezier(0.19, 1, 0.22, 1);
+        transition: width 2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .progress-labels { display: flex; justify-content: space-between; font-size: 0.9rem; color: #64748b; font-weight: 600; }
+    .progress-labels { display: flex; justify-content: space-between; font-size: 0.88rem; color: #64748b; font-weight: 700; letter-spacing: 0.3px; }
 
     /* --- MISSION SECTION --- */
     .mission-section { 
@@ -161,43 +230,47 @@
     /* --- SDG SECTION --- */
     .sdg-card { 
         background: #fff; 
-        padding: 50px 40px; 
-        border-radius: 20px; 
+        padding: 50px 35px; 
+        border-radius: 24px; 
         text-align: center; 
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid rgba(84, 180, 53, 0.08);
+        box-shadow: 0 15px 35px rgba(15, 23, 42, 0.02);
         height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
     }
     .sdg-card:hover {
-        transform: translateY(-15px);
-        border-color: var(--primary-green);
-        box-shadow: 0 30px 60px rgba(84, 180, 53, 0.15);
+        transform: translateY(-12px);
+        border-color: rgba(84, 180, 53, 0.3);
+        box-shadow: 0 30px 60px rgba(84, 180, 53, 0.12);
+        background: linear-gradient(to bottom, #ffffff 0%, rgba(84, 180, 53, 0.01) 100%);
     }
     .sdg-icon {
-        width: 85px;
-        height: 85px;
-        background: var(--bg-light);
+        width: 80px;
+        height: 80px;
+        background: #f1f5f9;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 25px;
-        font-size: 2.2rem;
+        font-size: 2rem;
         color: var(--primary-green);
-        transition: all 0.4s ease;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid rgba(0,0,0,0.02);
     }
     .sdg-card:hover .sdg-icon {
         background: var(--primary-green);
         color: white;
         transform: rotateY(360deg);
+        box-shadow: 0 8px 20px rgba(84, 180, 53, 0.3);
     }
-    .sdg-number { font-size: 0.8rem; font-weight: 800; color: #cbd5e1; margin-bottom: 0.75rem; display: block; text-transform: uppercase; letter-spacing: 2px; }
-    .sdg-card h3 { font-size: 1.5rem; margin-bottom: 1.25rem; font-weight: 700; }
-    .sdg-card p { font-size: 1rem; color: #64748b; margin: 0; line-height: 1.6; }
+    .sdg-number { font-size: 0.75rem; font-weight: 800; color: #94a3b8; margin-bottom: 0.75rem; display: block; text-transform: uppercase; letter-spacing: 2px; }
+    .sdg-card h3 { font-size: 1.4rem; margin-bottom: 1.25rem; font-weight: 800; color: var(--primary-dark); }
+    .sdg-card p { font-size: 0.95rem; color: #64748b; margin: 0; line-height: 1.65; }
 
     /* --- TEAM SECTION --- */
     .team-card { 
@@ -279,9 +352,15 @@
     }
     .logo-slider-container {
         width: 100%;
-        overflow: hidden;
+        overflow-x: auto; /* Enable horizontal scrolling */
+        scroll-behavior: smooth;
         position: relative;
         padding: 20px 0;
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+        -ms-overflow-style: none; /* Hide scrollbar IE */
+    }
+    .logo-slider-container::-webkit-scrollbar {
+        display: none; /* Hide scrollbar Chrome/Safari */
     }
     /* Fade effect on edges */
     .logo-slider-container::before,
@@ -305,11 +384,45 @@
     .logo-slider {
         display: flex;
         width: max-content;
-        animation: logo-slide 25s linear infinite; /* Increased speed (was 40s) */
         align-items: center;
+        cursor: grab;
+        user-select: none;
     }
-    .logo-slider:hover {
-        animation-play-state: paused;
+    .logo-slider:active {
+        cursor: grabbing;
+    }
+    
+    .slider-nav-btn {
+        position: absolute;
+        top: 55%;
+        transform: translateY(-50%);
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid var(--gray-border);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        cursor: pointer;
+        color: var(--primary-green);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    .slider-nav-btn:hover {
+        background: var(--primary-green);
+        color: white;
+        border-color: var(--primary-green);
+        box-shadow: 0 6px 15px rgba(84, 180, 53, 0.35);
+        transform: translateY(-50%) scale(1.08);
+    }
+    .slider-nav-btn.prev {
+        left: 20px;
+    }
+    .slider-nav-btn.next {
+        right: 20px;
     }
     .partner-logo-wrapper {
         padding: 0 40px; /* Adjusted spacing for larger logos */
@@ -331,15 +444,18 @@
     }
     
     @media (max-width: 992px) {
-        .partner-logo { height: 160px; }
-        .partner-logo-wrapper { padding: 0 35px; }
-        .logo-slider { animation-duration: 20s; } /* Faster on tablets */
+        .partner-logo { height: 150px; }
+        .partner-logo-wrapper { padding: 0 30px; }
     }
     
     @media (max-width: 768px) {
-        .partner-logo { height: 130px; }
-        .partner-logo-wrapper { padding: 0 25px; }
-        .logo-slider { animation-duration: 15s; } /* High speed on mobile */
+        .partner-logo { height: 110px; }
+        .partner-logo-wrapper { padding: 0 20px; }
+    }
+
+    @media (max-width: 480px) {
+        .partner-logo { height: 85px; }
+        .partner-logo-wrapper { padding: 0 12px; }
     }
 
     /* Utility Helpers */
@@ -368,10 +484,10 @@
                 <h1>Building a Sustainable Future</h1>
                 <p>A Socio-economic, Environmental and Humanitarian Membership Association dedicated to Greening and Environmental Conservation across Kenya.</p>
                 <div class="flex" style="display: flex; gap: 20px; flex-wrap: wrap;">
-                    <a href="/calculator" class="btn btn-green" style="background: var(--primary-green); color: white; border: 2px solid var(--primary-green); padding: 16px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease;">
+                    <a href="/calculator" class="btn hero-btn-green" style="padding: 16px 40px; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
                         <i class="fas fa-calculator"></i> Calculate Footprint
                     </a>
-                    <a href="/services" class="btn btn-outline" style="border: 2px solid white; color: white; background: transparent; padding: 16px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; transition: all 0.3s ease;">
+                    <a href="/services" class="btn hero-btn-outline" style="padding: 16px 40px; border-radius: 50px; text-decoration: none;">
                         Our Services
                     </a>
                 </div>
@@ -398,6 +514,42 @@
         </div>
     </div>
 
+    <!-- African Map Section at the Top -->
+    <section class="map-section" style="padding: 100px 0 60px 0; background: #fff;">
+        <div class="container">
+            <div class="text-center mb-60">
+                <h4 class="text-green" style="text-transform: uppercase; font-weight: 800; letter-spacing: 2px;">Pan-African Impact</h4>
+                <h2 style="font-size: 3rem; margin-top: 15px; margin-bottom: 20px;">Interactive African Conservation Map</h2>
+                <p style="color: #64748b; font-size: 1.2rem; margin-top: 10px; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.8;">
+                    Explore active restoration sites and community greening projects powered by <strong>Teamenvironment.KE.Africa</strong> across East, West, and North Africa.
+                </p>
+            </div>
+            
+            <div class="grid grid-2" style="gap: 40px; align-items: stretch; margin-bottom: 20px;">
+                <!-- Left: Beautiful Africa GIF and description -->
+                <div class="map-intro-col" style="background: #f8fafc; padding: 40px; border-radius: 28px; border: 1px solid rgba(84, 180, 53, 0.08); box-shadow: 0 10px 30px rgba(15, 23, 42, 0.02); text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <img src="{{ url_for('static', filename='images/partners/Africa.gif') }}" alt="Africa Reforestation Map" style="width: 100%; max-height: 330px; object-fit: contain; border-radius: 20px; margin-bottom: 25px; filter: drop-shadow(0 15px 30px rgba(84, 180, 53, 0.2));">
+                    <h3 style="color: var(--primary-dark); font-weight: 800; font-size: 1.5rem; margin-bottom: 12px;">Pan-African Green Canopy</h3>
+                    <p style="color: #64748b; font-size: 1.05rem; line-height: 1.7; margin: 0;">
+                        Our commitment is to establish sustainable ecosystems across all African borders. Click on the interactive map markers to explore each region's specific restoration projects.
+                    </p>
+                </div>
+                
+                <!-- Right: Interactive Leaflet Map -->
+                <div class="map-container-wrap" style="height: 520px; border-radius: 28px; overflow: hidden; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08); border: 1px solid rgba(84, 180, 53, 0.12); position: relative;">
+                    <div id="map" style="width: 100%; height: 100%;"></div>
+                </div>
+            </div>
+            
+            <!-- Button to explore country pages one by one -->
+            <div class="text-center mt-40">
+                <a href="/country/kenya" class="btn btn-green shadow-lg" style="background: var(--primary-green); color: white; border: 2px solid var(--primary-green); padding: 16px 45px; border-radius: 50px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; font-size: 1.1rem; box-shadow: 0 10px 25px rgba(84, 180, 53, 0.3); transition: all 0.3s ease;">
+                    <i class="fas fa-globe-africa" style="font-size: 1.2rem;"></i> Explore Country Pages One By One
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Section -->
     <section class="stats-section bg-light">
         <div class="container">
@@ -409,25 +561,24 @@
                     <a href="/work" class="btn btn-green" style="background: var(--primary-dark); color: white; border: 2px solid var(--primary-dark); padding: 14px 35px; border-radius: 50px; font-weight: 700; text-decoration: none;">Work With Us</a>
                 </div>
                 <div>
-                    <div class="grid grid-2" style="gap: 25px;">
-                        <div class="stat-box">
-                            <h2 class="counter" data-target="32">32</h2><span class="stat-suffix">+</span>
-                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Projects Finished</p>
+                    <div class="grid grid-2" style="gap: 25px;">                        <div class="stat-box">
+                            <h2 class="counter" data-target="{{ stats.trees_raw or 150000 }}">{{ stats.trees_planted or '150,000' }}</h2><span class="stat-suffix">+</span>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Trees Planted</p>
                         </div>
                         <div class="stat-box">
-                            <h2 class="counter" data-target="7">7</h2>
-                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Years Experience</p>
+                            <h2 class="counter" data-target="{{ stats.volunteers_raw or 5000 }}">{{ stats.volunteers or '5,000' }}</h2><span class="stat-suffix">+</span>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Active Volunteers</p>
                         </div>
                         <div class="stat-box">
-                            <h2 class="counter" data-target="120">120</h2><span class="stat-suffix">+</span>
-                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Investments</p>
+                            <h2 class="counter" data-target="{{ stats.acres_raw or 2500 }}">{{ stats.acres_restored or '2,500' }}</h2><span class="stat-suffix">+</span>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Acres Restored</p>
                         </div>
                         <div class="stat-box">
-                            <h2 class="counter" data-target="1500">1500</h2><span class="stat-suffix">+</span>
-                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Colleagues</p>
+                            <h2 class="counter" data-target="{{ stats.projects_finished or 32 }}">{{ stats.projects_finished or '32' }}</h2><span class="stat-suffix">+</span>
+                            <p style="font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; margin-top: 10px;">Finished Projects</p>
                         </div>
                     </div>
-
+ 
                     <div class="impact-progress-container">
                         <div class="progress-header">
                             <h4 style="margin: 0; color: var(--primary-dark); font-weight: 800;">Reforestation Goal: 15B Trees</h4>
@@ -437,7 +588,7 @@
                             <div class="progress-fill" data-width="12"></div>
                         </div>
                         <div class="progress-labels">
-                            <span>1.8B Seedlings Planted</span>
+                            <span>{{ stats.trees_planted or '150,000' }} Seedlings Funded</span>
                             <span>Target: 2032</span>
                         </div>
                     </div>
@@ -525,25 +676,6 @@
         </div>
     </section>
 
-    <!-- Map Section -->
-    <section class="map-section">
-        <div class="container">
-            <div class="text-center mb-60">
-                <h4 class="text-green" style="text-transform: uppercase; font-weight: 800; letter-spacing: 2px;">Our Footprint</h4>
-                <h2 style="font-size: 3rem; margin-top: 15px;">Where We Make an Impact</h2>
-                <p style="color: #64748b; font-size: 1.2rem; margin-top: 10px;">Restoring ecosystems and empowering local communities across the Republic of Kenya.</p>
-            </div>
-            
-            <div class="map-container" style="position: relative; height: 600px; background: #f8fafc; border-radius: 35px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.1);">
-                <div class="map-overlay-card" style="position: absolute; top: 40px; left: 40px; background: white; padding: 35px; border-radius: 20px; max-width: 350px; z-index: 10; box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
-                    <h3 style="color: var(--primary-dark); margin-bottom: 15px; font-weight: 800;">Interactive Impact Map</h3>
-                    <p style="color: #64748b; font-size: 1rem; line-height: 1.6;">Explore our active restoration sites and community projects. Click on the pins for detailed impact metrics.</p>
-                </div>
-                <div id="map" style="width: 100%; height: 100%;"></div>
-            </div>
-        </div>
-    </section>
-
     <!-- Team Section -->
     <section class="team-section bg-light" style="padding: 120px 0;">
         <div class="container">
@@ -604,8 +736,9 @@
                 <!-- Board Member 5 -->
                 <div class="team-card" style="background-image: url('{{ url_for('static', filename='images/partner_people/Tobias Olekina.jpeg') }}');">
                     <div class="team-info">
-                        <h3>Tobias Olekina Jnr</h3>
-                        <p>Policy Expert & Int. Relations</p>
+                        <h3>Tobias Olekina</h3>
+                        <p>Board Member</p>
+                        <span class="member-desc">President & CEO Africa International Policy Research Center (AIPRC), Public policy, governance and compliance expert</span>
                     </div>
                 </div>
                 <!-- Board Member 6 -->
@@ -641,27 +774,25 @@
     </section>
     
     <!-- Corporate Partners Slider -->
-    <section class="partners-section">
-        <div class="container">
-            <h5 class="partners-title">Our Corporate Partners & Collaborators</h5>
-            <div class="logo-slider-container">
-                <div class="logo-slider">
-                    <!-- Set 1 -->
-                    {% for i in range(1, 11) %}{% if i != 4 %}
-                    <div class="partner-logo-wrapper">
-                        <img src="{{ url_for('static', filename='images/partners/' ~ i ~ '.jpeg') }}" alt="Partner {{ i }}" class="partner-logo" loading="lazy">
-                    </div>
-                    {% endif %}{% endfor %}
-                    <div class="partner-logo-wrapper">
-                        <img src="{{ url_for('static', filename='images/partners/DEL SVG.svg') }}" alt="DEL SVG" class="partner-logo" loading="lazy">
-                    </div>
+    <section class="partners-section" style="position: relative;">
+        <div class="container" style="position: relative;">
+            <h5 class="partners-title">Teamenvironment .KE. Africa</h5>
+            
+            <!-- Navigation Buttons -->
+            <button class="slider-nav-btn prev" id="sliderPrevBtn" aria-label="Previous Partner">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-nav-btn next" id="sliderNextBtn" aria-label="Next Partner">
+                <i class="fas fa-chevron-right"></i>
+            </button>
 
-                    <!-- Set 2 (for seamless loop) -->
-                    {% for i in range(1, 11) %}{% if i != 4 %}
+            <div class="logo-slider-container" id="logoSliderContainer">
+                <div class="logo-slider" id="logoSlider">
+                    {% for i in range(1, 11) %}
                     <div class="partner-logo-wrapper">
                         <img src="{{ url_for('static', filename='images/partners/' ~ i ~ '.jpeg') }}" alt="Partner {{ i }}" class="partner-logo" loading="lazy">
                     </div>
-                    {% endif %}{% endfor %}
+                    {% endfor %}
                     <div class="partner-logo-wrapper">
                         <img src="{{ url_for('static', filename='images/partners/DEL SVG.svg') }}" alt="DEL SVG" class="partner-logo" loading="lazy">
                     </div>
@@ -669,4 +800,161 @@
             </div>
         </div>
     </section>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('logoSliderContainer');
+        const slider = document.getElementById('logoSlider');
+        const prevBtn = document.getElementById('sliderPrevBtn');
+        const nextBtn = document.getElementById('sliderNextBtn');
+        
+        if (!container || !slider) return;
+        
+        // Ensure initial scrollBehavior is auto for instant, seamless warping
+        container.style.scrollBehavior = 'auto';
+        
+        // --- 1. CLONE LOGOS FOR SEAMLESS INFINITE LOOP ---
+        const originalChildren = Array.from(slider.children);
+        originalChildren.forEach(child => {
+            const clone = child.cloneNode(true);
+            slider.appendChild(clone);
+        });
+
+        // --- 2. CALCULATE AND TRACK ORIGINAL WIDTH ---
+        let originalWidth = 0;
+        
+        function updateOriginalWidth() {
+            originalWidth = slider.scrollWidth / 2;
+        }
+        
+        window.addEventListener('load', updateOriginalWidth);
+        window.addEventListener('resize', updateOriginalWidth);
+        updateOriginalWidth();
+        
+        // Update when images complete loading
+        slider.querySelectorAll('img').forEach(img => {
+            if (img.complete) {
+                updateOriginalWidth();
+            } else {
+                img.addEventListener('load', updateOriginalWidth);
+            }
+        });
+
+        // --- 3. MOUSE GRAB AND DRAG SCROLLING ---
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let isPaused = false;
+        let resumeTimeout;
+        
+        function pauseAutoScrollTemporarily() {
+            isPaused = true;
+            clearTimeout(resumeTimeout);
+            resumeTimeout = setTimeout(() => {
+                isPaused = false;
+            }, 3000); // Resume auto scroll after 3s of inactivity
+        }
+
+        container.addEventListener('mousedown', (e) => {
+            isDown = true;
+            container.style.scrollBehavior = 'auto'; // Disable smooth scroll while dragging for responsiveness
+            startX = e.pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            isPaused = true;
+            clearTimeout(resumeTimeout);
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            if (isDown) {
+                isDown = false;
+                pauseAutoScrollTemporarily();
+            }
+        });
+        
+        container.addEventListener('mouseup', () => {
+            if (isDown) {
+                isDown = false;
+                container.style.scrollBehavior = 'auto';
+                pauseAutoScrollTemporarily();
+            }
+        });
+        
+        container.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 1.5; // Drag speed multiplier
+            container.scrollLeft = scrollLeft - walk;
+        });
+        
+        // Touch events support for mobile
+        container.addEventListener('touchstart', () => {
+            isPaused = true;
+            clearTimeout(resumeTimeout);
+            container.style.scrollBehavior = 'auto';
+        });
+        
+        container.addEventListener('touchend', () => {
+            container.style.scrollBehavior = 'auto';
+            pauseAutoScrollTemporarily();
+        });
+
+        // --- 4. CHEVRON BUTTON NAVIGATION ---
+        if (prevBtn && nextBtn) {
+            const scrollDistance = 350; // Scroll increment
+            let chevronScrollTimeout;
+            
+            prevBtn.addEventListener('click', () => {
+                pauseAutoScrollTemporarily();
+                container.style.scrollBehavior = 'smooth';
+                container.scrollLeft -= scrollDistance;
+                
+                clearTimeout(chevronScrollTimeout);
+                chevronScrollTimeout = setTimeout(() => {
+                    container.style.scrollBehavior = 'auto';
+                }, 500);
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                pauseAutoScrollTemporarily();
+                container.style.scrollBehavior = 'smooth';
+                container.scrollLeft += scrollDistance;
+                
+                clearTimeout(chevronScrollTimeout);
+                chevronScrollTimeout = setTimeout(() => {
+                    container.style.scrollBehavior = 'auto';
+                }, 500);
+            });
+        }
+
+        // --- 5. ULTRA-SMOOTH REQUESTANIMATIONFRAME LOOP ---
+        const scrollSpeed = 1.0; // speed in pixels per frame
+        
+        function step() {
+            if (originalWidth <= 0) {
+                updateOriginalWidth();
+            }
+            
+            if (!isDown && !isPaused) {
+                container.scrollLeft += scrollSpeed;
+            }
+            
+            // Warp-around checks for both auto-scroll and manual scrolling/dragging
+            if (originalWidth > 0 && container.style.scrollBehavior !== 'smooth') {
+                if (container.scrollLeft >= originalWidth) {
+                    container.scrollLeft -= originalWidth;
+                } else if (container.scrollLeft <= 0) {
+                    container.scrollLeft += originalWidth;
+                }
+            }
+            
+            requestAnimationFrame(step);
+        }
+        
+        // Start the infinite loop
+        requestAnimationFrame(step);
+    });
+</script>
+{% endblock %}
 {% endblock %}
