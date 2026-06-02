@@ -156,6 +156,36 @@ def send_email(subject, recipient, body, attachments=None):
         return False
 
 # ==========================================
+#  3.5 GLOBAL TEMPLATE CONTEXT PROCESSORS
+# ==========================================
+
+ACTIVITY_IMAGES = []
+
+def get_random_activity_image():
+    global ACTIVITY_IMAGES
+    if not ACTIVITY_IMAGES:
+        try:
+            activity_dir = os.path.join(app.static_folder, 'images', 'activity')
+            if os.path.exists(activity_dir):
+                files = os.listdir(activity_dir)
+                valid_extensions = ('.png', '.jpg', '.jpeg', '.gif', '.webp')
+                ACTIVITY_IMAGES = [f for f in files if f.lower().endswith(valid_extensions)]
+        except Exception as e:
+            print(f"Error loading activity images: {e}")
+            
+    if ACTIVITY_IMAGES:
+        import random
+        selected = random.choice(ACTIVITY_IMAGES)
+        return url_for('static', filename=f'images/activity/{selected}')
+    
+    # Safe fallback if directory empty or error occurs
+    return url_for('static', filename='images/Climate resilience.jpeg')
+
+@app.context_processor
+def inject_global_background():
+    return dict(global_random_bg=get_random_activity_image())
+
+# ==========================================
 #  4. WEBSITE ROUTES (Navigation)
 # ==========================================
 

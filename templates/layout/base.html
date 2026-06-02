@@ -39,6 +39,17 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#54B435">
     <link rel="apple-touch-icon" href="/static/images/lot/logo.png">
+    {% if global_random_bg %}
+    <style>
+        .page-header, .hero {
+            background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('{{ global_random_bg }}') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+        }
+    </style>
+    {% endif %}
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -90,6 +101,13 @@
 
             <nav class="main-nav" id="main-nav">
                 <ul class="nav-menu">
+                    <!-- Home -->
+                    <li>
+                        <a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+                            Home
+                        </a>
+                    </li>
+
                     <!-- Pillar 1: Get Informed -->
                     <li class="has-dropdown">
                         <a href="#" class="nav-link {% if request.endpoint in ['projects', 'blog', 'calculator', 'resources', 'faq', 'forest_audit'] %}active{% endif %}" aria-haspopup="true" aria-expanded="false">
