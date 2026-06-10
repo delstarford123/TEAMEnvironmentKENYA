@@ -216,6 +216,51 @@
         <i class="fas fa-hand-holding-heart"></i> M-Pesa
     </div>
 
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <!-- Tooltip -->
+        <div class="chatbot-tooltip">
+            I am TeamEnvironment AI BOT. Ask any question and I will answer.
+        </div>
+        <!-- Trigger Button -->
+        <button class="chatbot-trigger" id="chatbotTriggerBtn" aria-label="Open Chatbot">
+            <i class="fas fa-robot"></i>
+        </button>
+        
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 style="color: white; margin: 0;">TEAMEnvironment AI</h4>
+                        <span class="online-indicator"><span class="dot"></span> Online</span>
+                    </div>
+                </div>
+                <button class="close-chat" id="closeChatBtn" aria-label="Close Chat">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message bot">
+                    <div class="message-content">
+                        Hi! I am the TEAMEnvironment AI BOT. Ask me any questions about our mission, projects, volunteering, or MoU with KFS, and I will find the answers for you!
+                    </div>
+                </div>
+            </div>
+            
+            <form class="chat-input-area" id="chatForm">
+                <input type="text" id="chatInput" placeholder="Ask a question..." autocomplete="off" required>
+                <button type="submit" class="send-btn" aria-label="Send message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Donation Modal -->
     <div class="modal-overlay" id="mpesaModal">
         <div class="modal-box" style="max-width: 500px;">
@@ -324,6 +369,114 @@
                     .then(reg => console.log('Service Worker registered', reg))
                     .catch(err => console.log('Service Worker registration failed', err));
             });
+        }
+
+        // Chatbot Widget Toggle
+        const chatbotTriggerBtn = document.getElementById('chatbotTriggerBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        if (chatbotTriggerBtn && chatWindow) {
+            chatbotTriggerBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                chatWindow.classList.toggle('active');
+                if (chatWindow.classList.contains('active')) {
+                    chatInput.focus();
+                }
+            });
+
+            closeChatBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                chatWindow.classList.remove('active');
+            });
+
+            // Close chat if clicked outside
+            document.addEventListener('click', (e) => {
+                if (chatWindow.classList.contains('active') && !chatWindow.contains(e.target) && !chatbotTriggerBtn.contains(e.target)) {
+                    chatWindow.classList.remove('active');
+                }
+            });
+        }
+
+        if (chatForm) {
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const query = chatInput.value.trim();
+                if (!query) return;
+
+                // Add User Message
+                appendMessage(query, 'user');
+                chatInput.value = '';
+
+                // Add Typing Indicator
+                const typingId = appendTypingIndicator();
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: query })
+                    });
+                    const data = await response.json();
+                    
+                    // Remove Typing Indicator
+                    removeTypingIndicator(typingId);
+
+                    if (response.ok) {
+                        appendMessage(data.response, 'bot');
+                    } else {
+                        appendMessage(data.response || 'Sorry, I had trouble processing that request.', 'bot');
+                    }
+                } catch (error) {
+                    removeTypingIndicator(typingId);
+                    appendMessage('Network error. Please try again later.', 'bot');
+                }
+            });
+        }
+
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = text; // allow HTML links in responses
+            
+            messageDiv.appendChild(contentDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function appendTypingIndicator() {
+            const id = 'typing-' + Date.now();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message bot';
+            messageDiv.id = id;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const dotsDiv = document.createElement('div');
+            dotsDiv.className = 'typing-indicator-dots';
+            dotsDiv.innerHTML = '<span></span><span></span><span></span>';
+            
+            contentDiv.appendChild(dotsDiv);
+            messageDiv.appendChild(contentDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const indicator = document.getElementById(id);
+            if (indicator) {
+                indicator.remove();
+            }
         }
     </script>
     {% block extra_js %}{% endblock %}

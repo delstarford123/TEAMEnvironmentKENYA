@@ -251,7 +251,7 @@ def get_dynamic_stats():
 COUNTRY_DATA = {
     'kenya': {
         'name': 'Kenya',
-        'region': 'East Africa',
+        'region': 'TEAMENVIRONMENT KENYA',
         'coords': [-1.286389, 36.817223],
         'trees': '150,000',
         'volunteers': '5,000',
@@ -263,7 +263,7 @@ COUNTRY_DATA = {
     },
     'uganda': {
         'name': 'Uganda',
-        'region': 'East Africa',
+        'region': 'TEAMENVIRONMENT UGANDA',
         'coords': [0.3476, 32.5825],
         'trees': '85,000',
         'volunteers': '2,800',
@@ -275,7 +275,7 @@ COUNTRY_DATA = {
     },
     'tanzania': {
         'name': 'Tanzania',
-        'region': 'East Africa',
+        'region': 'TEAMENVIRONMENT TANZANIA',
         'coords': [-6.1612, 35.7454],
         'trees': '95,000',
         'volunteers': '3,100',
@@ -287,7 +287,7 @@ COUNTRY_DATA = {
     },
     'rwanda': {
         'name': 'Rwanda',
-        'region': 'East Africa',
+        'region': 'TEAMENVIRONMENT RWANDA',
         'coords': [-1.9403, 29.8739],
         'trees': '60,000',
         'volunteers': '2,200',
@@ -299,7 +299,7 @@ COUNTRY_DATA = {
     },
     'ethiopia': {
         'name': 'Ethiopia',
-        'region': 'East Africa',
+        'region': 'TEAMENVIRONMENT ETHIOPIA',
         'coords': [9.145, 40.4896],
         'trees': '110,000',
         'volunteers': '4,500',
@@ -311,7 +311,7 @@ COUNTRY_DATA = {
     },
     'nigeria': {
         'name': 'Nigeria',
-        'region': 'West Africa',
+        'region': 'TEAMENVIRONMENT NIGERIA',
         'coords': [9.0820, 8.6753],
         'trees': '125,000',
         'volunteers': '6,200',
@@ -323,7 +323,7 @@ COUNTRY_DATA = {
     },
     'ghana': {
         'name': 'Ghana',
-        'region': 'West Africa',
+        'region': 'TEAMENVIRONMENT GHANA',
         'coords': [7.9465, -1.0232],
         'trees': '75,000',
         'volunteers': '3,400',
@@ -335,7 +335,7 @@ COUNTRY_DATA = {
     },
     'senegal': {
         'name': 'Senegal',
-        'region': 'West Africa',
+        'region': 'TEAMENVIRONMENT SENEGAL',
         'coords': [14.4974, -14.4524],
         'trees': '55,000',
         'volunteers': '2,100',
@@ -347,7 +347,7 @@ COUNTRY_DATA = {
     },
     'ivory-coast': {
         'name': 'Ivory Coast',
-        'region': 'West Africa',
+        'region': 'TEAMENVIRONMENT IVORY COAST',
         'coords': [7.5400, -5.5471],
         'trees': '65,000',
         'volunteers': '2,400',
@@ -359,7 +359,7 @@ COUNTRY_DATA = {
     },
     'egypt': {
         'name': 'Egypt',
-        'region': 'North Africa',
+        'region': 'TEAMENVIRONMENT EGYPT',
         'coords': [26.8206, 30.8025],
         'trees': '45,000',
         'volunteers': '1,900',
@@ -371,7 +371,7 @@ COUNTRY_DATA = {
     },
     'morocco': {
         'name': 'Morocco',
-        'region': 'North Africa',
+        'region': 'TEAMENVIRONMENT MOROCCO',
         'coords': [31.7917, -7.0926],
         'trees': '70,000',
         'volunteers': '2,900',
@@ -383,7 +383,7 @@ COUNTRY_DATA = {
     },
     'algeria': {
         'name': 'Algeria',
-        'region': 'North Africa',
+        'region': 'TEAMENVIRONMENT ALGERIA',
         'coords': [28.0339, 1.6596],
         'trees': '50,000',
         'volunteers': '1,800',
@@ -395,7 +395,7 @@ COUNTRY_DATA = {
     },
     'tunisia': {
         'name': 'Tunisia',
-        'region': 'North Africa',
+        'region': 'TEAMENVIRONMENT TUNISIA',
         'coords': [33.8869, 9.5375],
         'trees': '40,000',
         'volunteers': '1,600',
@@ -430,6 +430,56 @@ def country_detail(country_name):
         next_country_name=next_country_name,
         all_countries=COUNTRY_DATA
     )
+
+# ==========================================
+#  4.2 CHATBOT ROUTING
+# ==========================================
+from chatbot.chatbot_logic import ChatbotLogic
+chatbot_model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "chatbot", "model")
+_chatbot_logic = None
+
+def get_chatbot_logic():
+    global _chatbot_logic
+    if _chatbot_logic is None:
+        _chatbot_logic = ChatbotLogic(chatbot_model_dir)
+    return _chatbot_logic
+
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    try:
+        data = request.get_json() or {}
+        message = data.get('message', '').strip()
+        if not message:
+            return jsonify({"response": "Please ask a question!"}), 400
+        
+        bot = get_chatbot_logic()
+        
+        # Try to reload brain if it wasn't loaded (e.g. trained after server started)
+        if not bot.brain.loaded:
+            bot.brain.__init__(chatbot_model_dir)
+            
+        response_text = bot.process_request(message, session)
+        
+        # Check for pending STK Push trigger set by process_request
+        stk_pending = session.pop('stk_push_pending', None)
+        if stk_pending:
+            phone = stk_pending.get('phone')
+            amount = stk_pending.get('amount')
+            name = session.get('chat_user_name', 'Valued Supporter')
+            email = session.get('chat_user_email')
+            
+            # Execute push
+            stk_res = execute_stk_push(phone, amount, name, email)
+            if stk_res.get('ResponseCode') == '0':
+                response_text += "<br><br>✅ <b>M-Pesa STK Push triggered!</b> Please check your phone for the PIN prompt."
+            else:
+                err_msg = stk_res.get('ResponseDescription') or stk_res.get('error') or "Failed to connect to Safaricom."
+                response_text += f"<br><br>❌ <b>Failed to initiate STK Push:</b> {err_msg}"
+                
+        return jsonify({"response": response_text})
+    except Exception as e:
+        print(f"Error in chat api: {e}")
+        return jsonify({"response": "I had a momentary distraction. Please ask again!"}), 500
 
 @app.route('/')
 @app.route('/index.html')
@@ -811,26 +861,22 @@ def submit_application():
 #  7. PAYMENT & DONATION ROUTES
 # ==========================================
 
-@app.route('/pay', methods=['POST'])
-def pay():
+def execute_stk_push(phone, amount, name='Valued Supporter', email=None):
     """Initiates an M-Pesa STK Push payment and saves a pending donation tracking record."""
-    data = request.json
-    name = data.get('name', 'Valued Supporter')
-    email = data.get('email')
-    phone = data.get('phone')
-    amount = data.get('amount')
-
     if not phone or not amount:
-        return jsonify({"error": "Phone and Amount are required"}), 400
+        return {"error": "Phone and Amount are required"}
 
+    phone = str(phone).strip()
     if phone.startswith('0'):
         phone = '254' + phone[1:]
     elif phone.startswith('+254'):
         phone = phone[1:]
+    elif phone.startswith('+') and phone[1:].isdigit():
+        phone = phone[1:]
     
     access_token = get_access_token()
     if not access_token:
-        return jsonify({"error": "Failed to generate M-Pesa Token"}), 500
+        return {"error": "Failed to generate M-Pesa Token"}
 
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     password = generate_password(timestamp)
@@ -864,7 +910,6 @@ def pay():
         
         if res_data.get('ResponseCode') == '0':
             checkout_id = res_data.get('CheckoutRequestID')
-            # Save pending donation info keyed by CheckoutRequestID for 100% reliable callback matching
             pending_ref = db.reference('pending_donations')
             pending_ref.child(checkout_id).set({
                 'name': name,
@@ -874,9 +919,23 @@ def pay():
                 'timestamp': timestamp
             })
             
-        return jsonify(res_data)
+        return res_data
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return {"error": str(e)}
+
+@app.route('/pay', methods=['POST'])
+def pay():
+    """Initiates an M-Pesa STK Push payment and saves a pending donation tracking record."""
+    data = request.json
+    name = data.get('name', 'Valued Supporter')
+    email = data.get('email')
+    phone = data.get('phone')
+    amount = data.get('amount')
+
+    res = execute_stk_push(phone, amount, name, email)
+    if "error" in res:
+        return jsonify(res), 500
+    return jsonify(res)
 
 @app.route('/callback', methods=['POST'])
 def callback():

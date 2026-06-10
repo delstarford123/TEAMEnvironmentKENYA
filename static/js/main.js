@@ -633,19 +633,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // African Country Locations
         const locations = [
-            { key: "kenya", name: "Kenya", region: "East Africa", coords: [-1.286389, 36.817223], trees: "150,000", details: "Core restoration projects in Ngong Hills and Nyeri watersheds." },
-            { key: "uganda", name: "Uganda", region: "East Africa", coords: [0.3476, 32.5825], trees: "85,000", details: "Mabira Forest restoration and community agroforestry." },
-            { key: "tanzania", name: "Tanzania", region: "East Africa", coords: [-6.1612, 35.7454], trees: "95,000", details: "Mount Kilimanjaro slopes conservation and Dodoma dryland regreening." },
-            { key: "rwanda", name: "Rwanda", region: "East Africa", coords: [-1.9403, 29.8739], trees: "60,000", details: "Terraced agroforestry and bamboo riverbank stabilization." },
-            { key: "ethiopia", name: "Ethiopia", region: "East Africa", coords: [9.145, 40.4896], trees: "110,000", details: "Highland watershed restoration and native tree planting." },
-            { key: "nigeria", name: "Nigeria", region: "West Africa", coords: [9.0820, 8.6753], trees: "125,000", details: "Great Green Wall forestation and Niger Delta mangrove recovery." },
-            { key: "ghana", name: "Ghana", region: "West Africa", coords: [7.9465, -1.0232], trees: "75,000", details: "Riparian watershed protection and cocoa agroforestry." },
-            { key: "senegal", name: "Senegal", region: "West Africa", coords: [14.4974, -14.4524], trees: "55,000", details: "Coastal mangrove reforestation and dryland windbreaks." },
-            { key: "ivory-coast", name: "Ivory Coast", region: "West Africa", coords: [7.5400, -5.5471], trees: "65,000", details: "Degraded national park recovery and cocoa soil enrichment." },
-            { key: "egypt", name: "Egypt", region: "North Africa", coords: [26.8206, 30.8025], trees: "45,000", details: "Desert afforestation using treated wastewater and Cairo urban greening." },
-            { key: "morocco", name: "Morocco", region: "North Africa", coords: [31.7917, -7.0926], trees: "70,000", details: "Argan forest restoration in the Atlas mountains." },
-            { key: "algeria", name: "Algeria", region: "North Africa", coords: [28.0339, 1.6596], trees: "50,000", details: "Green Dam pine forestation to combat desertification." },
-            { key: "tunisia", name: "Tunisia", region: "North Africa", coords: [33.8869, 9.5375], trees: "40,000", details: "Semi-arid dryland olive tree integration and rainwater harvest." }
+            { key: "kenya", name: "Kenya", region: "TEAMENVIRONMENT KENYA", coords: [-1.286389, 36.817223], trees: "150,000", details: "Core restoration projects in Ngong Hills and Nyeri watersheds." },
+            { key: "uganda", name: "Uganda", region: "TEAMENVIRONMENT UGANDA", coords: [0.3476, 32.5825], trees: "85,000", details: "Mabira Forest restoration and community agroforestry." },
+            { key: "tanzania", name: "Tanzania", region: "TEAMENVIRONMENT TANZANIA", coords: [-6.1612, 35.7454], trees: "95,000", details: "Mount Kilimanjaro slopes conservation and Dodoma dryland regreening." },
+            { key: "rwanda", name: "Rwanda", region: "TEAMENVIRONMENT RWANDA", coords: [-1.9403, 29.8739], trees: "60,000", details: "Terraced agroforestry and bamboo riverbank stabilization." },
+            { key: "ethiopia", name: "Ethiopia", region: "TEAMENVIRONMENT ETHIOPIA", coords: [9.145, 40.4896], trees: "110,000", details: "Highland watershed restoration and native tree planting." },
+            { key: "nigeria", name: "Nigeria", region: "TEAMENVIRONMENT NIGERIA", coords: [9.0820, 8.6753], trees: "125,000", details: "Great Green Wall forestation and Niger Delta mangrove recovery." },
+            { key: "ghana", name: "Ghana", region: "TEAMENVIRONMENT GHANA", coords: [7.9465, -1.0232], trees: "75,000", details: "Riparian watershed protection and cocoa agroforestry." },
+            { key: "senegal", name: "Senegal", region: "TEAMENVIRONMENT SENEGAL", coords: [14.4974, -14.4524], trees: "55,000", details: "Coastal mangrove reforestation and dryland windbreaks." },
+            { key: "ivory-coast", name: "Ivory Coast", region: "TEAMENVIRONMENT IVORY COAST", coords: [7.5400, -5.5471], trees: "65,000", details: "Degraded national park recovery and cocoa soil enrichment." },
+            { key: "egypt", name: "Egypt", region: "TEAMENVIRONMENT EGYPT", coords: [26.8206, 30.8025], trees: "45,000", details: "Desert afforestation using treated wastewater and Cairo urban greening." },
+            { key: "morocco", name: "Morocco", region: "TEAMENVIRONMENT MOROCCO", coords: [31.7917, -7.0926], trees: "70,000", details: "Argan forest restoration in the Atlas mountains." },
+            { key: "algeria", name: "Algeria", region: "TEAMENVIRONMENT ALGERIA", coords: [28.0339, 1.6596], trees: "50,000", details: "Green Dam pine forestation to combat desertification." },
+            { key: "tunisia", name: "Tunisia", region: "TEAMENVIRONMENT TUNISIA", coords: [33.8869, 9.5375], trees: "40,000", details: "Semi-arid dryland olive tree integration and rainwater harvest." }
         ];
 
         locations.forEach(loc => {
