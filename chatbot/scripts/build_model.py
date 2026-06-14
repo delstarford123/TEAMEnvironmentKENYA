@@ -39,6 +39,13 @@ def clean_html_content(html_text):
     # Remove script and style blocks
     html_text = re.sub(r'<script.*?>.*?</script>', ' ', html_text, flags=re.DOTALL | re.IGNORECASE)
     html_text = re.sub(r'<style.*?>.*?</style>', ' ', html_text, flags=re.DOTALL | re.IGNORECASE)
+    
+    # Remove navigation, headers, and footers to prevent garbage text
+    html_text = re.sub(r'<nav.*?>.*?</nav>', ' ', html_text, flags=re.DOTALL | re.IGNORECASE)
+    html_text = re.sub(r'<header.*?>.*?</header>', ' ', html_text, flags=re.DOTALL | re.IGNORECASE)
+    html_text = re.sub(r'<footer.*?>.*?</footer>', ' ', html_text, flags=re.DOTALL | re.IGNORECASE)
+    html_text = re.sub(r'<div[^>]*class="[^"]*(top-bar|breadcrumb|footer)[^"]*"[^>]*>.*?</div>', ' ', html_text, flags=re.DOTALL | re.IGNORECASE)
+
     # Remove Jinja tags and comments
     html_text = re.sub(r'\{#.*?#\}', ' ', html_text, flags=re.DOTALL)
     html_text = re.sub(r'\{%.*?%\}', ' ', html_text, flags=re.DOTALL)

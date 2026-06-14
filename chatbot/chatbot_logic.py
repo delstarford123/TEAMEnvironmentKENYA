@@ -120,8 +120,8 @@ class ChatbotLogic:
         name_part = f" {user_name}" if user_name else ""
         
         # Exact greeting match
-        if any(w in greeting_words for w in query_words):
-            return f"{greeting_pref}{name_part}! I am the TEAMEnvironment AI BOT. How can I assist you with conservation today?"
+        if any(w in greeting_words for w in query_words) and len(query_words) < 5:
+            return f"Hi! I am the TEAMEnvironment AI BOT{name_part}. Ask me any questions about our mission, projects, volunteering, or MoU with KFS, and I will find the answers for you!"
             
         if "how are you" in q:
             if user_name:
@@ -224,9 +224,9 @@ class ChatbotLogic:
                 link_str = f"<br><br>🔗 For more details, see <a href='{url}'>{source}</a>."
 
         if match and score > 0.25:
-            return match + link_str
+            return f"Here is what I found regarding your inquiry:<br><br><i>\"{match}\"</i>{link_str}"
         elif match and score > 0.12:
-            return f"According to our documents:<br><i>{match}</i>" + link_str
+            return f"I found some related information in our documents:<br><br><i>\"{match}\"</i>{link_str}"
         else:
             return (
                 f"I couldn't find a specific answer to that in our documents{name_part}. "
