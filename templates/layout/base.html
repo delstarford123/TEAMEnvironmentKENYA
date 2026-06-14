@@ -38,10 +38,11 @@
     <!-- PWA Setup -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#54B435">
-    <link rel="apple-touch-icon" href="/static/images/lot/logo.png">
+    <link rel="icon" href="/static/images/lot/logofornvigationbar.png" type="image/png">
+    <link rel="apple-touch-icon" href="/static/images/lot/logofornvigationbar.png">
     {% if global_random_bg %}
     <style>
-        .page-header, .hero {
+        .page-header {
             background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('{{ global_random_bg }}') !important;
             background-size: cover !important;
             background-position: center !important;
@@ -57,7 +58,7 @@
     <!-- PWA Install Banner -->
     <div id="pwa-banner" class="pwa-install-banner">
         <div class="pwa-content">
-            <img src="/static/images/lot/logo.png" alt="TEK Icon" class="pwa-icon">
+            <img src="/static/images/lot/logofornvigationbar.png" alt="TEK Icon" class="pwa-icon">
             <div class="pwa-text">
                 <h4>Install TEK App</h4>
                 <p>Install our app for a better experience and quick access.</p>
@@ -91,7 +92,7 @@
         <div class="container header-container">
             <div class="logo">
                 <a href="{{ url_for('home') }}" aria-label="Teamenvironment.KE.Africa Home">
-                    <img src="https://teamenvironment.org/wp-content/uploads/2025/03/logo-dark-removebg-preview.png" alt="TEK Logo">
+                    <img src="/static/images/lot/logofornvigationbar.png" alt="TEK Logo">
                 </a>
             </div>
             
@@ -293,23 +294,29 @@
 
                 <!-- Payment Method Toggles -->
                 <div class="payment-methods">
-                    <div class="method-card active" onclick="switchPayment('mpesa')">
+                    <div class="method-card active" onclick="switchPayment('manual')">
+                        <i class="fas fa-mobile-alt" style="font-size: 24px; color: #4CAF50; margin-bottom: 5px;"></i>
+                        <p>Manual Paybill</p>
+                    </div>
+                    <div class="method-card disabled-method" style="opacity: 0.5; cursor: not-allowed; position: relative;" title="Coming Soon">
                         <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
                             <text x="15" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="22" fill="#4CAF50">M-</text>
                             <text x="44" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="22" fill="#E53935">PESA</text>
                             <circle cx="104" cy="20" r="5" fill="#4CAF50"/>
                         </svg>
                         <p>M-Pesa</p>
+                        <span style="position:absolute; top:-5px; right:-5px; background:#e11d48; color:white; font-size:0.6rem; padding:2px 5px; border-radius:5px; font-weight:700;">Coming Soon</span>
                     </div>
-                    <div class="method-card" onclick="switchPayment('pesapal')">
+                    <div class="method-card disabled-method" style="opacity: 0.5; cursor: not-allowed; position: relative;" title="Coming Soon">
                         <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
                             <text x="10" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="20" fill="#003366">pesa</text>
                             <text x="54" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="20" fill="#00A651">pal</text>
                             <path d="M96 14 L106 20 L96 26 Z" fill="#00A651" />
                         </svg>
                         <p>PesaPal</p>
+                        <span style="position:absolute; top:-5px; right:-5px; background:#e11d48; color:white; font-size:0.6rem; padding:2px 5px; border-radius:5px; font-weight:700;">Coming Soon</span>
                     </div>
-                    <div class="method-card" onclick="switchPayment('paypal')">
+                    <div class="method-card disabled-method" style="opacity: 0.5; cursor: not-allowed; position: relative;" title="Coming Soon">
                         <svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20 8 h10 c4 0 7 2 6 6 c-1 4 -4 6 -8 6 h-4 l-2 8 h-4 Z" fill="#003087" />
                             <path d="M24 12 h10 c4 0 7 2 6 6 c-1 4 -4 6 -8 6 h-4 l-2 8 h-4 Z" fill="#0079C1" opacity="0.85" />
@@ -317,11 +324,25 @@
                             <text x="82" y="27" font-family="'Montserrat', sans-serif" font-weight="900" font-size="19" fill="#0079C1">Pal</text>
                         </svg>
                         <p>PayPal</p>
+                        <span style="position:absolute; top:-5px; right:-5px; background:#e11d48; color:white; font-size:0.6rem; padding:2px 5px; border-radius:5px; font-weight:700;">Coming Soon</span>
                     </div>
                 </div>
 
+                <!-- Manual Paybill Tab -->
+                <div id="manual-tab" class="payment-tab active">
+                    <div style="background-color: #f0fdf4; border: 2px dashed #4CAF50; border-radius: 12px; padding: 25px; text-align: center; margin-bottom: 20px;">
+                        <h4 style="color: #15803d; font-weight: 700; margin-bottom: 15px; font-size: 1.2rem;">Donate Manually via M-Pesa</h4>
+                        <div style="background: white; padding: 15px; border-radius: 8px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 15px;">
+                            <p style="font-size: 1.1rem; color: #333; margin-bottom: 8px;"><strong>PAYBILL NO:</strong> <span style="font-size: 1.4rem; letter-spacing: 2px; color: #0f172a; font-weight: 900; margin-left: 10px;">719 026</span></p>
+                            <p style="font-size: 1.1rem; color: #333; margin-bottom: 0;"><strong>Account Name:</strong> <span style="font-size: 1.2rem; color: #0f172a; font-weight: 700; margin-left: 10px;">Your Name</span></p>
+                        </div>
+                        <p style="font-size: 0.9rem; color: #475569; font-weight: 500;">Once you have completed the payment via your M-Pesa menu, we will verify and process your donation manually. Thank you for your support!</p>
+                    </div>
+                    <button class="pay-btn btn" onclick="closeModal()" style="width: 100%; background-color: var(--mpesa-green); border-color: var(--mpesa-green); padding: 15px;">I Have Made the Payment</button>
+                </div>
+
                 <!-- M-Pesa Tab -->
-                <div id="mpesa-tab" class="payment-tab active">
+                <div id="mpesa-tab" class="payment-tab">
                     <div class="input-group">
                         <label for="phone">M-Pesa Phone Number</label>
                         <input type="text" id="phone" placeholder="07XXXXXXXX" value="07">
@@ -357,6 +378,51 @@
 
     <script src="https://www.paypal.com/sdk/js?client-id=Aca4kHAlmsUXqNenGzW0LYdaPMnPrVIvOBjw8iE2D-rNdgT91YPZgxr6OCZIIyIZFRP-ErR9u0NIkwrf&currency=USD"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- GSAP Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Generic fade up animation for page headers
+            if(document.querySelector('.page-header h1')) {
+                gsap.fromTo(".page-header h1", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" });
+                gsap.fromTo(".page-header p", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.2, ease: "power3.out" });
+            }
+
+            // Animate standard cards globally
+            const cards = gsap.utils.toArray(".card, .team-card, .sdg-card, .activity-card, .pmv-card, .service-card, .esg-package-card");
+            cards.forEach(card => {
+                gsap.from(card, {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%",
+                    },
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            });
+
+            // Animate generic sections
+            const sections = gsap.utils.toArray("section h2, .mission-section, .stat-box");
+            sections.forEach(sec => {
+                gsap.from(sec, {
+                    scrollTrigger: {
+                        trigger: sec,
+                        start: "top 85%",
+                    },
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power2.out"
+                });
+            });
+        });
+    </script>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>

@@ -138,22 +138,42 @@
                 <!-- Payment Method Toggles -->
                 <label style="margin-bottom: 12px;">Select Payment Method</label>
                 <div class="payment-methods" style="margin-bottom: 25px;">
-                    <div class="method-card active" onclick="switchInlinePayment('mpesa')">
+                    <div class="method-card active" onclick="switchInlinePayment('manual')">
+                        <i class="fas fa-mobile-alt" style="font-size: 24px; color: #4CAF50; margin-bottom: 5px;"></i>
+                        <p>Manual Paybill</p>
+                    </div>
+                    <div class="method-card disabled-method" style="opacity: 0.5; cursor: not-allowed; position: relative;" title="Coming Soon">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/1200px-M-PESA_LOGO-01.svg.png" alt="M-Pesa">
                         <p>M-Pesa</p>
+                        <span style="position:absolute; top:-5px; right:-5px; background:#e11d48; color:white; font-size:0.6rem; padding:2px 5px; border-radius:5px; font-weight:700;">Coming Soon</span>
                     </div>
-                    <div class="method-card" onclick="switchInlinePayment('pesapal')">
+                    <div class="method-card disabled-method" style="opacity: 0.5; cursor: not-allowed; position: relative;" title="Coming Soon">
                         <img src="https://www.pesapal.com/assets/img/pesapal-logo.png" alt="PesaPal">
                         <p>PesaPal</p>
+                        <span style="position:absolute; top:-5px; right:-5px; background:#e11d48; color:white; font-size:0.6rem; padding:2px 5px; border-radius:5px; font-weight:700;">Coming Soon</span>
                     </div>
-                    <div class="method-card" onclick="switchInlinePayment('paypal')">
+                    <div class="method-card disabled-method" style="opacity: 0.5; cursor: not-allowed; position: relative;" title="Coming Soon">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/1200px-PayPal.svg.png" alt="PayPal">
                         <p>PayPal</p>
+                        <span style="position:absolute; top:-5px; right:-5px; background:#e11d48; color:white; font-size:0.6rem; padding:2px 5px; border-radius:5px; font-weight:700;">Coming Soon</span>
                     </div>
                 </div>
 
+                <!-- Manual Paybill Tab -->
+                <div id="inline-manual-tab" class="payment-tab active">
+                    <div style="background-color: #f0fdf4; border: 2px dashed #4CAF50; border-radius: 12px; padding: 25px; text-align: center; margin-bottom: 20px;">
+                        <h4 style="color: #15803d; font-weight: 700; margin-bottom: 15px; font-size: 1.2rem;">Donate Manually via M-Pesa</h4>
+                        <div style="background: white; padding: 15px; border-radius: 8px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 15px;">
+                            <p style="font-size: 1.1rem; color: #333; margin-bottom: 8px;"><strong>PAYBILL NO:</strong> <span style="font-size: 1.4rem; letter-spacing: 2px; color: #0f172a; font-weight: 900; margin-left: 10px;">719 026</span></p>
+                            <p style="font-size: 1.1rem; color: #333; margin-bottom: 0;"><strong>Account Name:</strong> <span style="font-size: 1.2rem; color: #0f172a; font-weight: 700; margin-left: 10px;">Your Name</span></p>
+                        </div>
+                        <p style="font-size: 0.9rem; color: #475569; font-weight: 500;">Once you have completed the payment via your M-Pesa menu, we will verify and process your donation manually. Thank you for your support!</p>
+                    </div>
+                    <button onclick="window.location.href='/'" class="btn" style="width: 100%; padding: 16px; background-color: var(--mpesa-green); border-color: var(--mpesa-green);">Return to Home</button>
+                </div>
+
                 <!-- M-Pesa Tab -->
-                <div id="inline-mpesa-tab" class="payment-tab active">
+                <div id="inline-mpesa-tab" class="payment-tab">
                     <div class="form-group">
                         <label for="inline_phone">M-Pesa Phone Number</label>
                         <input type="text" id="inline_phone" placeholder="07XXXXXXXX" value="07">

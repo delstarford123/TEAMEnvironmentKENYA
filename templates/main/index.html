@@ -29,15 +29,40 @@
 
     /* --- HERO SECTION --- */
     .hero {
-        background-image: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.65) 50%, rgba(84, 180, 53, 0.25) 100%), url('/static/images/hero_background.jpeg');
-        background-size: cover;
-        background-position: center;
         min-height: 95vh;
         display: flex;
         align-items: center;
         color: white;
         padding: 120px 0;
         position: relative;
+        overflow: hidden;
+    }
+    .hero-bg-slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+    .hero-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        visibility: hidden;
+    }
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.45) 50%, rgba(84, 180, 53, 0.25) 100%);
+        z-index: 1;
     }
 
     .hero-content { 
@@ -477,12 +502,21 @@
 
 {% block content %}
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
+    <section class="hero" id="hero">
+        <div class="hero-bg-slider" id="heroBgSlider">
+            <div class="hero-slide" style="background-image: url('{{ url_for('static', filename='images/activity/Capacity building.jpeg') }}');"></div>
+            <div class="hero-slide" style="background-image: url('{{ url_for('static', filename='images/activity/Green best practices.jpeg') }}');"></div>
+            <div class="hero-slide" style="background-image: url('{{ url_for('static', filename='images/activity/Landscapes.jpeg') }}');"></div>
+            <div class="hero-slide" style="background-image: url('{{ url_for('static', filename='images/activity/Reclaim land.jpeg') }}');"></div>
+            <div class="hero-slide" style="background-image: url('{{ url_for('static', filename='images/activity/Trees for policy markers.jpeg') }}');"></div>
+            <div class="hero-slide" style="background-image: url('{{ url_for('static', filename='images/activity/community.jpeg') }}');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="container" style="position: relative; z-index: 2;">
             <div class="hero-content">
                 <h3>Let Us Go Green, with You.</h3>
                 <h1>Building a Sustainable Future</h1>
-                <p>A Socio-economic, Environmental and Humanitarian Membership Association dedicated to Greening and Environmental Conservation across Kenya.</p>
+                <p>A Socio-economic and Environmental Association of registered members, volunteers, and partners focused on Greening and Environmental Conservation as a means to reversing the effects of global warming and Climate Change.</p>
                 <div class="flex" style="display: flex; gap: 20px; flex-wrap: wrap;">
                     <a href="/calculator" class="btn hero-btn-green" style="padding: 16px 40px; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
                         <i class="fas fa-calculator"></i> Calculate Footprint
@@ -621,14 +655,15 @@
         </div>
     </section>
 
-    <!-- Mission Section -->
+    <!-- What We Do Section -->
     <div class="container">
         <section class="mission-section">
             <div class="mission-image" aria-label="Tree planting restoration activities"></div>
             <div class="mission-text">
-                <h4>Our Mission</h4>
-                <h2>Empowering Communities through Environmental Action</h2>
-                <p>To foster climate change adaptation and mitigation by catalyzing community-level interventions that enhances well-being, livelihood security, environmental conservation and sustainable asset-based community development.</p>
+                <h4>What We Do</h4>
+                <h2>Community-Led Environmental Conservation</h2>
+                <p>We are involved in reforestation, agro-forestry, conservation agriculture and tree planting activities, as well as other best greening and environmental practices that espouse private public community partnerships in environmental conservation, resource management, restoration and biodiversity protection at community level.</p>
+                <p style="margin-top: 15px; font-weight: 600;">Our main goal is to contribute to the legacy of a habitable, peaceful, green, and clean environment for all, now and in posterity.</p>
                 <div class="mt-40">
                     <a href="/contact" class="btn btn-outline" style="border: 2px solid var(--primary-green); color: var(--primary-green); padding: 14px 40px; border-radius: 50px; font-weight: 700; text-decoration: none; transition: all 0.3s ease; background: transparent;">
                         Get In Touch
@@ -647,7 +682,13 @@
                 <p style="max-width: 800px; margin: 0 auto; color: #64748b; font-size: 1.2rem; line-height: 1.8;">We align our local conservation efforts with the United Nations Sustainable Development Goals to ensure a lasting impact on our planet and its people.</p>
             </div>
             
-            <div class="grid grid-4">
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                <div class="sdg-card">
+                    <span class="sdg-number">Goal 2</span>
+                    <div class="sdg-icon"><i class="fas fa-seedling"></i></div>
+                    <h3>Zero Hunger</h3>
+                    <p>Promoting sustainable environmental practices to ensure food security for local communities.</p>
+                </div>
                 <div class="sdg-card">
                     <span class="sdg-number">Goal 13</span>
                     <div class="sdg-icon"><i class="fas fa-globe-africa"></i></div>
@@ -954,6 +995,58 @@
         
         // Start the infinite loop
         requestAnimationFrame(step);
+    });
+
+    // GSAP Animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- GSAP Hero Background Slider ---
+        const heroSlides = gsap.utils.toArray(".hero-slide");
+        if (heroSlides.length > 0) {
+            let currentSlideIndex = 0;
+
+            // Initialize all slides to invisible and shifted slightly right
+            gsap.set(heroSlides, { autoAlpha: 0, xPercent: 10, scale: 1.05 });
+            // Show the first slide
+            gsap.set(heroSlides[0], { autoAlpha: 1, xPercent: 0, scale: 1 });
+
+            function nextSlide() {
+                const currentSlide = heroSlides[currentSlideIndex];
+                currentSlideIndex = (currentSlideIndex + 1) % heroSlides.length;
+                const nextSlide = heroSlides[currentSlideIndex];
+
+                const tl = gsap.timeline();
+                
+                // Prepare next slide slightly off-screen right
+                gsap.set(nextSlide, { autoAlpha: 0, xPercent: 10, scale: 1.05 });
+
+                // Fade out & pan left the current slide
+                tl.to(currentSlide, {
+                    autoAlpha: 0,
+                    xPercent: -10,
+                    duration: 1.8,
+                    ease: "power2.inOut"
+                }, 0)
+                // Fade in & pan to center the next slide
+                .to(nextSlide, {
+                    autoAlpha: 1,
+                    xPercent: 0,
+                    scale: 1,
+                    duration: 1.8,
+                    ease: "power2.inOut"
+                }, 0);
+
+                gsap.delayedCall(6, nextSlide);
+            }
+
+            // Start loop
+            gsap.delayedCall(6, nextSlide);
+        }
+
+        // Hero text fade up
+        gsap.fromTo(".hero-content h3", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" });
+        gsap.fromTo(".hero-content h1", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.2, ease: "power3.out" });
+        gsap.fromTo(".hero-content p", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.4, ease: "power3.out" });
+        gsap.fromTo(".hero-content .flex", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.6, ease: "power3.out" });
     });
 </script>
 {% endblock %}
